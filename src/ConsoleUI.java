@@ -1,4 +1,13 @@
+import java.util.Scanner;
 
-public interface ConsoleUI {
+public class ConsoleUI {
+    
+    Scanner scan;
+    
+    public ConsoleUI() {
+        //TODO: get Alerts class 
+        scan = new Scanner(System.in);
+    }
+    
 
 }

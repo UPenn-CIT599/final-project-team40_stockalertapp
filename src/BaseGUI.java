@@ -51,7 +51,6 @@ public class BaseGUI extends JFrame {
     
     public static void main(String[] args) {
         BaseGUI gui = new BaseGUI();
-        
     }
     
 }

@@ -6,6 +6,11 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
+/**
+ * Entry point for StockAlert Applications graphical user interface which will be the default for all non-headless environments.
+ * @author robertstanton
+ *
+ */
 public class BaseGUI extends JFrame {
     private ChartGUI chart;
     private JButton changeStock;
@@ -14,6 +19,8 @@ public class BaseGUI extends JFrame {
     public BaseGUI() {
         this("StockAlertApp");
     }
+    
+    
     public BaseGUI(String title) {
         super(title);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

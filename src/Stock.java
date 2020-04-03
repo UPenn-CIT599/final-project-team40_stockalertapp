@@ -44,13 +44,8 @@ private TreeMap datahistory;
 		DataPull t= new DataPull();
 		t.getcsv(csv);
 		
-		
-		
 		return TreeMap;
 	}
-
-
-
 
 
 	public static void main(String[] args) {

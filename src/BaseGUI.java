@@ -25,7 +25,7 @@ public class BaseGUI extends JFrame {
         Container content = getContentPane();
         
         // create components
-        Stock stock = new Stock();
+        Stock stock = new Stock("SPY");
         chart = new ChartGUI(stock);
         changeStock = new JButton("new Stock");
         
@@ -38,7 +38,7 @@ public class BaseGUI extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                Stock s = new Stock();
+                Stock s = new Stock("AAPL");
                 chart.changeStock(s);
             }
             

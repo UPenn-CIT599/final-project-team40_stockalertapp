@@ -8,6 +8,11 @@ import java.util.Random;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+/**
+ * Helper class for generating random stochastic time series of prices.  Only used for testing purposes.
+ * @author robertstanton
+ *
+ */
 public class StockRandom {
     
     private String ticker;
@@ -27,6 +32,10 @@ public class StockRandom {
         ticker = tick;
     }
     
+    /**
+     * creates stochastic time series of prices with normally distributed standard deviation.
+     * @param dateRange
+     */
     public void setHistoricalPrices(List<LocalDate> dateRange) {
         Random generator = new Random();
         Double curValue = generator.nextDouble() * 100;

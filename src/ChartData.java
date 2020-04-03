@@ -32,7 +32,7 @@ public class ChartData {
     private int yBuffer;
     private double minVal; // done
     private double maxVal; // done
-    private StockRandom stock; // done
+    private Stock stock; // done
     private TreeMap<LocalDate, Double[]> plotPoints; // {x, y}
     private TreeMap<LocalDate, Double> xAxisTicks;
     private TreeMap<Double, Double> yAxisTicks;
@@ -55,7 +55,7 @@ public class ChartData {
      *                Intended to move the 'charting area' up along the y axis to
      *                allow for X AXIS labels.
      */
-    public ChartData(StockRandom s, int width, int height, int xOffset, int yBuffer) {
+    public ChartData(Stock s, int width, int height, int xOffset, int yBuffer) {
         stock = s;
         this.width = width;
         this.height = height;
@@ -85,7 +85,7 @@ public class ChartData {
      * 
      * @param s
      */
-    public void changeStock(StockRandom s) {
+    public void changeStock(Stock s) {
         stock = s;
         setValues();
     }

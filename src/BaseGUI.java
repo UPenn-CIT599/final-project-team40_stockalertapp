@@ -32,11 +32,10 @@ public class BaseGUI extends JFrame {
         Container content = getContentPane();
         
         // create components
-<<<<<<< HEAD
+
         Stock stock = new Stock("SPY");
-=======
-        StockRandom stock = new StockRandom();
->>>>>>> guiMod
+
+
         chart = new ChartGUI(stock);
         changeStock = new JButton("new Stock");
         
@@ -49,11 +48,10 @@ public class BaseGUI extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-<<<<<<< HEAD
+
                 Stock s = new Stock("AAPL");
-=======
-                StockRandom s = new StockRandom();
->>>>>>> guiMod
+
+
                 chart.changeStock(s);
             }
             

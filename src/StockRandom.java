@@ -8,16 +8,16 @@ import java.util.Random;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
-public class Stock {
+public class StockRandom {
     
     private String ticker;
     private TreeMap<LocalDate, Double> historicalPrices;
     
-    public Stock() {
+    public StockRandom() {
         this("test");
     }
     
-    public Stock(String tick) {
+    public StockRandom(String tick) {
         historicalPrices = new TreeMap<>();
         LocalDate startDate = LocalDate.of(2020, 1, 1);
         // LocalDate endDate = LocalDate.of(2020, 1, 30);

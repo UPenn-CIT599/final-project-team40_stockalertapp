@@ -43,7 +43,7 @@ public class ChartGUI extends JPanel {
     private int netHeight;
     private BufferedImage image;
     private Graphics2D g2d;
-    private Stock stock;
+    private StockRandom stock;
 
     private Color background = Color.WHITE;
     private Color foreground = Color.BLACK;
@@ -59,7 +59,7 @@ public class ChartGUI extends JPanel {
      * Constucts a ChartGUI object with a default size of width 800, height 400;
      * @param s
      */
-    public ChartGUI(Stock s) {
+    public ChartGUI(StockRandom s) {
         this(s, new Dimension(800, 400));
     }
     
@@ -68,7 +68,7 @@ public class ChartGUI extends JPanel {
      * @param s
      * @param d
      */
-    public ChartGUI(Stock s, Dimension d) {
+    public ChartGUI(StockRandom s, Dimension d) {
         stock = s;
         chartD = d;
         image = new BufferedImage((int) chartD.getWidth(), (int) chartD.getHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -147,7 +147,7 @@ public class ChartGUI extends JPanel {
      * Changes all details to allow for plotting different stocks without the need for new ChartData and ChartGUI objects.
      * @param s
      */
-    public void changeStock(Stock s) {
+    public void changeStock(StockRandom s) {
         stock = s;
         chartData = new ChartData(stock, netWidth, netHeight, xOffset, buffer);
         repaint();

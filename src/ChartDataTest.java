@@ -84,7 +84,8 @@ class ChartDataTest {
         chart.changeStock(gen);
         numTicks = 7;
         assertEquals(chart.getXAxisTicks().size(), numTicks);
-        
     }
+    
+    
 
 }

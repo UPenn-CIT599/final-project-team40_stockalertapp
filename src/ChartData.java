@@ -23,19 +23,21 @@ import java.util.stream.Collectors;
  */
 public class ChartData {
 
-    private double slopeY;
-    private double interceptY;
-    private double deltaX;
+    public double slopeY;  // change to private post testing
+    public double interceptY; // change to private post testing
+    public double deltaX;
     private int width;
     private int height;
     private int xOffset;
     private int yBuffer;
-    private double minVal; // done
-    private double maxVal; // done
-    private Stock stock; // done
+    public double minVal; // change to private post testing
+    public double maxVal; // change to private post testing
+    private Stock stock; 
     private TreeMap<LocalDate, Double[]> plotPoints; // {x, y}
     private TreeMap<LocalDate, Double> xAxisTicks;
     private TreeMap<Double, Double> yAxisTicks;
+    
+    private RandomPriceGenerator gen; // remove when Stock is done
 
     /**
      * Constructs relavent values for the x and y axis plotting from the inputed
@@ -55,15 +57,15 @@ public class ChartData {
      *                Intended to move the 'charting area' up along the y axis to
      *                allow for X AXIS labels.
      */
-    public ChartData(Stock s, int width, int height, int xOffset, int yBuffer) {
-        stock = s;
+    public ChartData(RandomPriceGenerator g, int width, int height, int xOffset, int yBuffer) {
+        // stock = s;  REINSTATE
+        
+        gen = g;  // TODO: REMOVE WHEN STOCK CLASS COMPLETE
+        
         this.width = width;
         this.height = height;
         this.xOffset = xOffset;
         this.yBuffer = yBuffer;
-        plotPoints = new TreeMap<>();
-        xAxisTicks = new TreeMap<>();
-        yAxisTicks = new TreeMap<>();
         setValues();
     }
 
@@ -85,8 +87,9 @@ public class ChartData {
      * 
      * @param s
      */
-    public void changeStock(Stock s) {
-        stock = s;
+    public void changeStock(RandomPriceGenerator g) { // TODO: change to Stock when stock is done
+         // stock = s;
+        gen = g;
         setValues();
     }
 
@@ -94,20 +97,20 @@ public class ChartData {
      * Sets the minimum and maximum values of the Stocks pricing data
      */
     private void setMinMaxValues() {
-        minVal = stock.getHistoricalPrices().values().stream().min(Double::compareTo).get();
-        maxVal = stock.getHistoricalPrices().values().stream().max(Double::compareTo).get();
+        minVal = gen.getMin(); // TODO: switch to Stock
+        maxVal = gen.getMax(); // TODO: switch to Stock
     }
 
     /**
      * Sets values for converting Stock prices to plot points
      * 
      * @param width
-     * @param height
+     * @param height 
      */
     private void setSlopeIntercept(int width, int height) {
-        slopeY = maxVal < 0 ? 0 : (-height) / (maxVal - minVal);
+        slopeY = maxVal < 0 ? 0 : (-(height - yBuffer)) / (maxVal - minVal);
         interceptY = minVal < 0 ? 0 : (-(slopeY * maxVal) + yBuffer);
-        deltaX = (double) (width) / (stock.getHistoricalPrices().size() - 1);
+        deltaX = (double) (width) / (gen.getHistoricalPrices().size()); // TODO: switch to Stock
     }
 
     /**
@@ -125,8 +128,9 @@ public class ChartData {
      * Converts Stock price to plot point and stores in plotPoints data structure. Each Entry is keyed by the LocalDate and valued as a Double[x, y] coordinates.
      */
     private void setPlotPoints() {
+        plotPoints = new TreeMap<>();
         int x = 1;
-        for (Map.Entry entry : stock.getHistoricalPrices().entrySet()) {
+        for (Map.Entry entry : gen.getHistoricalPrices().entrySet()) {  // TODO: switch to Stock
             double curVal = convertPriceToPlot((double) entry.getValue());
             plotPoints.put((LocalDate) entry.getKey(), new Double[] { (deltaX * x + xOffset), curVal });
             x++;
@@ -138,9 +142,10 @@ public class ChartData {
      * labels.
      */
     private void setXAxisTicks() {
+        xAxisTicks = new TreeMap<>();
         int dataLength = plotPoints.size();
         int x = 0;
-        if (dataLength < 10) {
+        if (dataLength < 10) { 
             // daily ticks
             for (Map.Entry dateEntry : plotPoints.entrySet()) {
                 // cast objects to respective types
@@ -220,8 +225,9 @@ public class ChartData {
      * Splits Y axis into 6 regions and calculates their plot points from the range
      * of Prices as well as assigning a label. All values rounded to first decimal
      * place.
-     */
+     */ 
     private void setYAxisTicks() {
+        yAxisTicks = new TreeMap<>();
         double range = maxVal - minVal;
         double diff = range / 6;
         double curVal = maxVal;
@@ -255,5 +261,4 @@ public class ChartData {
     public TreeMap<LocalDate, Double[]> getPlotPoints() {
         return plotPoints;
     }
-
 }

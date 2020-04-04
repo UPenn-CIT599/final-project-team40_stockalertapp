@@ -9,7 +9,6 @@ import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-
 import javax.net.ssl.HttpsURLConnection;
 
 
@@ -73,7 +72,7 @@ public class DataPull  {
 		//add json to project build path with link below
 		//https://www.wikihow.com/Add-JARs-to-Project-Build-Paths-in-Eclipse-(Java)
 		         try {
-		        	
+		             
 					String url=("https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol="+symbol+"&outputsize=full&apikey=JRVCT84VUG4TM97S&datatype=csv");
 					
 					InputStream input = new URL(url).openStream();

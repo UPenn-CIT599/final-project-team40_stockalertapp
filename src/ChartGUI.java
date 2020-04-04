@@ -55,6 +55,8 @@ public class ChartGUI extends JPanel {
     private BasicStroke dashStroke = new BasicStroke(1, ENDCAPS, LINEJOIN, 3f, dash, 3f);
     private Color[] colorPallette = new Color[] { Color.RED, Color.ORANGE, Color.MAGENTA, Color.YELLOW, Color.GREEN };
     
+    private RandomPriceGenerator gen; // TODO: Remove when Stock class complete
+    
     /**
      * Constucts a ChartGUI object with a default size of width 800, height 400;
      * @param s
@@ -80,8 +82,9 @@ public class ChartGUI extends JPanel {
         setPreferredSize(chartD);
         setXOffset();
         setYOffset();
-
-        chartData = new ChartData(s, netWidth, netHeight, xOffset, buffer);
+        
+        gen = new RandomPriceGenerator("SPY"); // TODO: Remove when Stock complete
+        chartData = new ChartData(gen, netWidth, netHeight, xOffset, buffer); // TODO: switch to Stock
     }
     
     /**
@@ -138,7 +141,8 @@ public class ChartGUI extends JPanel {
             setPreferredSize(chartD);
             setXOffset();
             setYOffset();
-            chartData = new ChartData(stock, netWidth, netHeight, xOffset, buffer);
+            
+            chartData = new ChartData(gen, netWidth, netHeight, xOffset, buffer); // TODO: switch to Stock
             repaint();
         }
     }
@@ -149,7 +153,8 @@ public class ChartGUI extends JPanel {
      */
     public void changeStock(Stock s) {
         stock = s;
-        chartData = new ChartData(stock, netWidth, netHeight, xOffset, buffer);
+        gen = new RandomPriceGenerator("SPYG");
+        chartData = new ChartData(gen, netWidth, netHeight, xOffset, buffer); // TODO: switch to Stock
         repaint();
     }
 

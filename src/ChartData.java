@@ -123,6 +123,12 @@ public class ChartData {
     private double convertPriceToPlot(double price) {
         return Math.round(slopeY * price + interceptY);
     }
+    
+    public double[] convertToPlot(double x, double y) {
+        double xPlot = x * deltaX;
+        double yPlot = convertPriceToPlot(y);
+        return new double[] {x, y};
+    }
 
     /**
      * Converts Stock price to plot point and stores in plotPoints data structure. Each Entry is keyed by the LocalDate and valued as a Double[x, y] coordinates.

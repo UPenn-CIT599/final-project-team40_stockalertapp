@@ -14,7 +14,7 @@ import javax.net.ssl.HttpsURLConnection;
 /**
  * DATAPULL CLASS:
  * 
- * This class to pull stock historical data.
+ * This class to pull stock historical data from an external source.
  * 
  * @author kravetsj
  *
@@ -30,6 +30,7 @@ public class DataPull {
 	 * 
 	 * @param ticker
 	 */
+	
 	public static String getJSON(String url) {
 		HttpsURLConnection con = null;
 		try {

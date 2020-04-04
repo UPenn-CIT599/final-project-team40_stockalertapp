@@ -16,6 +16,7 @@ import javax.swing.JFrame;
  *
  */
 public class BaseGUI extends JFrame {
+	
 	private ChartGUI chart;
 	private JButton changeStock;
 	private TableGUI table;

@@ -3,7 +3,10 @@ import java.util.TreeMap;
 
 
 /**
- * A class to store a stock's ticker, price, and historical data
+ * STOCK CLASS:
+ * 
+ * This class stores a stock's ticker, price, and historical data
+ * 
  * @author kravetsj
  *
  */

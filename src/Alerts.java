@@ -1,7 +1,9 @@
 /***
- * ALERTS CLASS: This class 
+ * ALERTS CLASS:
  * 
- * @author tiffchoi
+ * This class maintains the list of stocks with their respective chosen alerts.
+ * 
+ * @author Tiffany Choi
  *
  */
 

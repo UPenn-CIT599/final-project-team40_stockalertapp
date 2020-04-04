@@ -22,6 +22,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 /**
+ * CHARTGUI CLASS:
+ * 
  * Creates a Chart based on data held in a ChartData object drawn on the panel
  * to be placed in a frame. Besides setting the CharData object this class is
  * primarily responsible for rendering the image on the panel. Details can be

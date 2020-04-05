@@ -1,6 +1,6 @@
 Design Milestone README:
 
 
-Non-Trivial Method: setXAxisTicks
+Non-Trivial Method: setSlopeIntercept(int width, int height)
 
 Unit Test: ChartDataTest.java

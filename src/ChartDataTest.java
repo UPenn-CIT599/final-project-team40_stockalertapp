@@ -1,10 +1,10 @@
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 
-import org.junit.Before;
 import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class ChartDataTest {
     ChartData chart;

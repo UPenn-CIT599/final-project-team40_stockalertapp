@@ -42,7 +42,8 @@ public class ChartData {
 	private RandomPriceGenerator gen; // remove when Stock is done
 
 	/**
-	 * Constructs relavent values for the x and y axis plotting from the inputed
+	 * CHARTDATA METHOD:
+	 * Constructs relevant values for the x and y axis plotting from the inputed
 	 * values. The width and height represent the displayable space of the chart.
 	 * While xOffset and yBuffer are used to adjust those numbers to match the
 	 * actual plot points of the ChartGUI creating this object.
@@ -72,6 +73,7 @@ public class ChartData {
 	}
 
 	/**
+	 * SETTVALUES METHOD:
 	 * Helper method for setting a variety of required values in a single line. Used
 	 * in Constructor and changeStock method.
 	 */
@@ -84,6 +86,7 @@ public class ChartData {
 	}
 
 	/**
+	 * CHANGESTOCK METHOD:
 	 * Changes values of the ChartData for different Stocks depending on view
 	 * preference of user. This way only one Chart is needed.
 	 * 
@@ -96,6 +99,7 @@ public class ChartData {
 	}
 
 	/**
+	 * SETMINMAXVALUES METHOD:
 	 * Sets the minimum and maximum values of the Stocks pricing data
 	 */
 	private void setMinMaxValues() {
@@ -104,6 +108,7 @@ public class ChartData {
 	}
 
 	/**
+	 * SETSLOPEINTERCEPT METHOD:
 	 * Sets values for converting Stock prices to plot points
 	 * 
 	 * @param width
@@ -116,6 +121,7 @@ public class ChartData {
 	}
 
 	/**
+	 * CONVERTPRICETOPLOT METHOD:
 	 * Converts a given price to a Y Axis plot point. Formula : slopeY * price +
 	 * interceptY.
 	 * 
@@ -133,6 +139,7 @@ public class ChartData {
 	}
 
 	/**
+	 * SETPLOTPOINTS METHOD:
 	 * Converts Stock price to plot point and stores in plotPoints data structure.
 	 * Each Entry is keyed by the LocalDate and valued as a Double[x, y]
 	 * coordinates.
@@ -148,6 +155,7 @@ public class ChartData {
 	}
 
 	/**
+	 * SETXAXISTICKS METHOD:
 	 * Set number of x axis ticks, the plot point to paint them and their associated
 	 * labels.
 	 */
@@ -232,6 +240,7 @@ public class ChartData {
 	}
 
 	/**
+	 * SETYAXISTICKS METHOD:
 	 * Splits Y axis into 6 regions and calculates their plot points from the range
 	 * of Prices as well as assigning a label. All values rounded to first decimal
 	 * place.
@@ -249,6 +258,7 @@ public class ChartData {
 	}
 
 	/**
+	 * GETXAXISTICKS METHOD:
 	 * Returns a TreeMap for plotting x axis labels. The key is the label and the
 	 * value is the plot point.
 	 * 
@@ -259,6 +269,7 @@ public class ChartData {
 	}
 
 	/**
+	 * GETYAXISTICKS METHOD:
 	 * Returns a TreeMap for plotting y axis labels. The key is the label and the
 	 * value is the plot point.
 	 * 
@@ -269,6 +280,7 @@ public class ChartData {
 	}
 
 	/**
+	 * GETPLOTPOINTS METHOD:
 	 * Returns a TreeMap for plotting price points on the Chart. The key is the date
 	 * and the value is an array representing x, y coordinates to plot.
 	 * 

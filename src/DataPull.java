@@ -26,7 +26,8 @@ public class DataPull {
 	}
 
 	/**
-	 * Returns a json string from a url
+	 * GETJSON METHOD:
+	 * This method returns a JSON string from a URL
 	 * 
 	 * @param ticker
 	 */
@@ -65,7 +66,8 @@ public class DataPull {
 	}
 
 	/**
-	 * Returns a csv of stock data with data, open, high, low, close, volume
+	 * GETTCSV METHOD:
+	 * This method returns a CSV of stock data with data, open, high, low, close, volume.
 	 * 
 	 * @param ticker
 	 */
@@ -103,7 +105,9 @@ public class DataPull {
 	}
 
 	/**
-	 * Returns a quote like this:
+	 * GETCURRENTQUOTE METHOD:
+	 * 
+	 * This method returns a quote like this:
 	 * 
 	 * "Global Quote": { "01. symbol": "IBM", "02. open": "112.0000", "03. high":
 	 * "113.8100", "04. low": "110.1700", "05. price": "110.9300", "06. volume":
@@ -122,6 +126,7 @@ public class DataPull {
 		return quote;
 	}
 
+	
 	public static void main(String[] args) {
 
 		getcsv("SPY");

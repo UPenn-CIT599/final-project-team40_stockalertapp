@@ -20,6 +20,7 @@ private String quote;
 private TreeMap datahistory;
 
 	/**
+	 * STOCK METHOD:
 	 * Stock object with stock's ticker, price, and historical data
 	 * @param ticker
 	 */
@@ -39,6 +40,7 @@ private TreeMap datahistory;
 	
 	
 	/**
+	 * GETTREEMAP METHOD:
 	 * Tree map to store data from stock csv
 	 * @param ticker
 	 */

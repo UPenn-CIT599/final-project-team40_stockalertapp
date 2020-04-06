@@ -8,4 +8,12 @@
 
 public class RefreshData {
 
+	/**
+	 * DATAREFRESH METHOD:
+	 * This method refreshes the stock data.
+	 */
+	
+	public void dataRefresh() {
+		
+	}
 }

@@ -1,5 +1,5 @@
 import java.io.BufferedReader;
-
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,6 +11,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -30,24 +31,27 @@ public class DataPull  {
 	/**
 	 * Returns a csv of stock data with data, open, high, low, close, volume
 	 * @param ticker
+	 * @throws InterruptedException 
 	 */
-	public static void getcsv(String symbol) {
+	public static void getcsv(String symbol) throws InterruptedException {
 		///api key =JRVCT84VUG4TM97S
 		         try {
 		        	
 		        	 try
-		             { 
+		             { 	 
+		        		 System.gc(); 
 		                 Files.deleteIfExists(Paths.get((symbol+".csv"))); 
+		                 //System.out.println("Deleted old "+symbol+".csv file"); 
 		             } 
 		             catch(NoSuchFileException e) 
 		             { 
 		                 System.out.println("No such file/directory exists"); 
 		             }
 		        	 
-		        	 
-		        	 
+		        	System.out.println("waiting 13 seconds for " +symbol+" data due to api rate limit")  ; 
+		        	TimeUnit.SECONDS.sleep(13);
 					String url="https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" +(symbol)+"&outputsize=full&apikey=JRVCT84VUG4TM97S&datatype=csv";
-					System.out.println(url);
+					
 					InputStream input = new URL(url).openStream();
 
 					FileWriter fw= new FileWriter ((symbol+".csv"), true);
@@ -60,11 +64,14 @@ public class DataPull  {
 			                 String line;
 
 			             while ((line = br.readLine()) != null) {
-			                 System.out.println(line);
+			                 //System.out.println(line);
 			                 pw.println (line);
 							 pw.flush();  
 			             }
+			             br.close();
+			             reader.close();
 			         }
+					 
 
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -75,9 +82,15 @@ public class DataPull  {
 	/**Returns the current price of a stock ticker
 	 * 
 	 * @param symbol
+	 * @throws InterruptedException 
 	 */
-	public static double getcurrentquote(String symbol) {
+	public static double getcurrentquote(String symbol) throws InterruptedException {
 		
+
+		
+		
+		System.out.println("waiting 13 seconds for "+symbol+" data due to api rate limit")  ;
+		TimeUnit.SECONDS.sleep(13);
 		String url= "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" +symbol+"&apikey=JRVCT84VUG4TM97S";
 		
 		InputStream input = null;
@@ -104,9 +117,12 @@ public class DataPull  {
 	            String[] priceComponents = lineComponents[6].split(",");
 	            String str=priceComponents[0].replace("\"","");
 	            double currentprice = Double.parseDouble(str);
+	            br.close();
+	            reader.close();
 	            return currentprice;
 	            
 	        }
+		
 		
 		 catch (IOException e) {
 			// TODO Auto-generated catch block

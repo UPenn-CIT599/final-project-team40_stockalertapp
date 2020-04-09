@@ -2,6 +2,7 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -20,15 +21,17 @@ public class BaseGUI extends JFrame {
 	private ChartGUI chart;
 	private JButton changeStock;
 	private TableGUI table;
+	private ArrayList<Stock> stocks;
 
 	public BaseGUI() {
-		this("StockAlertApp");
+	    
+		this("StockAlertApp", );
 	}
 
-	public BaseGUI(String title) {
+	public BaseGUI(String title, ArrayList<Stock> s) {
 		super(title);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+		stocks = s;
 		// set layout for frame
 		setLayout(new BorderLayout());
 
@@ -37,9 +40,8 @@ public class BaseGUI extends JFrame {
 
 		// create components
 
-		Stock stock = new Stock("SPY");
 
-		chart = new ChartGUI(stock);
+		chart = new ChartGUI(stocks.get(0));
 		changeStock = new JButton("new Stock");
 
 		// add components to content pane
@@ -52,7 +54,7 @@ public class BaseGUI extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				Stock s = new Stock("AAPL");
+				Stock s = stocks.get(1);
 
 				chart.changeStock(s);
 			}

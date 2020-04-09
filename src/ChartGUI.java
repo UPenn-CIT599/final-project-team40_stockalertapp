@@ -305,4 +305,12 @@ public class ChartGUI extends JPanel {
 			prevY = y;
 		}
 	}
+	
+	/**
+	 * Gets the stock object this chart is displaying.
+	 * @return
+	 */
+	public Stock getStock() {
+	    return stock;
+	}
 }

@@ -128,6 +128,10 @@ private TreeMap datahistory;
         
 		return datahistory;
 	}
+	
+	public TreeMap<LocalDate, OHLCV> getDataHistory() {
+	    return datahistory;
+	}
 
 	public static void main(String[] args) throws FileNotFoundException, InterruptedException {
 		// TODO Auto-generated method stub

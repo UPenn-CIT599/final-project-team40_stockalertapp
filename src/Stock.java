@@ -57,9 +57,6 @@ private TreeMap datahistory;
 		}
 	}
 
-	
-	
-	
 	/**
 	 * Tree map to store data from stock csv
 	 * @param ticker
@@ -101,11 +98,6 @@ private TreeMap datahistory;
 			datahistory.put(localDate, ohlcv);
 
 			}
-        
-        
-        
-			
-			
 		}
         fileReader.close();
         
@@ -123,51 +115,72 @@ private TreeMap datahistory;
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-   	 
 
-        
 		return datahistory;
 	}
 
-	public static void main(String[] args) throws FileNotFoundException, InterruptedException {
-		// TODO Auto-generated method stub
-		
-		Stock t;
-		
-		t = new Stock("SLB");
-		
-		
-		
-		
-		//get all entries
-        Set<Map.Entry<LocalDate, OHLCV>> entries = t.datahistory.entrySet();
-        
-        //using for loop
-        for(Map.Entry<LocalDate, OHLCV> entry : entries){
-            System.out.println( entry.getKey() + " open " + entry.getValue().open +  " high " +entry.getValue().high+ " low " + entry.getValue().low +  " close " + entry.getValue().close+ " volume " + entry.getValue().volume);
-        }
-        
-        System.out.print(t.quote)  ;
-        
-        
-        t = new Stock("UPRO");
-		
-		
-		
-		
-		//get all entries
-        Set<Map.Entry<LocalDate, OHLCV>> entries1 = t.datahistory.entrySet();
-        
-        //using for loop
-        for(Map.Entry<LocalDate, OHLCV> entry : entries1){
-            System.out.println( entry.getKey() + " open " + entry.getValue().open +  " high " +entry.getValue().high+ " low " + entry.getValue().low +  " close " + entry.getValue().close+ " volume " + entry.getValue().volume);
-        }
-        
-        System.out.print(t.quote)  ;
-		
+
+	/**
+	 * Getters and setters
+	 * @return
+	 */
+
+	public String getTicker() {
+		return ticker;
 	}
 
-	
-	
+
+
+
+	public void setTicker(String ticker) {
+		this.ticker = ticker;
+	}
+
+
+
+
+	public String getCsv() {
+		return csv;
+	}
+
+
+
+
+	public void setCsv(String csv) {
+		this.csv = csv;
+	}
+
+
+
+
+	public double getQuote() {
+		return quote;
+	}
+
+
+
+
+	public void setQuote(double quote) {
+		this.quote = quote;
+	}
+
+
+
+
+	public TreeMap getDatahistory() {
+		return datahistory;
+	}
+
+
+
+
+	public void setDatahistory(TreeMap datahistory) {
+		this.datahistory = datahistory;
+	}
+
+
+
+
+
 
 }

@@ -13,7 +13,15 @@ public class StubController {
             } catch (FileNotFoundException | InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
+            } finally {
+                for(Stock s : stocks) {
+                    System.out.println(s.getDataHistory().toString());
+                }
             }
+        }
+        if(stocks.size() > 0) {
+            BaseGUI gui = new BaseGUI(stocks);
+            
         }
     }
 

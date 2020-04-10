@@ -22,10 +22,9 @@ public class BaseGUI extends JFrame {
 	private JButton changeStock;
 	private TableGUI table;
 	private ArrayList<Stock> stocks;
-
-	public BaseGUI() {
-	    
-		this("StockAlertApp", );
+	
+	public BaseGUI(ArrayList<Stock> s) {
+	    this("StockAlertApp", s);
 	}
 
 	public BaseGUI(String title, ArrayList<Stock> s) {
@@ -65,9 +64,4 @@ public class BaseGUI extends JFrame {
 		setVisible(true);
 
 	}
-
-	public static void main(String[] args) {
-		BaseGUI gui = new BaseGUI();
-	}
-
 }

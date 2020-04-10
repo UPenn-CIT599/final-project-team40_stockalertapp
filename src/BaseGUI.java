@@ -57,9 +57,7 @@ public class BaseGUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			    int stocksSize = stocks.size();
 			    int tgtStockIndex = stocks.indexOf(tgtStock);
-			    System.out.println(tgtStock.getTicker() + " " + tgtStockIndex);
 				tgtStock = stocks.get((tgtStockIndex + 1) % stocksSize);
-				
 
 				chart.changeStock(tgtStock.getDataHistory());
 				table.setStock(tgtStock.getTicker());

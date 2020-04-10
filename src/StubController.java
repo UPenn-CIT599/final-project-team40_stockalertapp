@@ -73,8 +73,6 @@ public class StubController {
             }
         }
         
-        app.stocks.stream().map(Stock::getTicker).forEach(System.out::println);
-        
         if(app.stocks.size() > 0) {
             BaseGUI gui = new BaseGUI(app.stocks);
         }

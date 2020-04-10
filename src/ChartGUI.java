@@ -131,32 +131,24 @@ public class ChartGUI extends JPanel {
 	 * @return the new font
 	 */
 	public Font getSizedFont() {
-	    //check width available vs number of ticks
+	    //check width available vs number of x ticks
 	    double idealFontRatio = 1.0;
 	    int numXAxisTicks = chartData.getXAxisTicks().size();
 	    FontMetrics metric = g2d.getFontMetrics();
 	    int stringWidth = metric.stringWidth(chartData.getXAxisTicks().firstKey().toString());
-	    
-	    if(stringWidth * numXAxisTicks >= netWidth) {
-	        int idealStringWidth = (int) (netWidth / numXAxisTicks);
+	    if(stringWidth * (numXAxisTicks + 1) >= netWidth) {
+	        int idealStringWidth = (int) (netWidth / (numXAxisTicks + 1) * .95);
 	        idealFontRatio = (double) idealStringWidth / stringWidth;
 	    }
 	    
+	    //check width available vs size of price
+	    String maxVal = String.format("%.2f",chartData.getMax());
+	    int maxWidth = metric.stringWidth(maxVal);
+	    if(maxWidth >= 40) {
+	        double ratio = ((double) 40 / maxWidth);
+	        idealFontRatio = ratio < idealFontRatio ? ratio : idealFontRatio;
+	    }
 	    
-	    /*
-		int maxWidth = 0;
-		for (Map.Entry entry : chartData.getYAxisTicks().entrySet()) {
-			int stringWidth = g2d.getFontMetrics().stringWidth(entry.getKey().toString());
-			maxWidth = Math.max(stringWidth, maxWidth);
-		}
-		Font newFont = g2d.getFont();
-		if (maxWidth > xOffset) {
-			Font curFont = newFont;
-			newFont = new Font(curFont.getFontName(), curFont.getStyle(),
-					(int) (curFont.getSize() * .6));
-		}
-		return newFont;
-		*/
 	    Font curFont = g2d.getFont();
 	    return new Font(curFont.getFontName(), curFont.getStyle(), (int) (curFont.getSize() * idealFontRatio));
 	}
@@ -339,7 +331,7 @@ public class ChartGUI extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 RandomPriceGenerator gen2 = new RandomPriceGenerator("newStock");
-                gen2.setTimeLength(5000);
+                gen2.setTimeLength(5275);
                 chart.changeStock(gen2.getHistorialBars());
             }
             

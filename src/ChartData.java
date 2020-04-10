@@ -1,8 +1,10 @@
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
  
@@ -176,7 +178,38 @@ public class ChartData {
 				xAxisTicks.put(key, curTick);
 				x++;
 			}
-		} else if (dataLength < 40) {
+		} else {
+		    if(dataLength % 10 == 0) {
+		        int delta = dataLength / 10;
+		        x = delta;
+		        ArrayList<LocalDate> keys = plotPoints.keySet().stream().collect(Collectors.toCollection(ArrayList::new));
+		        while(x <= dataLength - delta) {
+		            double curTick = Math.round(x * deltaX) + xOffset;
+		            xAxisTicks.put(keys.get(x), curTick);
+		            x += delta;
+		        }
+		    } else if(dataLength % 8 == 0) {
+		        int delta = dataLength / 8;
+                x = delta;
+                ArrayList<LocalDate> keys = plotPoints.keySet().stream().collect(Collectors.toCollection(ArrayList::new));
+                while(x <= dataLength - delta) {
+                    double curTick = Math.round(x * deltaX) + xOffset;
+                    xAxisTicks.put(keys.get(x), curTick);
+                    x += delta;
+                }
+		    } else {
+		        int delta = dataLength / 6;
+                x = delta;
+                ArrayList<LocalDate> keys = plotPoints.keySet().stream().collect(Collectors.toCollection(ArrayList::new));
+                while(x <= dataLength - delta) {
+                    double curTick = Math.round(x * deltaX) + xOffset;
+                    xAxisTicks.put(keys.get(x), curTick);
+                    x += delta;
+                }
+		    }
+		}
+		/*
+		else if (dataLength < 40) {
 			// semi daily ticks
 			for (Map.Entry dateEntry : plotPoints.entrySet()) {
 				// cast objects to respective types
@@ -241,6 +274,7 @@ public class ChartData {
 				x++;
 			}
 		}
+		*/
 	}
 
 	/**
@@ -292,5 +326,13 @@ public class ChartData {
 	 */
 	public TreeMap<LocalDate, Double[]> getPlotPoints() {
 		return plotPoints;
+	}
+	
+	/**
+	 * GETMAX METHOD:
+	 * returns max price of the data set
+	 */
+	public double getMax() {
+	    return maxVal;
 	}
 }

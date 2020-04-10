@@ -50,7 +50,7 @@ public class DataPull  {
 		        	 
 		        	System.out.println("waiting 13 seconds for " +symbol+" data due to api rate limit")  ; 
 		        	TimeUnit.SECONDS.sleep(13);
-					String url="https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=" +(symbol)+"&outputsize=full&apikey=JRVCT84VUG4TM97S&datatype=csv";
+					String url="https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=" +(symbol)+"&outputsize=full&apikey=JRVCT84VUG4TM97S&datatype=csv";
 					
 					InputStream input = new URL(url).openStream();
 

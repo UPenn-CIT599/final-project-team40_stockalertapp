@@ -1,5 +1,6 @@
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -47,6 +48,27 @@ public class RandomPriceGenerator {
         }
     }
     
+    /**
+     * Returns OHLCV value that is a representative of the Stock class datahistory instance variable. 
+     * @return
+     */
+    public TreeMap<LocalDate, OHLCV> getHistorialBars() {
+        
+        TreeMap<LocalDate, OHLCV> historicalBars = new TreeMap<>();
+        double range = .01;
+        for(Map.Entry entry : historicalPrices.entrySet()) {
+            range = range * (1 + generator.nextGaussian()/ 100);
+            double high = (double) entry.getValue() * (1 + range);
+            double low = (double) entry.getValue() * (1- range);
+            double open = ((high - low) * generator.nextDouble()) + low;
+            double close = ((high - low) * generator.nextDouble()) + low;
+            OHLCV ohlc = new OHLCV(open, high, low, close, 1000000.00);
+            
+            historicalBars.put((LocalDate) entry.getKey(), ohlc);
+        }
+        return historicalBars;
+     }
+    
     /***
      * GETHISTORICALPRICES METHOD:
      * This method returns the historical prices.
@@ -75,15 +97,6 @@ public class RandomPriceGenerator {
     }
     
     /**
-     * MAIN METHOD
-     * @param args
-     */
-    public static void main(String[] args) {
-        RandomPriceGenerator gen = new RandomPriceGenerator("spy");
-        System.out.println(gen.getHistoricalPrices());
-    }
-    
-    /**
      * SETTIMELENGTH METHOD:
      * This method sets the start date, date range, and runs the createHistoricalPrices method.
      * @param x
@@ -94,4 +107,14 @@ public class RandomPriceGenerator {
         historicalPrices = new TreeMap<>();
         createHistoricalPrices();
     }
+    
+    /**
+     * MAIN METHOD
+     * @param args
+     */
+    public static void main(String[] args) {
+        RandomPriceGenerator gen = new RandomPriceGenerator("spy");
+        gen.getHistorialBars().entrySet().stream().map(Map.Entry::getValue).forEach(entry -> System.out.println(entry.low + " " + entry.high));
+    }
+    
 } 

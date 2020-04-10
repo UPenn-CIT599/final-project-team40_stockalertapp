@@ -1,4 +1,5 @@
 import java.awt.BasicStroke;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -12,7 +13,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
+import java.time.LocalDate;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -32,7 +35,7 @@ import javax.swing.SwingConstants;
  * 
  * @author robertstanton
  *
- */
+ */ 
 
 public class ChartGUI extends JPanel {
 	private final int buffer = 5; // for edge spacing
@@ -46,7 +49,7 @@ public class ChartGUI extends JPanel {
 	private int netHeight;
 	private BufferedImage image;
 	private Graphics2D g2d;
-	private Stock stock;
+	private TreeMap<LocalDate, OHLCV> stockData;
 
 	private Color background = Color.WHITE;
 	private Color foreground = Color.BLACK;
@@ -58,7 +61,6 @@ public class ChartGUI extends JPanel {
 	private BasicStroke dashStroke = new BasicStroke(1, ENDCAPS, LINEJOIN, 3f, dash, 3f);
 	private Color[] colorPallette = new Color[] { Color.RED, Color.ORANGE, Color.MAGENTA, Color.YELLOW, Color.GREEN };
 
-	private RandomPriceGenerator gen; // TODO: Remove when Stock class complete
 
 	/**
 	 * CHARTGUI METHOD: This method constructs a ChartGUI object with a default size
@@ -66,7 +68,7 @@ public class ChartGUI extends JPanel {
 	 * 
 	 * @param s
 	 */
-	public ChartGUI(Stock s) {
+	public ChartGUI(TreeMap<LocalDate, OHLCV> s) {
 		this(s, new Dimension(800, 400));
 	}
 
@@ -77,8 +79,8 @@ public class ChartGUI extends JPanel {
 	 * @param s
 	 * @param d
 	 */
-	public ChartGUI(Stock s, Dimension d) {
-		stock = s;
+	public ChartGUI(TreeMap<LocalDate, OHLCV> s, Dimension d) {
+		stockData = s;
 		chartD = d;
 		image = new BufferedImage((int) chartD.getWidth(), (int) chartD.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		g2d = image.createGraphics();
@@ -90,8 +92,7 @@ public class ChartGUI extends JPanel {
 		setXOffset();
 		setYOffset();
 
-		gen = new RandomPriceGenerator("SPY"); // TODO: Remove when Stock complete
-		chartData = new ChartData(gen, netWidth, netHeight, xOffset, buffer); // TODO: switch to Stock
+		chartData = new ChartData(stockData, netWidth, netHeight, xOffset, buffer); // TODO: switch to Stock
 	}
 
 	/**
@@ -156,7 +157,7 @@ public class ChartGUI extends JPanel {
 			setXOffset();
 			setYOffset();
 
-			chartData = new ChartData(gen, netWidth, netHeight, xOffset, buffer); // TODO: switch to Stock
+			chartData = new ChartData(stockData, netWidth, netHeight, xOffset, buffer); // TODO: switch to Stock
 			repaint();
 		}
 	}
@@ -167,10 +168,9 @@ public class ChartGUI extends JPanel {
 	 * 
 	 * @param s
 	 */
-	public void changeStock(Stock s) {
-		stock = s;
-		gen = new RandomPriceGenerator("SPYG");
-		chartData = new ChartData(gen, netWidth, netHeight, xOffset, buffer); // TODO: switch to Stock
+	public void changeStock(TreeMap<LocalDate, OHLCV> s) {
+		stockData = s;
+		chartData = new ChartData(stockData, netWidth, netHeight, xOffset, buffer); // TODO: switch to Stock
 		repaint();
 	}
 
@@ -196,7 +196,7 @@ public class ChartGUI extends JPanel {
 
 	/**
 	 * DRAWXAXIS METHOD:
-	 * Draws the x axis labels, ticks, and gridlines.
+	 * Draws the x axis labels, ticks, and grid lines.
 	 * 
 	 * @param g
 	 */
@@ -306,11 +306,29 @@ public class ChartGUI extends JPanel {
 		}
 	}
 	
-	/**
-	 * Gets the stock object this chart is displaying.
-	 * @return
-	 */
-	public Stock getStock() {
-	    return stock;
-	}
+	public static void main(String[] args) {
+        RandomPriceGenerator gen = new RandomPriceGenerator("SPY");
+        ChartGUI chart = new ChartGUI(gen.getHistorialBars());
+        JButton button = new JButton("change stock");
+        JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        Container content = frame.getContentPane();
+        content.setLayout(new BorderLayout());
+        content.add(chart, BorderLayout.NORTH);
+        content.add(button, BorderLayout.SOUTH);
+        
+        button.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                RandomPriceGenerator gen2 = new RandomPriceGenerator("newStock");
+                chart.changeStock(gen2.getHistorialBars());
+            }
+            
+        });
+        
+        frame.pack();
+        frame.setVisible(true);
+        
+    }
 }

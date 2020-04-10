@@ -1,7 +1,12 @@
+import java.io.Serializable;
 
-public class OHLCV {
+public class OHLCV implements Serializable {
 
 	/**
+     * 
+     */
+    private static final long serialVersionUID = 8773796337479006667L;
+    /**
 	 * Class to hold open, high, low, close, volume data in treemap
 	 */
 

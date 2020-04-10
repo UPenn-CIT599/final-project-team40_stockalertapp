@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
-
+ 
 /**
  * CHARTDATA CLASS:
  * 
@@ -34,12 +34,10 @@ public class ChartData {
 	private int yBuffer;
 	public double minVal; // change to private post testing
 	public double maxVal; // change to private post testing
-	private Stock stock;
+	private TreeMap<LocalDate, OHLCV> historicalBars;
 	private TreeMap<LocalDate, Double[]> plotPoints; // {x, y}
 	private TreeMap<LocalDate, Double> xAxisTicks;
 	private TreeMap<Double, Double> yAxisTicks;
-
-	private RandomPriceGenerator gen; // remove when Stock is done
 
 	/**
 	 * CHARTDATA METHOD:
@@ -60,11 +58,10 @@ public class ChartData {
 	 *                Intended to move the 'charting area' up along the y axis to
 	 *                allow for X AXIS labels.
 	 */
-	public ChartData(RandomPriceGenerator g, int width, int height, int xOffset, int yBuffer) {
+	public ChartData(TreeMap<LocalDate, OHLCV> bars, int width, int height, int xOffset, int yBuffer) {
 		// stock = s; REINSTATE
 
-		gen = g; // TODO: REMOVE WHEN STOCK CLASS COMPLETE
-
+	    historicalBars = bars;
 		this.width = width;
 		this.height = height;
 		this.xOffset = xOffset;
@@ -92,9 +89,9 @@ public class ChartData {
 	 * 
 	 * @param s
 	 */
-	public void changeStock(RandomPriceGenerator g) { // TODO: change to Stock when stock is done
-		// stock = s;
-		gen = g;
+	public void changeStock(TreeMap<LocalDate, OHLCV> bars) { // TODO: change to Stock when stock is done
+		
+	    historicalBars = bars;
 		setValues();
 	}
 
@@ -103,8 +100,8 @@ public class ChartData {
 	 * Sets the minimum and maximum values of the Stocks pricing data
 	 */
 	private void setMinMaxValues() {
-		minVal = gen.getMin(); // TODO: switch to Stock
-		maxVal = gen.getMax(); // TODO: switch to Stock
+		minVal = historicalBars.values().stream().map(x -> x.low).min(Double::compareTo).get();
+		maxVal = historicalBars.values().parallelStream().map(x -> x.high).max(Double::compareTo).get(); 
 	}
 
 	/**
@@ -117,21 +114,27 @@ public class ChartData {
 	private void setSlopeIntercept(int width, int height) {
 		slopeY = maxVal < 0 ? 0 : (-(height - yBuffer)) / (maxVal - minVal);
 		interceptY = minVal < 0 ? 0 : (-(slopeY * maxVal) + yBuffer);
-		deltaX = (double) (width) / (gen.getHistoricalPrices().size()); // TODO: switch to Stock
+		deltaX = (double) (width) / (historicalBars.size()); 
 	}
 
 	/**
-	 * CONVERTPRICETOPLOT METHOD:
+	 * ConvertPriceToPlot METHOD:
 	 * Converts a given price to a Y Axis plot point. Formula : slopeY * price +
 	 * interceptY.
 	 * 
 	 * @param price
 	 * @return
 	 */
-	private double convertPriceToPlot(double price) {
+	public double convertPriceToPlot(double price) {
 		return Math.round(slopeY * price + interceptY);
 	}
-
+	
+	/**
+	 * returns coordinates to plot for a given x y value pairing. x is the number element you are trying to plot and y is the value at that index.
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public double[] convertToPlot(double x, double y) {
 		double xPlot = x * deltaX;
 		double yPlot = convertPriceToPlot(y);
@@ -147,8 +150,9 @@ public class ChartData {
 	private void setPlotPoints() {
 		plotPoints = new TreeMap<>();
 		int x = 1;
-		for (Map.Entry entry : gen.getHistoricalPrices().entrySet()) { // TODO: switch to Stock
-			double curVal = convertPriceToPlot((double) entry.getValue());
+		for (Map.Entry entry : historicalBars.entrySet()) { 
+		    OHLCV bar = (OHLCV) entry.getValue();
+			double curVal = convertPriceToPlot(bar.close);
 			plotPoints.put((LocalDate) entry.getKey(), new Double[] { (deltaX * x + xOffset), curVal });
 			x++;
 		}

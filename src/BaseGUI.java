@@ -22,7 +22,8 @@ public class BaseGUI extends JFrame {
 	private JButton changeStock;
 	private TableGUI table;
 	private ArrayList<Stock> stocks;
-	
+	private Stock tgtStock;
+	 
 	public BaseGUI(ArrayList<Stock> s) {
 	    this("StockAlertApp", s);
 	}
@@ -39,12 +40,14 @@ public class BaseGUI extends JFrame {
 
 		// create components
 
-
-		chart = new ChartGUI(stocks.get(0));
+		tgtStock = stocks.get(0);
+		chart = new ChartGUI(tgtStock.getDataHistory());
 		changeStock = new JButton("new Stock");
+		table = new TableGUI(tgtStock.getTicker());
 
 		// add components to content pane
-		content.add(chart, BorderLayout.NORTH);
+		content.add(table, BorderLayout.NORTH);
+		content.add(chart, BorderLayout.CENTER);
 		content.add(changeStock, BorderLayout.SOUTH);
 
 		// add action listener
@@ -52,16 +55,19 @@ public class BaseGUI extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+			    int stocksSize = stocks.size();
+			    int tgtStockIndex = stocks.indexOf(tgtStock);
+			    System.out.println(tgtStock.getTicker() + " " + tgtStockIndex);
+				tgtStock = stocks.get((tgtStockIndex + 1) % stocksSize);
+				
 
-				Stock s = stocks.get(1);
-
-				chart.changeStock(s);
+				chart.changeStock(tgtStock.getDataHistory());
+				table.setStock(tgtStock.getTicker());
 			}
 
 		});
 
 		pack();
 		setVisible(true);
-
 	}
 }

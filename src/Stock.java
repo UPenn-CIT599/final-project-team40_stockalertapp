@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
@@ -20,13 +21,18 @@ import java.nio.file.Paths;
  * @author kravetsj
  *
  */
-public class Stock {
+public class Stock implements Serializable {
 
 
-private String ticker;
-private String csv;
-private double quote;
-private TreeMap datahistory;
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -1995220666246658729L;
+    
+    private String ticker;
+    private String csv;
+    private double quote;
+    private TreeMap datahistory; 
 
 	/**
 	 * Stock object with stock's ticker, price, and historical data
@@ -35,7 +41,7 @@ private TreeMap datahistory;
 	 * @throws InterruptedException 
 	 */
 	
-	public Stock(String ticker) throws FileNotFoundException, InterruptedException {
+	public Stock(String ticker) throws FileNotFoundException, InterruptedException{
 		// TODO Auto-generated constructor stub
 		
 		DataPull t= new DataPull();
@@ -132,6 +138,10 @@ private TreeMap datahistory;
 	public TreeMap<LocalDate, OHLCV> getDataHistory() {
 	    return datahistory;
 	}
+	
+	public String getTicker() {
+	    return ticker;
+	}
 
 	public static void main(String[] args) throws FileNotFoundException, InterruptedException {
 		// TODO Auto-generated method stub
@@ -170,8 +180,4 @@ private TreeMap datahistory;
         System.out.print(t.quote)  ;
 		
 	}
-
-	
-	
-
 }

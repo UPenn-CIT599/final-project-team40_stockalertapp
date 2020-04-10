@@ -19,7 +19,7 @@ import javax.swing.JFrame;
 public class BaseGUI extends JFrame {
 	
 	private ChartGUI chart;
-	private JButton changeStock;
+	private StockDetailButton changeStock;
 	private TableGUI table;
 	private ArrayList<Stock> stocks;
 	private Stock tgtStock;
@@ -42,7 +42,7 @@ public class BaseGUI extends JFrame {
 
 		tgtStock = stocks.get(0);
 		chart = new ChartGUI(tgtStock.getDataHistory());
-		changeStock = new JButton("new Stock");
+		changeStock = new StockDetailButton(tgtStock);
 		table = new TableGUI(tgtStock.getTicker());
 
 		// add components to content pane
@@ -56,11 +56,12 @@ public class BaseGUI extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 			    int stocksSize = stocks.size();
-			    int tgtStockIndex = stocks.indexOf(tgtStock);
+			    int tgtStockIndex = stocks.indexOf(changeStock.getStock());
 				tgtStock = stocks.get((tgtStockIndex + 1) % stocksSize);
 
 				chart.changeStock(tgtStock.getDataHistory());
 				table.setStock(tgtStock.getTicker());
+				changeStock.changeStock(tgtStock);
 			}
 
 		});

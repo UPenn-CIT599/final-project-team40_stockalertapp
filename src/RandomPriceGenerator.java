@@ -41,7 +41,7 @@ public class RandomPriceGenerator {
      * This method create historical prices for testing purposes.
      */
     private void createHistoricalPrices() {
-        Double curPrice = generator.nextDouble() * 100;
+        Double curPrice = generator.nextDouble() * 1000;
         for(LocalDate day : dateRange) {
             curPrice = curPrice * (1 + generator.nextGaussian()/100);
             historicalPrices.put(day, curPrice);

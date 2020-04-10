@@ -5,6 +5,7 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
@@ -130,6 +131,19 @@ public class ChartGUI extends JPanel {
 	 * @return the new font
 	 */
 	public Font getSizedFont() {
+	    //check width available vs number of ticks
+	    double idealFontRatio = 1.0;
+	    int numXAxisTicks = chartData.getXAxisTicks().size();
+	    FontMetrics metric = g2d.getFontMetrics();
+	    int stringWidth = metric.stringWidth(chartData.getXAxisTicks().firstKey().toString());
+	    
+	    if(stringWidth * numXAxisTicks >= netWidth) {
+	        int idealStringWidth = (int) (netWidth / numXAxisTicks);
+	        idealFontRatio = (double) idealStringWidth / stringWidth;
+	    }
+	    
+	    
+	    /*
 		int maxWidth = 0;
 		for (Map.Entry entry : chartData.getYAxisTicks().entrySet()) {
 			int stringWidth = g2d.getFontMetrics().stringWidth(entry.getKey().toString());
@@ -139,9 +153,12 @@ public class ChartGUI extends JPanel {
 		if (maxWidth > xOffset) {
 			Font curFont = newFont;
 			newFont = new Font(curFont.getFontName(), curFont.getStyle(),
-					(int) (curFont.getSize() * (xOffset / maxWidth) * 0.90));
+					(int) (curFont.getSize() * .6));
 		}
 		return newFont;
+		*/
+	    Font curFont = g2d.getFont();
+	    return new Font(curFont.getFontName(), curFont.getStyle(), (int) (curFont.getSize() * idealFontRatio));
 	}
 
 	/**
@@ -322,6 +339,7 @@ public class ChartGUI extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 RandomPriceGenerator gen2 = new RandomPriceGenerator("newStock");
+                gen2.setTimeLength(5000);
                 chart.changeStock(gen2.getHistorialBars());
             }
             

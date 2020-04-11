@@ -1,6 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -16,76 +17,39 @@ import javax.swing.JRadioButton;
 import javax.swing.border.Border;
 
 public class TableGUI extends JPanel{
-    ArrayList<JLabel> alerts;
-    ArrayList<JRadioButton> buttons;
-    JLabel tickerHeader;
-    JLabel stockLabel;
-    GridBagConstraints gridCont;
-    String ticker;
+    private ArrayList<JButton> buttons;
+    private JLabel stockLabel;
+    private GridBagConstraints gridCont;
+    private String ticker;
     
     public TableGUI(String ticker) {
         this.ticker = ticker;
         buttons = new ArrayList<>();
-        
-        setBackgroundColor(Color.GREEN);
-        setOpaque(true);
-        setLayout(new GridBagLayout());
         gridCont = new GridBagConstraints();
+        
+        setLayout(new GridBagLayout());
         Border border = BorderFactory.createLineBorder(Color.BLACK);
-        tickerHeader = new JLabel("Ticker", JLabel.CENTER);
-        tickerHeader.setForeground(Color.WHITE);
-        tickerHeader.setBackground(Color.DARK_GRAY);
-        tickerHeader.setOpaque(true);
+        this.setBackground(Color.DARK_GRAY);
         
         stockLabel = new JLabel(ticker.toUpperCase(), JLabel.CENTER);
         stockLabel.setForeground(Color.WHITE);
         stockLabel.setBackground(Color.DARK_GRAY);
         stockLabel.setOpaque(true);
+        stockLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
         
-        alerts = new ArrayList<>();
-        for(String alertName : new String[] { "3M", "6M", "1Y", "ALL"}) {
+        for(String alertName : new String[] { "3M", "6M", "1Y", "5Y", "ALL"}) {
             
-            JLabel alert = new JLabel(alertName);
-            alert.setForeground(Color.WHITE);
-            alert.setBackground(Color.DARK_GRAY);
-            alert.setOpaque(true);
-            alert.setHorizontalTextPosition(JLabel.CENTER);
-            alerts.add(alert);
+            JButton dateAdjust = new JButton(alertName);
+            dateAdjust.setForeground(new Color(230, 145, 0));
+            dateAdjust.setBackground(Color.DARK_GRAY);
+            dateAdjust.setOpaque(true);
+            dateAdjust.setHorizontalTextPosition(JLabel.CENTER);
+            dateAdjust.setActionCommand(alertName);
+            buttons.add(dateAdjust);
         }
-        
-        createHeader();
         createRow(1);
-        
-    }
-    
-    private void setBackgroundColor(Color black) {
-        // TODO Auto-generated method stub
-        
     }
 
-    public void createHeader() {
-        gridCont.fill = GridBagConstraints.BOTH;
-        gridCont.weightx = 4.0;
-        gridCont.weighty = 1.0;
-        //gridCont.ipady = 10;
-        //gridCont.ipadx = 10;
-        gridCont.gridy = 0;
-        gridCont.anchor = GridBagConstraints.FIRST_LINE_START;
-        add(tickerHeader, gridCont);
-        
-        int x = 1;
-        for(JLabel item : alerts) {
-            gridCont.gridx = GridBagConstraints.RELATIVE;
-            gridCont.anchor = GridBagConstraints.BASELINE;
-            gridCont.weightx = 1.0;
-            if(x == alerts.size()) {
-                gridCont.anchor = GridBagConstraints.FIRST_LINE_END;
-            }
-            add(item, gridCont);
-            x++;
-        }
-        
-    }
     
     public void createRow(int num) {
         gridCont.weighty = 3.0;
@@ -97,16 +61,12 @@ public class TableGUI extends JPanel{
         
         gridCont.gridx = GridBagConstraints.RELATIVE;
         int x = 1;
-        for(JLabel item : alerts) {
+        for(JButton item : buttons) {
             gridCont.weightx = 1.0;
-            if(x == alerts.size()) {
+            if(x == buttons.size()) {
                 gridCont.anchor = GridBagConstraints.FIRST_LINE_END;
             }
-            JRadioButton button = new JRadioButton();
-            button.setForeground(Color.WHITE);
-            button.setBackground(Color.DARK_GRAY);
-            button.setOpaque(true);
-            add(button, gridCont);
+            add(item, gridCont);
             x++;
         }
     }
@@ -115,6 +75,15 @@ public class TableGUI extends JPanel{
         this.ticker = ticker;
         stockLabel.setText(ticker.toUpperCase());
     }
+    
+    public String getStock() {
+        return ticker;
+    }
+    
+    public ArrayList<JButton> getButtons() {
+        return buttons;
+    }
+    
     public static void main(String[] args) {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

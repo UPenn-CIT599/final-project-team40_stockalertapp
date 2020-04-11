@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -15,6 +16,7 @@ public class StockDetailButton extends JButton{
     private Color backGroundColor = Color.DARK_GRAY;
     private Color foreGroundColor = Color.WHITE;
     private Color hoverColor = Color.GRAY;
+    private Font tickerFont;
     
     /**
      * Constructs the JButton with a Stock object attribute as well as setting the background and foreground colors.
@@ -22,7 +24,9 @@ public class StockDetailButton extends JButton{
      */
     public StockDetailButton(Stock s) {
         stock = s;
+        tickerFont = new Font(Font.SANS_SERIF, Font.PLAIN, 16);
         
+        this.setFont(tickerFont);
         this.setText(stock.getTicker());
         this.setBackground(backGroundColor);
         this.setForeground(foreGroundColor);

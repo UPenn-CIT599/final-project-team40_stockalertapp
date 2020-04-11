@@ -52,7 +52,7 @@ public class BaseGUI extends JFrame {
 		// create components
 
 		tgtStock = stocks.get(0);
-		chart = new ChartGUI(tgtStock.getDataHistory());
+		chart = new ChartGUI(tgtStock.getDatahistory());
 		// changeStock = new StockDetailButton(tgtStock);
 		table = new TableGUI(tgtStock.getTicker());
 		stockList = new StockListPanel(stocks);
@@ -79,7 +79,7 @@ public class BaseGUI extends JFrame {
     				StockDetailButton b = (StockDetailButton) e.getSource();
     				Stock tgtStock = b.getStock();
     
-    				chart.changeStock(tgtStock.getDataHistory());
+    				chart.changeStock(tgtStock.getDatahistory());
     				table.setStock(tgtStock.getTicker());
     			}
     

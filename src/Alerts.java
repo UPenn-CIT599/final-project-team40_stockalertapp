@@ -9,15 +9,28 @@
 
 public class Alerts {
 	
+	// test price variable
+	
+	double price = 45.00;
+	double pricealert = 50.00;
+	
+	// store the alerts method
+	
+	
+	
 	/**
 	 * BELOWPRICEALERT METHOD: 
-	 * This method alerts the user if the price is below a certain number.
+	 * This method alerts the user if the price is below or equal to a certain number.
 	 * @return true: if the price is below the number
 	 * @return false: if the price is above the number
 	 */
 	
 	public boolean belowPriceAlert() {
 		
+		if (price <= pricealert) {
+			return true;
+		} 
+
 		return false;
 		
 	}
@@ -31,6 +44,10 @@ public class Alerts {
 	
 	public boolean abovePriceAlert() {
 		
+		if (price >= pricealert) {
+			return true;
+		}
+		
 		return false;
 	}
 		
@@ -42,6 +59,8 @@ public class Alerts {
 	 */
 	
 	public boolean smaCrossoverAlert() {
+		
+		
 		
 		return false;
 	}

@@ -179,7 +179,7 @@ public class ChartGUI extends JPanel {
 	 */
 	public void changeStock(TreeMap<LocalDate, OHLCV> s) {
 		stockData = s;
-		chartData = new ChartData(stockData, netWidth, netHeight, xOffset, buffer); // TODO: switch to Stock
+		chartData = new ChartData(stockData, netWidth, netHeight, xOffset, buffer); 
 		repaint();
 	}
 

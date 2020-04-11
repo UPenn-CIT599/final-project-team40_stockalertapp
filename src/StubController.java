@@ -51,6 +51,7 @@ public class StubController {
             e.printStackTrace();
         }
     }
+    
     public static void main(String[] args) {
         StubController app = new StubController();
         File tgtFile = new File("portfolio.ser");

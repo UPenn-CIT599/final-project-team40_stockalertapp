@@ -36,7 +36,6 @@ public class BaseGUI extends JFrame {
 		super(title);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		stocks = s;
-		// set layout for frame
 		
 
 		// get content pane for frame
@@ -61,7 +60,6 @@ public class BaseGUI extends JFrame {
 		// add components to content pane
 		rightPanel.add(table, BorderLayout.NORTH);
 		rightPanel.add(chart, BorderLayout.CENTER);
-		//rightPanel.add(changeStock, BorderLayout.SOUTH);
 		
 		leftPanel.add(stockList, BorderLayout.NORTH);
 		leftPanel.setBackground(Color.DARK_GRAY);
@@ -87,5 +85,18 @@ public class BaseGUI extends JFrame {
 
 		pack();
 		setVisible(true);
+	}
+	
+	private class ChartAction implements ActionListener {
+	    BaseGUI gui;
+	    
+	    public ChartAction(BaseGUI gui) {
+	        this.gui = gui;
+	    }
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            
+        }
+	    
 	}
 }

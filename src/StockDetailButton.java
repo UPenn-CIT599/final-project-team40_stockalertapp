@@ -1,5 +1,8 @@
 import java.awt.Color;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
 /**
@@ -19,12 +22,13 @@ public class StockDetailButton extends JButton{
      */
     public StockDetailButton(Stock s) {
         stock = s;
+        
         this.setText(stock.getTicker());
         this.setBackground(backGroundColor);
         this.setForeground(foreGroundColor);
         this.setBorderPainted(false);
         this.setOpaque(true);
-        
+        this.addMouseListener(new MouseEventActions());
     }
     
     /**
@@ -42,5 +46,37 @@ public class StockDetailButton extends JButton{
      */
     public Stock getStock() {
         return stock;
+    }
+    
+    private class MouseEventActions implements MouseListener {
+        
+        
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            ((JButton) e.getSource()).setForeground(new Color(222, 180, 132, 100));
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            ((JButton) e.getSource()).setForeground(Color.WHITE);
+            
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+            ((JButton)e.getSource()).setBackground(Color.GRAY);
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+            ((JButton) e.getSource()).setBackground(Color.DARK_GRAY); 
+            
+        }
+        
     }
 }

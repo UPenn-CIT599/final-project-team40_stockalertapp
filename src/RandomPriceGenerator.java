@@ -52,7 +52,7 @@ public class RandomPriceGenerator {
      * Returns OHLCV value that is a representative of the Stock class datahistory instance variable. 
      * @return
      */
-    public TreeMap<LocalDate, OHLCV> getHistorialBars() {
+    public TreeMap<LocalDate, OHLCV> getHistoricalBars() {
         
         TreeMap<LocalDate, OHLCV> historicalBars = new TreeMap<>();
         double range = .01;
@@ -114,7 +114,7 @@ public class RandomPriceGenerator {
      */
     public static void main(String[] args) {
         RandomPriceGenerator gen = new RandomPriceGenerator("spy");
-        gen.getHistorialBars().entrySet().stream().map(Map.Entry::getValue).forEach(entry -> System.out.println(entry.low + " " + entry.high));
+        LocalDate startDate = gen.getHistoricalBars().lastKey().minusDays(30);
     }
     
 } 

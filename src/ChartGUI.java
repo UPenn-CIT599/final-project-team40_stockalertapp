@@ -317,7 +317,7 @@ public class ChartGUI extends JPanel {
 	
 	public static void main(String[] args) {
         RandomPriceGenerator gen = new RandomPriceGenerator("SPY");
-        ChartGUI chart = new ChartGUI(gen.getHistorialBars());
+        ChartGUI chart = new ChartGUI(gen.getHistoricalBars());
         JButton button = new JButton("change stock");
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -332,7 +332,8 @@ public class ChartGUI extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 RandomPriceGenerator gen2 = new RandomPriceGenerator("newStock");
                 gen2.setTimeLength(5275);
-                chart.changeStock(gen2.getHistorialBars());
+                
+                chart.changeStock(gen2.getHistoricalBars());
             }
             
         });

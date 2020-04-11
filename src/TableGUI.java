@@ -17,6 +17,7 @@ import javax.swing.border.Border;
 
 public class TableGUI extends JPanel{
     ArrayList<JLabel> alerts;
+    ArrayList<JRadioButton> buttons;
     JLabel tickerHeader;
     JLabel stockLabel;
     GridBagConstraints gridCont;
@@ -24,6 +25,8 @@ public class TableGUI extends JPanel{
     
     public TableGUI(String ticker) {
         this.ticker = ticker;
+        buttons = new ArrayList<>();
+        
         setBackgroundColor(Color.GREEN);
         setOpaque(true);
         setLayout(new GridBagLayout());
@@ -40,7 +43,8 @@ public class TableGUI extends JPanel{
         stockLabel.setOpaque(true);
         
         alerts = new ArrayList<>();
-        for(String alertName : new String[] { "MACD", "OBV", "SMA", "ExpMA"}) {
+        for(String alertName : new String[] { "3M", "6M", "1Y", "ALL"}) {
+            
             JLabel alert = new JLabel(alertName);
             alert.setForeground(Color.WHITE);
             alert.setBackground(Color.DARK_GRAY);

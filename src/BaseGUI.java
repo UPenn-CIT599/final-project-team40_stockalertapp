@@ -4,7 +4,10 @@ import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -51,8 +54,8 @@ public class BaseGUI extends JFrame {
 		// create components
 
 		tgtStock = stocks.get(0);
-		chart = new ChartGUI(tgtStock.getDataHistory());
-		// changeStock = new StockDetailButton(tgtStock);
+		chart = new ChartGUI(tgtStock.getDatahistory());
+		changeStock = new StockDetailButton(tgtStock);
 		table = new TableGUI(tgtStock.getTicker());
 		stockList = new StockListPanel(stocks);
 		
@@ -60,6 +63,7 @@ public class BaseGUI extends JFrame {
 		// add components to content pane
 		rightPanel.add(table, BorderLayout.NORTH);
 		rightPanel.add(chart, BorderLayout.CENTER);
+		rightPanel.add(changeStock, BorderLayout.SOUTH);
 		
 		leftPanel.add(stockList, BorderLayout.NORTH);
 		leftPanel.setBackground(Color.DARK_GRAY);
@@ -67,6 +71,8 @@ public class BaseGUI extends JFrame {
 		
 		content.add(leftPanel, BorderLayout.WEST);
 		content.add(rightPanel, BorderLayout.CENTER);
+		
+		changeStock.addActionListener(new ChartAction(this));
 
 		// add action listener
 		for(StockDetailButton button : stockList.getButtons())
@@ -77,7 +83,7 @@ public class BaseGUI extends JFrame {
     				StockDetailButton b = (StockDetailButton) e.getSource();
     				Stock tgtStock = b.getStock();
     
-    				chart.changeStock(tgtStock.getDataHistory());
+    				chart.changeStock(tgtStock.getDatahistory());
     				table.setStock(tgtStock.getTicker());
     			}
     
@@ -95,7 +101,20 @@ public class BaseGUI extends JFrame {
 	    }
         @Override
         public void actionPerformed(ActionEvent e) {
+            TreeMap<LocalDate, OHLCV> shortData = new TreeMap<>();
+            TreeMap<LocalDate, OHLCV> tgtData = gui.tgtStock.getDatahistory();
+            LocalDate startDate = tgtData.lastKey().minusDays(30);
             
+            for(Map.Entry entry : tgtData.entrySet()) {
+                LocalDate k  = (LocalDate) entry.getKey();
+                OHLCV v = (OHLCV) entry.getValue();
+                
+                if(k.isAfter(startDate)) {
+                    shortData.put(k, v);
+                }
+            }
+            gui.chart.changeStock(shortData);
+            gui.changeStock.setText(gui.tgtStock.getTicker());
         }
 	    
 	}

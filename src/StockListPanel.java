@@ -53,6 +53,13 @@ public class StockListPanel extends JPanel {
         return buttons;
     }
     
+    public void addStock(Stock s) {
+        portfolio.add(s);
+        StockDetailButton newButton = new StockDetailButton(s);
+        buttons.add(newButton);
+        add(newButton, gbConst);
+    }
+    
     public static void main(String[] args) {
         StubController controller = new StubController();
         

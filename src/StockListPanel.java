@@ -6,6 +6,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,37 +15,61 @@ import java.util.Arrays;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class StockListPanel extends JPanel {
     
     private ArrayList<Stock> portfolio;
     private ArrayList<StockDetailButton> buttons;
     private GridBagConstraints gbConst;
-    private JButton toggleVisible;
+    private JButton addStock;
+    private GridBagConstraints showAddStock;
+    private GridBagLayout gbLayout;
+    
     private String[] toggleSymbols;
+    private MouseEventActions mouseControl;
+    private JTextField newStockInput;
     
     public StockListPanel(ArrayList<Stock> s) {
         portfolio = s;
         buttons = new ArrayList<>();
+        mouseControl = new MouseEventActions();
         setBackground(Color.DARK_GRAY);
         setOpaque(true);
         
-        setLayout(new GridBagLayout());
-        toggleVisible = new JButton();
-        Font buttonFont = toggleVisible.getFont();
-        toggleVisible.setFont(new Font(buttonFont.getFontName(), buttonFont.getStyle(), (int) (buttonFont.getSize() * 1.1)));
-        toggleVisible.setBackground(Color.DARK_GRAY);
-        toggleVisible.setForeground(Color.WHITE);
-        toggleVisible.setOpaque(true);
-        toggleVisible.setBorderPainted(false);
+        gbLayout = new GridBagLayout();
+        setLayout(gbLayout);
+        addStock = new JButton("+");
+        Font buttonFont = addStock.getFont();
+        addStock.setFont(new Font(buttonFont.getFontName(), buttonFont.getStyle(), (int) (buttonFont.getSize() * 1.5)));
+        addStock.setBackground(Color.DARK_GRAY);
+        addStock.setForeground(Color.WHITE);
+        addStock.setOpaque(true);
+        addStock.setBorderPainted(false);
+        addStock.addMouseListener(mouseControl);
+        
+        newStockInput = new JTextField("enter ticker");
+        newStockInput.setForeground(Color.LIGHT_GRAY);
+        newStockInput.addMouseListener(mouseControl);
+        newStockInput.setVisible(false);
+        newStockInput.addActionListener(new AddStockTextAction());
+        
+        showAddStock = new GridBagConstraints();
+        showAddStock.fill = GridBagConstraints.BOTH;
+        showAddStock.gridy = 2;
+        showAddStock.gridx = 1;
+        
         
         gbConst = new GridBagConstraints();
         gbConst.gridy = GridBagConstraints.RELATIVE;
         gbConst.gridx = 1;
         gbConst.fill = GridBagConstraints.BOTH;
-        add(toggleVisible, gbConst);
+        add(addStock, gbConst);
+        add(newStockInput, gbConst);
+        
         for(Stock stock : portfolio) {
             StockDetailButton button = new StockDetailButton(stock);
+            button.addMouseListener(mouseControl);
             buttons.add(button);
             add(button, gbConst);
         }
@@ -60,18 +86,71 @@ public class StockListPanel extends JPanel {
         add(newButton, gbConst);
     }
     
-    public static void main(String[] args) {
-        StubController controller = new StubController();
+    public void setAddStockAction(ActionListener action) {
+        addStock.addActionListener(action);
+    }
+    
+    public void setNewStockInputVisible() {
+        if(!newStockInput.isVisible()) {
+            newStockInput.setVisible(true);
+            addStock.setText("-");
+            revalidate();
+        } else {
+            newStockInput.setVisible(false);
+            addStock.setText("+");
+            revalidate();
+        }
+    }
+    
+    private class AddStockTextAction implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if(e.KEY_EVENT_MASK == 8) {
+                ((JTextField) e.getSource()).setVisible(false);
+                ((JTextField) e.getSource()).setText("enter ticker");
+                revalidate();
+            }
+        }
         
-        controller.deserializeData(new File("portfolio.ser"));
-        StockListPanel stockList = new StockListPanel(controller.stocks);
-        JFrame frame = new JFrame();
-        Container content = frame.getContentPane();
-        content.setLayout(new FlowLayout());
-        content.add(stockList);
-        
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
+    }
+    private class MouseEventActions implements MouseListener {
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            Object source = e.getSource();
+            if(source instanceof JTextField) {
+                ((JTextField) source).setText("");
+                ((JTextField) source).setForeground(Color.BLACK);
+            }
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            if(e.getSource() instanceof JButton) {
+                ((JButton) e.getSource()).setForeground(new Color(222, 180, 132, 100));
+            }
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            if(e.getSource() instanceof JButton) {
+                ((JButton) e.getSource()).setForeground(Color.WHITE);
+            }
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+            if(e.getSource() instanceof JButton) {
+                ((JButton)e.getSource()).setBackground(Color.GRAY);
+            }
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+            if(e.getSource() instanceof JButton) {
+                ((JButton) e.getSource()).setBackground(Color.DARK_GRAY); 
+            }
+        }
     }
 }

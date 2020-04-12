@@ -31,6 +31,7 @@ public class BaseGUI extends JFrame {
 	private StockListPanel stockList;
 	private ArrayList<Stock> stocks;
 	private Stock tgtStock;
+	private Container content;
 	 
 	public BaseGUI(ArrayList<Stock> s) {
 	    this("StockAlertApp", s);
@@ -43,7 +44,7 @@ public class BaseGUI extends JFrame {
 		
 
 		// get content pane for frame
-		Container content = getContentPane();
+		content = getContentPane();
 		content.setLayout(new BorderLayout());
 		
 		JPanel leftPanel = new JPanel();
@@ -79,8 +80,12 @@ public class BaseGUI extends JFrame {
 		}
 		
 		// set StockListPanel Buttons to switch between stocks
-		for(StockDetailButton button : stockList.getButtons())
+		for(StockDetailButton button : stockList.getButtons()) {
     		button.addActionListener(new SwitchStockAction());
+		}
+		
+		// set StockListPanel addStock button to add stock to portfolio and display in panel
+		stockList.setAddStockAction(new AddStockAction());
 		
 		// pack components and set visible
 		pack();
@@ -145,6 +150,18 @@ public class BaseGUI extends JFrame {
                 shortData.putAll(tgtData);
             }
             chart.changeStock(shortData);
+        }
+	    
+	}
+	
+	private class AddStockAction implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            stockList.setNewStockInputVisible();
+            
+            content.revalidate();
+            
         }
 	    
 	}

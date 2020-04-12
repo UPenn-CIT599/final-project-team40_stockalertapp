@@ -6,6 +6,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -52,7 +53,6 @@ public class StockListPanel extends JPanel {
         newStockInput.setForeground(Color.LIGHT_GRAY);
         newStockInput.addMouseListener(mouseControl);
         newStockInput.setVisible(false);
-        newStockInput.addActionListener(new AddStockTextAction());
         
         showAddStock = new GridBagConstraints();
         showAddStock.fill = GridBagConstraints.BOTH;
@@ -86,10 +86,13 @@ public class StockListPanel extends JPanel {
         add(newButton, gbConst);
     }
     
-    public void setAddStockAction(ActionListener action) {
+    public void setAddStockSlideAction(ActionListener action) {
         addStock.addActionListener(action);
     }
     
+    public void setAddStockTextAction(ActionListener action) {
+        newStockInput.addActionListener(action);
+    }
     public void setNewStockInputVisible() {
         if(!newStockInput.isVisible()) {
             newStockInput.setVisible(true);
@@ -102,18 +105,6 @@ public class StockListPanel extends JPanel {
         }
     }
     
-    private class AddStockTextAction implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if(e.KEY_EVENT_MASK == 8) {
-                ((JTextField) e.getSource()).setVisible(false);
-                ((JTextField) e.getSource()).setText("enter ticker");
-                revalidate();
-            }
-        }
-        
-    }
     private class MouseEventActions implements MouseListener {
 
         @Override

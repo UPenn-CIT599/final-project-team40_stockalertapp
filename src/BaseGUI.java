@@ -13,6 +13,7 @@ import java.util.TreeMap;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 /**
  * BASEGUI CLASS:
@@ -85,7 +86,8 @@ public class BaseGUI extends JFrame {
 		}
 		
 		// set StockListPanel addStock button to add stock to portfolio and display in panel
-		stockList.setAddStockAction(new AddStockAction());
+		stockList.setAddStockSlideAction(new AddStockSlideAction());
+		stockList.setAddStockTextAction(new AddStockTextAction());
 		
 		// pack components and set visible
 		pack();
@@ -154,15 +156,30 @@ public class BaseGUI extends JFrame {
 	    
 	}
 	
-	private class AddStockAction implements ActionListener {
+	
+	private class AddStockSlideAction implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
             stockList.setNewStockInputVisible();
-            
             content.revalidate();
-            
         }
-	    
 	}
+	
+	 private class AddStockTextAction implements ActionListener {
+
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	            if(e.KEY_EVENT_MASK == 8) {
+	                JTextField comp = (JTextField) e.getSource();
+	                String newTicker = comp.getText();
+	                
+	                // TODO: get new stock add to portfolio and set tgtStock to new stock to update rest of components
+	                
+	                comp.setForeground(Color.LIGHT_GRAY);
+	                comp.setText("enter ticker");
+	                revalidate();
+	            }
+	        }
+	    }
 }

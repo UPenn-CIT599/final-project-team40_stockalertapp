@@ -13,6 +13,7 @@ import java.util.TreeMap;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 /**
@@ -49,9 +50,13 @@ public class BaseGUI extends JFrame {
 		content.setLayout(new BorderLayout());
 		
 		JPanel leftPanel = new JPanel();
+		JScrollPane leftScroll = new JScrollPane(leftPanel);
+		leftScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		leftScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		JPanel rightPanel = new JPanel();
 		rightPanel.setLayout(new BorderLayout());
 		leftPanel.setLayout(new BorderLayout());
+		
 		
 		
 		// create components
@@ -70,7 +75,7 @@ public class BaseGUI extends JFrame {
 		leftPanel.setBackground(Color.DARK_GRAY);
 		leftPanel.setOpaque(true);
 		
-		content.add(leftPanel, BorderLayout.WEST);
+		content.add(leftScroll, BorderLayout.WEST);
 		content.add(rightPanel, BorderLayout.CENTER);
 		
 

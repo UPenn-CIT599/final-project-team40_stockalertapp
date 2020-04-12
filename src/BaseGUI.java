@@ -13,6 +13,8 @@ import java.util.TreeMap;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 
 /**
  * BASEGUI CLASS:
@@ -48,9 +50,13 @@ public class BaseGUI extends JFrame {
 		content.setLayout(new BorderLayout());
 		
 		JPanel leftPanel = new JPanel();
+		JScrollPane leftScroll = new JScrollPane(leftPanel);
+		leftScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		leftScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		JPanel rightPanel = new JPanel();
 		rightPanel.setLayout(new BorderLayout());
 		leftPanel.setLayout(new BorderLayout());
+		
 		
 		
 		// create components
@@ -69,7 +75,7 @@ public class BaseGUI extends JFrame {
 		leftPanel.setBackground(Color.DARK_GRAY);
 		leftPanel.setOpaque(true);
 		
-		content.add(leftPanel, BorderLayout.WEST);
+		content.add(leftScroll, BorderLayout.WEST);
 		content.add(rightPanel, BorderLayout.CENTER);
 		
 
@@ -85,7 +91,8 @@ public class BaseGUI extends JFrame {
 		}
 		
 		// set StockListPanel addStock button to add stock to portfolio and display in panel
-		stockList.setAddStockAction(new AddStockAction());
+		stockList.setAddStockSlideAction(new AddStockSlideAction());
+		stockList.setAddStockTextAction(new AddStockTextAction());
 		
 		// pack components and set visible
 		pack();
@@ -154,15 +161,30 @@ public class BaseGUI extends JFrame {
 	    
 	}
 	
-	private class AddStockAction implements ActionListener {
+	
+	private class AddStockSlideAction implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
             stockList.setNewStockInputVisible();
-            
             content.revalidate();
-            
         }
-	    
 	}
+	
+	 private class AddStockTextAction implements ActionListener {
+
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	            if(e.KEY_EVENT_MASK == 8) {
+	                JTextField comp = (JTextField) e.getSource();
+	                String newTicker = comp.getText();
+	                
+	                // TODO: get new stock add to portfolio and set tgtStock to new stock to update rest of components
+	                
+	                comp.setForeground(Color.LIGHT_GRAY);
+	                comp.setText("enter ticker");
+	                revalidate();
+	            }
+	        }
+	    }
 }

@@ -18,166 +18,166 @@ import javax.net.ssl.HttpsURLConnection;
 /**
  * A class to pull stock historical data
  * 
- * @author kravetsj; tiffchoi
+ * @author Joseph Kravets; tiffchoi
  *
  */
 public class DataPull {
 
-	public DataPull() {
-		// TODO Auto-generated constructor stub
+    public DataPull() {
+	// TODO Auto-generated constructor stub
+    }
+
+    /**
+     * Returns a csv of stock data with data, open, high, low, close, volume
+     * 
+     * @param ticker
+     * @throws InterruptedException
+     */
+    public static void getCsv(String symbol) throws InterruptedException {
+	/// api key =JRVCT84VUG4TM97S
+	try {
+
+	    try {
+		System.gc();
+		Files.deleteIfExists(Paths.get((symbol + ".csv")));
+
+	    } catch (NoSuchFileException e) {
+		System.out.println("No such file exists");
+	    }
+
+	    System.out.println("waiting 13 seconds for " + symbol + " data due to api rate limit");
+	    TimeUnit.SECONDS.sleep(13);
+	    String url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=" + (symbol)
+		    + "&outputsize=full&apikey=JRVCT84VUG4TM97S&datatype=csv";
+
+	    InputStream input = new URL(url).openStream();
+
+	    FileWriter fw = new FileWriter((symbol + ".csv"), true);
+	    PrintWriter pw = new PrintWriter(fw);
+
+	    try (InputStreamReader reader = new InputStreamReader(input, "UTF-8");
+
+		    BufferedReader br = new BufferedReader(reader)) {
+
+		String line;
+
+		while ((line = br.readLine()) != null) {
+
+		    pw.println(line);
+		    pw.flush();
+		}
+		br.close();
+		reader.close();
+	    }
+
+	} catch (IOException e) {
+
+	    e.printStackTrace();
+	}
+    }
+
+    /**
+     * Returns the current price of a stock ticker
+     * 
+     * @param symbol
+     * @throws InterruptedException
+     */
+    public static double getCurrentQuote(String symbol) throws InterruptedException {
+
+	System.out.println("waiting 13 seconds for " + symbol + " data due to api rate limit");
+	TimeUnit.SECONDS.sleep(13);
+	String url = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" + symbol
+		+ "&apikey=JRVCT84VUG4TM97S";
+
+	InputStream input = null;
+
+	try {
+	    input = new URL(url).openStream();
+	} catch (MalformedURLException e1) {
+	    e1.printStackTrace();
+	} catch (IOException e1) {
+	    e1.printStackTrace();
+	}
+	try (InputStreamReader reader = new InputStreamReader(input, "UTF-8");
+
+		BufferedReader br = new BufferedReader(reader)) {
+	    String line;
+
+	    String json = " ";
+	    while ((line = br.readLine()) != null) {
+		json = json + line;
+	    }
+	    String[] lineComponents = json.split(":");
+	    String[] priceComponents = lineComponents[6].split(",");
+	    String str = priceComponents[0].replace("\"", "");
+	    double currentPrice = Double.parseDouble(str);
+	    br.close();
+	    reader.close();
+	    return currentPrice;
+
 	}
 
-	/**
-	 * Returns a csv of stock data with data, open, high, low, close, volume
-	 * 
-	 * @param ticker
-	 * @throws InterruptedException
-	 */
-	public static void getcsv(String symbol) throws InterruptedException {
-		/// api key =JRVCT84VUG4TM97S
-		try {
+	catch (IOException e) {
 
-			try {
-				System.gc();
-				Files.deleteIfExists(Paths.get((symbol + ".csv")));
-				// System.out.println("Deleted old "+symbol+".csv file");
-			} catch (NoSuchFileException e) {
-				System.out.println("No such file/directory exists");
-			}
-
-			System.out.println("waiting 13 seconds for " + symbol + " data due to api rate limit");
-			TimeUnit.SECONDS.sleep(13);
-			String url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=" + (symbol)
-					+ "&outputsize=full&apikey=JRVCT84VUG4TM97S&datatype=csv";
-
-			InputStream input = new URL(url).openStream();
-
-			FileWriter fw = new FileWriter((symbol + ".csv"), true);
-			PrintWriter pw = new PrintWriter(fw);
-
-			try (InputStreamReader reader = new InputStreamReader(input, "UTF-8");
-
-					BufferedReader br = new BufferedReader(reader)) {
-
-				String line;
-
-				while ((line = br.readLine()) != null) {
-					// System.out.println(line);
-					pw.println(line);
-					pw.flush();
-				}
-				br.close();
-				reader.close();
-			}
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	    e.printStackTrace();
+	    return 0.0;
 	}
+    }
 
-	/**
-	 * Returns the current price of a stock ticker
-	 * 
-	 * @param symbol
-	 * @throws InterruptedException
-	 */
-	public static double getcurrentquote(String symbol) throws InterruptedException {
+    /**
+     * Returns the current financial indicators from stock ticker
+     * 
+     * Added the SMA
+     * 
+     * @param symbol
+     * @throws InterruptedException
+     */
 
-		System.out.println("waiting 13 seconds for " + symbol + " data due to api rate limit");
-		TimeUnit.SECONDS.sleep(13);
-		String url = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" + symbol
-				+ "&apikey=JRVCT84VUG4TM97S";
+    public static void getIndicator(String symbol) throws InterruptedException {
+	/// api key =JRVCT84VUG4TM97S
+	try {
 
-		InputStream input = null;
+	    try {
+		System.gc();
+		Files.deleteIfExists(Paths.get((symbol + ".csv")));
 
-		try {
-			input = new URL(url).openStream();
-		} catch (MalformedURLException e1) {
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			e1.printStackTrace();
+	    } catch (NoSuchFileException e) {
+		System.out.println("No such file/directory exists");
+	    }
+
+	    System.out.println("waiting 13 seconds for " + symbol + " data due to api rate limit");
+	    TimeUnit.SECONDS.sleep(13);
+
+	    // For SMA
+	    // https://www.alphavantage.co/query?function=SMA&symbol=IBM&interval=weekly&time_period=10&series_type=open&apikey=demo
+
+	    String url = "https://www.alphavantage.co/query?function=SMA&symbol=" + (symbol)
+		    + "&interval=weekly&time_period=10&series_type=open&apikey=JRVCT84VUG4TM97S&datatype=csv";
+
+	    InputStream input = new URL(url).openStream();
+
+	    FileWriter fw = new FileWriter((symbol + ".csv"), true);
+	    PrintWriter pw = new PrintWriter(fw);
+
+	    try (InputStreamReader reader = new InputStreamReader(input, "UTF-8");
+
+		    BufferedReader br = new BufferedReader(reader)) {
+
+		String line;
+
+		while ((line = br.readLine()) != null) {
+		    // System.out.println(line);
+		    pw.println(line);
+		    pw.flush();
 		}
-		try (InputStreamReader reader = new InputStreamReader(input, "UTF-8");
+		br.close();
+		reader.close();
+	    }
 
-				BufferedReader br = new BufferedReader(reader)) {
-			String line;
-
-			String x = " ";
-			while ((line = br.readLine()) != null) {
-				x = x + line;
-			}
-			String[] lineComponents = x.split(":");
-			String[] priceComponents = lineComponents[6].split(",");
-			String str = priceComponents[0].replace("\"", "");
-			double currentprice = Double.parseDouble(str);
-			br.close();
-			reader.close();
-			return currentprice;
-
-		}
-
-		catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return 0.0;
-		}
+	} catch (IOException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
 	}
-
-	/**
-	 * Returns the current financial indicators from stock ticker
-	 * 
-	 * Added the SMA
-	 * 
-	 * @param symbol
-	 * @throws InterruptedException
-	 */
-
-	public static void getIndicator(String symbol) throws InterruptedException {
-		/// api key =JRVCT84VUG4TM97S
-		try {
-
-			try {
-				System.gc();
-				Files.deleteIfExists(Paths.get((symbol + ".csv")));
-				// System.out.println("Deleted old "+symbol+".csv file");
-			} catch (NoSuchFileException e) {
-				System.out.println("No such file/directory exists");
-			}
-
-			System.out.println("waiting 13 seconds for " + symbol + " data due to api rate limit");
-			TimeUnit.SECONDS.sleep(13);
-
-			// For SMA
-			// https://www.alphavantage.co/query?function=SMA&symbol=IBM&interval=weekly&time_period=10&series_type=open&apikey=demo
-
-			String url = "https://www.alphavantage.co/query?function=SMA&symbol=" + (symbol)
-					+ "&interval=weekly&time_period=10&series_type=open&apikey=JRVCT84VUG4TM97S&datatype=csv";
-
-			InputStream input = new URL(url).openStream();
-
-			FileWriter fw = new FileWriter((symbol + ".csv"), true);
-			PrintWriter pw = new PrintWriter(fw);
-
-			try (InputStreamReader reader = new InputStreamReader(input, "UTF-8");
-
-					BufferedReader br = new BufferedReader(reader)) {
-
-				String line;
-
-				while ((line = br.readLine()) != null) {
-					// System.out.println(line);
-					pw.println(line);
-					pw.flush();
-				}
-				br.close();
-				reader.close();
-			}
-
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+    }
 
 }

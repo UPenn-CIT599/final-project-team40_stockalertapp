@@ -6,6 +6,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -14,8 +15,11 @@ import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 public class StockListPanel extends JPanel {
     
@@ -23,12 +27,12 @@ public class StockListPanel extends JPanel {
     private ArrayList<StockDetailButton> buttons;
     private GridBagConstraints gbConst;
     private JButton addStock;
-    private GridBagConstraints showAddStock;
     private GridBagLayout gbLayout;
     
     private String[] toggleSymbols;
     private MouseEventActions mouseControl;
     private JTextField newStockInput;
+    private JPopupMenu popupMenu;
     
     public StockListPanel(ArrayList<Stock> s) {
         portfolio = s;
@@ -52,13 +56,9 @@ public class StockListPanel extends JPanel {
         newStockInput.setForeground(Color.LIGHT_GRAY);
         newStockInput.addMouseListener(mouseControl);
         newStockInput.setVisible(false);
-        newStockInput.addActionListener(new AddStockTextAction());
         
-        showAddStock = new GridBagConstraints();
-        showAddStock.fill = GridBagConstraints.BOTH;
-        showAddStock.gridy = 2;
-        showAddStock.gridx = 1;
-        
+        popupMenu = new JPopupMenu();
+        popupMenu.add(new JMenuItem("Remove stock"));
         
         gbConst = new GridBagConstraints();
         gbConst.gridy = GridBagConstraints.RELATIVE;
@@ -86,10 +86,17 @@ public class StockListPanel extends JPanel {
         add(newButton, gbConst);
     }
     
-    public void setAddStockAction(ActionListener action) {
+    public void removeStock() {
+        
+    }
+    
+    public void setAddStockSlideAction(ActionListener action) {
         addStock.addActionListener(action);
     }
     
+    public void setAddStockTextAction(ActionListener action) {
+        newStockInput.addActionListener(action);
+    }
     public void setNewStockInputVisible() {
         if(!newStockInput.isVisible()) {
             newStockInput.setVisible(true);
@@ -102,18 +109,6 @@ public class StockListPanel extends JPanel {
         }
     }
     
-    private class AddStockTextAction implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if(e.KEY_EVENT_MASK == 8) {
-                ((JTextField) e.getSource()).setVisible(false);
-                ((JTextField) e.getSource()).setText("enter ticker");
-                revalidate();
-            }
-        }
-        
-    }
     private class MouseEventActions implements MouseListener {
 
         @Override
@@ -123,6 +118,13 @@ public class StockListPanel extends JPanel {
                 ((JTextField) source).setText("");
                 ((JTextField) source).setForeground(Color.BLACK);
             }
+            
+            if(source instanceof JButton) {
+                if(SwingUtilities.isRightMouseButton(e)) {
+                    popupMenu.show((JButton) source, e.getX(), e.getY());
+                }
+            }
+            
         }
 
         @Override

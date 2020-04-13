@@ -151,5 +151,43 @@ public class Stock {
 	public void setDatahistory(TreeMap datahistory) {
 		this.datahistory = datahistory;
 	}
+	
+	public static void main(String[] args) throws FileNotFoundException, InterruptedException {
+	// TODO Auto-generated method stub
+	
+	Stock t;
+	
+	t = new Stock("SLB");
+	
+	
+	
+	
+	//get all entries
+    Set<Map.Entry<LocalDate, OHLCV>> entries = t.datahistory.entrySet();
+    
+    //using for loop
+    for(Map.Entry<LocalDate, OHLCV> entry : entries){
+        System.out.println( entry.getKey() + " open " + entry.getValue().open +  " high " +entry.getValue().high+ " low " + entry.getValue().low +  " close " + entry.getValue().close+ " volume " + entry.getValue().volume);
+    }
+    
+    System.out.println(t.quote)  ;
+    
+    
+    t = new Stock("UPRO");
+	
+	
+	
+	
+	//get all entries
+    Set<Map.Entry<LocalDate, OHLCV>> entries1 = t.datahistory.entrySet();
+    
+    //using for loop
+    for(Map.Entry<LocalDate, OHLCV> entry : entries1){
+        System.out.println( entry.getKey() + " open " + entry.getValue().open +  " high " +entry.getValue().high+ " low " + entry.getValue().low +  " close " + entry.getValue().close+ " volume " + entry.getValue().volume);
+    }
+    
+    System.out.println(t.quote)  ;
+	
+}
 
 }

@@ -15,8 +15,11 @@ import java.util.Arrays;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 public class StockListPanel extends JPanel {
     
@@ -24,12 +27,12 @@ public class StockListPanel extends JPanel {
     private ArrayList<StockDetailButton> buttons;
     private GridBagConstraints gbConst;
     private JButton addStock;
-    private GridBagConstraints showAddStock;
     private GridBagLayout gbLayout;
     
     private String[] toggleSymbols;
     private MouseEventActions mouseControl;
     private JTextField newStockInput;
+    private JPopupMenu popupMenu;
     
     public StockListPanel(ArrayList<Stock> s) {
         portfolio = s;
@@ -54,11 +57,8 @@ public class StockListPanel extends JPanel {
         newStockInput.addMouseListener(mouseControl);
         newStockInput.setVisible(false);
         
-        showAddStock = new GridBagConstraints();
-        showAddStock.fill = GridBagConstraints.BOTH;
-        showAddStock.gridy = 2;
-        showAddStock.gridx = 1;
-        
+        popupMenu = new JPopupMenu();
+        popupMenu.add(new JMenuItem("Remove stock"));
         
         gbConst = new GridBagConstraints();
         gbConst.gridy = GridBagConstraints.RELATIVE;
@@ -84,6 +84,10 @@ public class StockListPanel extends JPanel {
         StockDetailButton newButton = new StockDetailButton(s);
         buttons.add(newButton);
         add(newButton, gbConst);
+    }
+    
+    public void removeStock() {
+        
     }
     
     public void setAddStockSlideAction(ActionListener action) {
@@ -114,6 +118,13 @@ public class StockListPanel extends JPanel {
                 ((JTextField) source).setText("");
                 ((JTextField) source).setForeground(Color.BLACK);
             }
+            
+            if(source instanceof JButton) {
+                if(SwingUtilities.isRightMouseButton(e)) {
+                    popupMenu.show((JButton) source, e.getX(), e.getY());
+                }
+            }
+            
         }
 
         @Override

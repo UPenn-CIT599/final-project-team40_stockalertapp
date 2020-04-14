@@ -20,7 +20,7 @@ import javax.swing.JTextField;
  * BASEGUI CLASS:
  * 
  * This class is the entry point for StockAlert Applications graphical user
- * interface which will be the default for all non-headless environments.
+ * interface which will be the default for all non-server environments.
  *
  * @author robertstanton
  *
@@ -28,7 +28,6 @@ import javax.swing.JTextField;
 public class BaseGUI extends JFrame {
 	
 	private ChartGUI chart;
-	private StockDetailButton changeStock;
 	private TableGUI table;
 	private StockListPanel stockList;
 	private ArrayList<Stock> stocks;
@@ -97,9 +96,16 @@ public class BaseGUI extends JFrame {
 		// pack components and set visible
 		pack();
 		setVisible(true);
+	} // end primary constructor
+	
+	public void notifyStockChange(Stock newStock) {
+	    
 	}
 	
-	// Private ActionListener classes to act on components
+	
+	// ==============================================================================================
+	//                 Private ActionListener classes to act on components
+	// ==============================================================================================
 	
 	/**
 	 * Changes the Focus Stock for the RightPanel components (Chart and Table).

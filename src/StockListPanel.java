@@ -173,8 +173,8 @@ public class StockListPanel extends JPanel {
             }
             revalidate();
         }
-        
     }
+    
     private class MouseEventActions implements MouseListener {
 
         @Override

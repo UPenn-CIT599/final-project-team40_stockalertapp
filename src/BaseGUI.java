@@ -96,6 +96,11 @@ public class BaseGUI extends JFrame {
 		setVisible(true);
 	} // end primary constructor
 	
+	/**
+	 * Alert observing components of a change in the target stock
+	 * 
+	 * @param newStock
+	 */
 	public void notifyStockChange(Stock newStock) {
 	    tgtStock = newStock;
 	    chart.changeStock(tgtStock.getDatahistory());

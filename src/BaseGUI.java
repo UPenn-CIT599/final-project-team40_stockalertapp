@@ -27,12 +27,17 @@ import javax.swing.JTextField;
  */
 public class BaseGUI extends JFrame {
 	
+    private ArrayList<Stock> stocks;
+    private Stock tgtStock;
+    private Container content;
+    
+    
+    // panel right components
 	private ChartGUI chart;
 	private TableGUI table;
-	private StockListPanel stockList;
-	private ArrayList<Stock> stocks;
-	private Stock tgtStock;
-	private Container content;
+	
+	// panel left components
+	private StockListPanel stockList; // remove
 	 
 	public BaseGUI(ArrayList<Stock> s) {
 	    this("StockAlertApp", s);
@@ -42,39 +47,41 @@ public class BaseGUI extends JFrame {
 		super(title);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		stocks = s;
-		
+		tgtStock = stocks.get(0);
 
 		// get content pane for frame
 		content = getContentPane();
 		content.setLayout(new BorderLayout());
 		
-		JPanel leftPanel = new JPanel();
-		JScrollPane leftScroll = new JScrollPane(leftPanel);
-		leftScroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		leftScroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		// create components
+        chart = new ChartGUI(tgtStock.getDatahistory());
+        table = new TableGUI(tgtStock.getTicker());
+        
+        stockList = new StockListPanel(stocks);
+        stockList.setStockChangeAction(new ChangeStockAction());
+        
+		// =====================================================================================
+        
+		// left panel
+        JPanel leftPanel = new JPanel();
+        leftPanel.setLayout(new BorderLayout());
+        leftPanel.add(stockList, BorderLayout.NORTH);
+        leftPanel.setBackground(Color.DARK_GRAY);
+        JScrollPane scroller = new JScrollPane(leftPanel);
+        scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		
+        // right panel
 		JPanel rightPanel = new JPanel();
 		rightPanel.setLayout(new BorderLayout());
-		leftPanel.setLayout(new BorderLayout());
+		rightPanel.add(table, BorderLayout.NORTH);
+        rightPanel.add(chart, BorderLayout.CENTER);
 		
-		
-		
-		// create components
-
-		tgtStock = stocks.get(0);
-		chart = new ChartGUI(tgtStock.getDatahistory());
-		table = new TableGUI(tgtStock.getTicker());
-		stockList = new StockListPanel(stocks);
+        // =====================================================================================
 		
 
 		// add components to content pane
-		rightPanel.add(table, BorderLayout.NORTH);
-		rightPanel.add(chart, BorderLayout.CENTER);
-		
-		leftPanel.add(stockList, BorderLayout.NORTH);
-		leftPanel.setBackground(Color.DARK_GRAY);
-		leftPanel.setOpaque(true);
-		
-		content.add(leftScroll, BorderLayout.WEST);
+		content.add(scroller, BorderLayout.WEST);
 		content.add(rightPanel, BorderLayout.CENTER);
 		
 
@@ -84,28 +91,53 @@ public class BaseGUI extends JFrame {
 		    but.addActionListener(new DateAdjustAction());
 		}
 		
-		// set StockListPanel Buttons to switch between stocks
-		for(StockDetailButton button : stockList.getButtons()) {
-    		button.addActionListener(new SwitchStockAction());
-		}
-		
-		// set StockListPanel addStock button to add stock to portfolio and display in panel
-		stockList.setAddStockSlideAction(new AddStockSlideAction());
-		stockList.setAddStockTextAction(new AddStockTextAction());
-		
 		// pack components and set visible
 		pack();
 		setVisible(true);
 	} // end primary constructor
 	
+	/**
+	 * Alert observing components of a change in the target stock
+	 * 
+	 * @param newStock
+	 */
 	public void notifyStockChange(Stock newStock) {
-	    
+	    tgtStock = newStock;
+	    chart.changeStock(tgtStock.getDatahistory());
+	    table.setStock(tgtStock.getTicker());
 	}
 	
 	
 	// ==============================================================================================
 	//                 Private ActionListener classes to act on components
 	// ==============================================================================================
+	
+	/**
+	 * Changes tgtStock and triggers notification to observers
+	 */
+	public class ChangeStockAction implements ActionListener {
+	    
+	    @Override
+	    public void actionPerformed(ActionEvent e) {
+	        if(e.getActionCommand().equals("stockDetailButton")) {
+	            StockDetailButton button = (StockDetailButton) e.getSource();
+	            notifyStockChange(button.getStock());
+	        }
+	    }
+	}
+	
+	/** 
+	 * Remove stock and update observers
+	 */
+	public class RemoveStockAction implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if(e.getActionCommand().equals("removeItem")) {
+                // leftPanel.removeStock();
+            }
+        }
+	}
 	
 	/**
 	 * Changes the Focus Stock for the RightPanel components (Chart and Table).
@@ -166,31 +198,4 @@ public class BaseGUI extends JFrame {
         }
 	    
 	}
-	
-	
-	private class AddStockSlideAction implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            stockList.setNewStockInputVisible();
-            content.revalidate();
-        }
-	}
-	
-	 private class AddStockTextAction implements ActionListener {
-
-	        @Override
-	        public void actionPerformed(ActionEvent e) {
-	            if(e.KEY_EVENT_MASK == 8) {
-	                JTextField comp = (JTextField) e.getSource();
-	                String newTicker = comp.getText();
-	                
-	                // TODO: get new stock add to portfolio and set tgtStock to new stock to update rest of components
-	                
-	                comp.setForeground(Color.LIGHT_GRAY);
-	                comp.setText("enter ticker");
-	                revalidate();
-	            }
-	        }
-	    }
 }

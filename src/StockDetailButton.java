@@ -32,6 +32,7 @@ public class StockDetailButton extends JButton{
         this.setForeground(foreGroundColor);
         this.setBorderPainted(false);
         this.setOpaque(true);
+        this.setActionCommand("stockDetailButton");
     }
     
     /**

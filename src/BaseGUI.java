@@ -54,7 +54,7 @@ public class BaseGUI extends JFrame {
 		content.setLayout(new BorderLayout());
 		
 		// create components
-        chart = new ChartGUI(tgtStock.getDatahistory());
+        chart = new ChartGUI(tgtStock.getdataHistory());
         table = new TableGUI(tgtStock.getTicker());
         
         stockList = new StockListPanel(stocks);
@@ -103,7 +103,7 @@ public class BaseGUI extends JFrame {
 	 */
 	public void notifyStockChange(Stock newStock) {
 	    tgtStock = newStock;
-	    chart.changeStock(tgtStock.getDatahistory());
+	    chart.changeStock(tgtStock.getdataHistory());
 	    table.setStock(tgtStock.getTicker());
 	}
 	
@@ -150,7 +150,7 @@ public class BaseGUI extends JFrame {
         public void actionPerformed(ActionEvent e) {
             StockDetailButton b = (StockDetailButton) e.getSource();
             tgtStock = b.getStock();
-            chart.changeStock(tgtStock.getDatahistory());
+            chart.changeStock(tgtStock.getdataHistory());
             table.setStock(tgtStock.getTicker());
         }
 	    
@@ -179,7 +179,7 @@ public class BaseGUI extends JFrame {
         public void actionPerformed(ActionEvent e) {
             String timeAdjust = e.getActionCommand();
             int monthsBack = dateAdjustMap.get(timeAdjust);
-            TreeMap<LocalDate, OHLCV> tgtData = tgtStock.getDatahistory();
+            TreeMap<LocalDate, OHLCV> tgtData = tgtStock.getdataHistory();
             if(monthsBack > 0) {
                 LocalDate startDate = tgtData.lastKey().minusMonths(monthsBack);
                 for(Map.Entry entry : tgtData.entrySet()) {

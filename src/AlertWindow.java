@@ -11,11 +11,20 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/** 
+ * Panel is used for displaying text version of alerts based on settings for various stocks.
+ * 
+ * @author robertstanton
+ *
+ */
 public class AlertWindow extends JPanel{
     
-    private ArrayList<JButton> labelList;
+    private ArrayList<JLabel> labelList;
     private Dimension dimension;
     
+    /**
+     * Constructs basic panel to display labels with alert information;
+     */
     public AlertWindow() {
         
         labelList = new ArrayList<>();
@@ -28,8 +37,13 @@ public class AlertWindow extends JPanel{
         setOpaque(true);
     }
     
+    /** 
+     * Adds a new Alert message to the panel.
+     * 
+     * @param msg
+     */
     public void addAlert(String msg) {
-        JButton alertButton = new JButton(msg);
+        JLabel alertButton = new JLabel(msg);
         labelList.add(alertButton);
         
         alertButton.setBackground(Color.WHITE);

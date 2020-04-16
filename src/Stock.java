@@ -1,7 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
@@ -22,13 +21,8 @@ import java.nio.file.Paths;
  * @author Joseph Kravets
  *
  */
-public class Stock implements Serializable{
+public class Stock {
 
-    /**
-     * Serial User ID
-     */
-    private static final long serialVersionUID = -1995220666246658729L;
-    
     private String ticker;
     private String csv;
     private double quote;

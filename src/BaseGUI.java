@@ -32,9 +32,11 @@ public class BaseGUI extends JFrame {
     private Container content;
     
     
+    
     // panel right components
 	private ChartGUI chart;
 	private TableGUI table;
+	private PanelRight rightPanel;
 	
 	// panel left components
 	private StockListPanel stockList; // remove
@@ -54,9 +56,12 @@ public class BaseGUI extends JFrame {
 		content.setLayout(new BorderLayout());
 		
 		// create components
-        chart = new ChartGUI(tgtStock.getdataHistory());
-        table = new TableGUI(tgtStock.getTicker());
+		
+		// right panel components
+        // chart = new ChartGUI(tgtStock.getdataHistory());
+        // table = new TableGUI(tgtStock.getTicker());
         
+        // left panel components
         stockList = new StockListPanel(stocks);
         stockList.setStockChangeAction(new ChangeStockAction());
         
@@ -72,11 +77,13 @@ public class BaseGUI extends JFrame {
         scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
         // right panel
+        /*
 		JPanel rightPanel = new JPanel();
 		rightPanel.setLayout(new BorderLayout());
 		rightPanel.add(table, BorderLayout.NORTH);
         rightPanel.add(chart, BorderLayout.CENTER);
-		
+		*/
+        rightPanel = new PanelRight(tgtStock);
         // =====================================================================================
 		
 
@@ -84,12 +91,15 @@ public class BaseGUI extends JFrame {
 		content.add(scroller, BorderLayout.WEST);
 		content.add(rightPanel, BorderLayout.CENTER);
 		
-
+		/*
+		 
+		 
 		// add action listeners
 		// set table buttons to adjust time frame of chart
 		for(JButton but : table.getButtons()) {
 		    but.addActionListener(new DateAdjustAction());
 		}
+		*/
 		
 		// pack components and set visible
 		pack();
@@ -103,8 +113,9 @@ public class BaseGUI extends JFrame {
 	 */
 	public void notifyStockChange(Stock newStock) {
 	    tgtStock = newStock;
-	    chart.changeStock(tgtStock.getdataHistory());
-	    table.setStock(tgtStock.getTicker());
+	    rightPanel.changeTargetStock(tgtStock);
+	    //chart.changeStock(tgtStock.getdataHistory());
+	    //table.setStock(tgtStock.getTicker());
 	}
 	
 	
@@ -152,49 +163,6 @@ public class BaseGUI extends JFrame {
             tgtStock = b.getStock();
             chart.changeStock(tgtStock.getdataHistory());
             table.setStock(tgtStock.getTicker());
-        }
-	    
-	}
-	
-	/**
-	 * Changes the time frame displayed in the Chart to 3 months, 6 months, 1 year, or all Data.
-	 * @author robertstanton
-	 *
-	 */
-	private class DateAdjustAction implements ActionListener {
-	    HashMap<String, Integer> dateAdjustMap;
-	    TreeMap<LocalDate, OHLCV> shortData;
-	    
-	    public DateAdjustAction() {
-	        shortData = new TreeMap<>();
-	        dateAdjustMap = new HashMap<>();
-	        dateAdjustMap.put("3M", 3);
-	        dateAdjustMap.put("6M", 6);
-	        dateAdjustMap.put("1Y",  12);
-	        dateAdjustMap.put("5Y", 60);
-	        dateAdjustMap.put("ALL", 0);
-	    }
-	    
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            String timeAdjust = e.getActionCommand();
-            int monthsBack = dateAdjustMap.get(timeAdjust);
-            TreeMap<LocalDate, OHLCV> tgtData = tgtStock.getdataHistory();
-            if(monthsBack > 0) {
-                LocalDate startDate = tgtData.lastKey().minusMonths(monthsBack);
-                for(Map.Entry entry : tgtData.entrySet()) {
-                    
-                    LocalDate k = (LocalDate) entry.getKey();
-                    OHLCV v = (OHLCV) entry.getValue();
-                    
-                    if(k.isAfter(startDate)) {
-                        shortData.put(k, v);
-                    }
-                }
-            } else {
-                shortData.putAll(tgtData);
-            }
-            chart.changeStock(shortData);
         }
 	    
 	}

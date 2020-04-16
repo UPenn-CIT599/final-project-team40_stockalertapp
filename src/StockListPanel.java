@@ -187,7 +187,7 @@ public class StockListPanel extends JPanel {
             
             if(source instanceof StockDetailButton) {
                 unsetFocusButtonColor();
-                focusButton = (StockDetailButton) source;
+                focusButton = (StockDetailButton) e.getSource();
                 setFocusButtonColor();
                 if(SwingUtilities.isRightMouseButton(e)) {
                     popupMenu.show(focusButton, e.getX(), e.getY());

@@ -314,32 +314,4 @@ public class ChartGUI extends JPanel {
 			prevY = y;
 		}
 	}
-	
-	public static void main(String[] args) {
-        RandomPriceGenerator gen = new RandomPriceGenerator("SPY");
-        ChartGUI chart = new ChartGUI(gen.getHistoricalBars());
-        JButton button = new JButton("change stock");
-        JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Container content = frame.getContentPane();
-        content.setLayout(new BorderLayout());
-        content.add(chart, BorderLayout.NORTH);
-        content.add(button, BorderLayout.SOUTH);
-        
-        button.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                RandomPriceGenerator gen2 = new RandomPriceGenerator("newStock");
-                gen2.setTimeLength(5275);
-                
-                chart.changeStock(gen2.getHistoricalBars());
-            }
-            
-        });
-        
-        frame.pack();
-        frame.setVisible(true);
-        
-    }
 }

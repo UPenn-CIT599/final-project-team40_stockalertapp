@@ -55,17 +55,11 @@ public class BaseGUI extends JFrame {
 		content = getContentPane();
 		content.setLayout(new BorderLayout());
 		
-		// create components
+		// =============================== Create Components ==================================
 		
-		// right panel components
-        // chart = new ChartGUI(tgtStock.getdataHistory());
-        // table = new TableGUI(tgtStock.getTicker());
-        
         // left panel components
         stockList = new StockListPanel(stocks);
         stockList.setStockChangeAction(new ChangeStockAction());
-        
-		// =====================================================================================
         
 		// left panel
         JPanel leftPanel = new JPanel();
@@ -77,29 +71,14 @@ public class BaseGUI extends JFrame {
         scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
         // right panel
-        /*
-		JPanel rightPanel = new JPanel();
-		rightPanel.setLayout(new BorderLayout());
-		rightPanel.add(table, BorderLayout.NORTH);
-        rightPanel.add(chart, BorderLayout.CENTER);
-		*/
         rightPanel = new PanelRight(tgtStock);
+        
         // =====================================================================================
 		
 
 		// add components to content pane
 		content.add(scroller, BorderLayout.WEST);
 		content.add(rightPanel, BorderLayout.CENTER);
-		
-		/*
-		 
-		 
-		// add action listeners
-		// set table buttons to adjust time frame of chart
-		for(JButton but : table.getButtons()) {
-		    but.addActionListener(new DateAdjustAction());
-		}
-		*/
 		
 		// pack components and set visible
 		pack();
@@ -114,8 +93,6 @@ public class BaseGUI extends JFrame {
 	public void notifyStockChange(Stock newStock) {
 	    tgtStock = newStock;
 	    rightPanel.changeTargetStock(tgtStock);
-	    //chart.changeStock(tgtStock.getdataHistory());
-	    //table.setStock(tgtStock.getTicker());
 	}
 	
 	

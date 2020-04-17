@@ -1,5 +1,6 @@
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -40,12 +41,33 @@ public class RandomPriceGenerator {
      * This method create historical prices for testing purposes.
      */
     private void createHistoricalPrices() {
-        Double curPrice = generator.nextDouble() * 100;
+        Double curPrice = generator.nextDouble() * 1000;
         for(LocalDate day : dateRange) {
             curPrice = curPrice * (1 + generator.nextGaussian()/100);
             historicalPrices.put(day, curPrice);
         }
     }
+    
+    /**
+     * Returns OHLCV value that is a representative of the Stock class datahistory instance variable. 
+     * @return
+     */
+    public TreeMap<LocalDate, OHLCV> getHistoricalBars() {
+        
+        TreeMap<LocalDate, OHLCV> historicalBars = new TreeMap<>();
+        double range = .01;
+        for(Map.Entry entry : historicalPrices.entrySet()) {
+            range = range * (1 + generator.nextGaussian()/ 100);
+            double high = (double) entry.getValue() * (1 + range);
+            double low = (double) entry.getValue() * (1- range);
+            double open = ((high - low) * generator.nextDouble()) + low;
+            double close = ((high - low) * generator.nextDouble()) + low;
+            OHLCV ohlc = new OHLCV(open, high, low, close, 1000000.00);
+            
+            historicalBars.put((LocalDate) entry.getKey(), ohlc);
+        }
+        return historicalBars;
+     }
     
     /***
      * GETHISTORICALPRICES METHOD:
@@ -75,15 +97,6 @@ public class RandomPriceGenerator {
     }
     
     /**
-     * MAIN METHOD
-     * @param args
-     */
-    public static void main(String[] args) {
-        RandomPriceGenerator gen = new RandomPriceGenerator("spy");
-        System.out.println(gen.getHistoricalPrices());
-    }
-    
-    /**
      * SETTIMELENGTH METHOD:
      * This method sets the start date, date range, and runs the createHistoricalPrices method.
      * @param x
@@ -94,4 +107,14 @@ public class RandomPriceGenerator {
         historicalPrices = new TreeMap<>();
         createHistoricalPrices();
     }
+    
+    /**
+     * MAIN METHOD
+     * @param args
+     */
+    public static void main(String[] args) {
+        RandomPriceGenerator gen = new RandomPriceGenerator("spy");
+        LocalDate startDate = gen.getHistoricalBars().lastKey().minusDays(30);
+    }
+    
 } 

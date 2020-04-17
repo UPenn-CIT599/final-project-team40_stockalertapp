@@ -107,6 +107,10 @@ public class BaseGUI extends JFrame {
 	    rightPanel.changeTargetStock(tgtStock);
 	}
 	
+	/**
+	 * Constructs a new Stock object notifies observers and adds to stocks arraylist and stockList panel.
+	 * @param ticker
+	 */
 	public void addNewStock(String ticker) {
 	    rightPanel.addAlert("<html><bold>" + ticker + "</bold> : fetching data now ... </html>");
 	    try {
@@ -121,8 +125,22 @@ public class BaseGUI extends JFrame {
         }
 	}
 	
+	/**
+	 * Returns the stock list.
+	 * @return
+	 */
+	public ArrayList<Stock> getStocks() {
+	    return stocks;
+	}
+	
 	// =====================  CALLBACK CLASS =============================
     
+	/**
+	 * Class for implementing call backs from the StockListPanel.
+	 * 
+	 * @author robertstanton
+	 *
+	 */
     private class AddStockCallBack implements StockCallBack {
         
         @Override
@@ -140,26 +158,4 @@ public class BaseGUI extends JFrame {
             stocks.remove(s);
         }
     }
-	
-	
-	// ==============================================================================================
-	//                 Private ActionListener classes to act on components
-	// ==============================================================================================
-
-	
-	/**
-	 * Changes the Focus Stock for the RightPanel components (Chart and Table).
-	 * @author robertstanton
-	 *
-	 */
-	private class SwitchStockAction implements ActionListener {
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            StockDetailButton b = (StockDetailButton) e.getSource();
-            tgtStock = b.getStock();
-            chart.changeStock(tgtStock.getdataHistory());
-            table.setStock(tgtStock.getTicker());
-        }
-	}
 }

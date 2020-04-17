@@ -15,6 +15,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+
 public class StockListPanel extends JPanel {
     
     private ArrayList<StockDetailButton> buttons;
@@ -27,6 +28,7 @@ public class StockListPanel extends JPanel {
     private JPopupMenu popupMenu;
     private JMenuItem removeItem;
     private StockDetailButton focusButton;
+    private StockCallBack addStockCallBack;
     
     
     public StockListPanel(ArrayList<Stock> s) {
@@ -74,6 +76,7 @@ public class StockListPanel extends JPanel {
         for(Stock stock : s) {
             StockDetailButton button = new StockDetailButton(stock);
             button.addMouseListener(mouseControl);
+            button.addActionListener(new ChangeStockAction());
             buttons.add(button);
             add(button, gbConst);
         }
@@ -97,6 +100,7 @@ public class StockListPanel extends JPanel {
     
     public void addStock(Stock s) {
         StockDetailButton newButton = new StockDetailButton(s);
+        newButton.addMouseListener(mouseControl);
         buttons.add(newButton);
         add(newButton, gbConst);
     }
@@ -109,6 +113,7 @@ public class StockListPanel extends JPanel {
                 revalidate();
             }
         }
+        addStockCallBack.removeStock(s);
     }
     
     public void setAddStockTextAction(ActionListener action) {
@@ -127,13 +132,19 @@ public class StockListPanel extends JPanel {
         }
     }
     
+    /*
     public void setStockChangeAction(ActionListener action) {
         for(JButton button : buttons) {
             button.addActionListener(action);
         }
     }
+    */
     
-    // =====================  ACTION CLASSES  =========================
+    public void setNewStockAddAction(StockCallBack addStockCallBack) {
+        this.addStockCallBack = addStockCallBack;
+    }
+    
+    // =====================  ACTION LISTENER CLASSES  =========================
     
     private class EnterKeyAction implements ActionListener {
 
@@ -141,13 +152,14 @@ public class StockListPanel extends JPanel {
         public void actionPerformed(ActionEvent e) {
             if(e.KEY_EVENT_MASK == 8) {
                 JTextField comp = (JTextField) e.getSource();
-                String newTicker = comp.getText();
-                
-                // TODO: get new stock add to portfolio and set tgtStock to new stock to update rest of components
+                String newTicker = comp.getText().toUpperCase();
                 
                 comp.setForeground(Color.LIGHT_GRAY);
-                comp.setText("enter ticker");
+                comp.setText(" fetching ... ");
                 revalidate();
+                // baffled ... 
+                addStockCallBack.addStock(newTicker); // calls back to BaseGUI to create new Stock object
+                comp.setText("enter ticker");
             }
         }
     }
@@ -165,14 +177,26 @@ public class StockListPanel extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            int idx = buttons.indexOf(focusButton);
-            buttons.remove(focusButton);
-            remove(focusButton);
+            Stock s = focusButton.getStock();
+            removeStock(s);
             if(buttons.size() > 0) {
-                focusButton = buttons.get(idx > 0 ? idx - 1 : 0);
+                focusButton = buttons.get(0);
+                addStockCallBack.changeStock(focusButton.getStock());
+                setFocusButtonColor();
             }
+            
             revalidate();
         }
+    }
+    
+    private class ChangeStockAction implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Stock s = ((StockDetailButton) e.getSource()).getStock();
+            addStockCallBack.changeStock(s);
+        }
+        
     }
     
     private class MouseEventActions implements MouseListener {
@@ -224,4 +248,5 @@ public class StockListPanel extends JPanel {
             }
         }
     }
+
 }

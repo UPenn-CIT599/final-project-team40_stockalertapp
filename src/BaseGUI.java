@@ -4,6 +4,7 @@ import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,14 +41,25 @@ public class BaseGUI extends JFrame {
 	
 	// panel left components
 	private StockListPanel stockList; // remove
-	 
+	
+	/**
+	 * Constructs Application with default title of StockAlertApp.
+	 * @param s
+	 */
 	public BaseGUI(ArrayList<Stock> s) {
 	    this("StockAlertApp", s);
 	}
-
+	
+	/**
+	 * Constructs Applicatino with a title and the set of stocks.
+	 * @param title
+	 * @param s
+	 */
 	public BaseGUI(String title, ArrayList<Stock> s) {
 		super(title);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		
 		stocks = s;
 		tgtStock = stocks.get(0);
 
@@ -59,7 +71,7 @@ public class BaseGUI extends JFrame {
 		
         // left panel components
         stockList = new StockListPanel(stocks);
-        stockList.setStockChangeAction(new ChangeStockAction());
+        stockList.setNewStockAddAction(new AddStockCallBack());
         
 		// left panel
         JPanel leftPanel = new JPanel();
@@ -83,7 +95,7 @@ public class BaseGUI extends JFrame {
 		// pack components and set visible
 		pack();
 		setVisible(true);
-	} // end primary constructor
+	}
 	
 	/**
 	 * Alert observing components of a change in the target stock
@@ -95,37 +107,45 @@ public class BaseGUI extends JFrame {
 	    rightPanel.changeTargetStock(tgtStock);
 	}
 	
+	public void addNewStock(String ticker) {
+	    rightPanel.addAlert("<html><bold>" + ticker + "</bold> : fetching data now ... </html>");
+	    try {
+            Stock newStock = new Stock(ticker);
+            stockList.addStock(newStock);
+            stocks.add(newStock);
+            notifyStockChange(newStock);
+            
+        } catch (FileNotFoundException | InterruptedException e) {
+            rightPanel.addAlert("<html><bold>" + ticker + "</bold> : failed to retrieve ticker</html>");
+            e.printStackTrace();
+        }
+	}
+	
+	// =====================  CALLBACK CLASS =============================
+    
+    private class AddStockCallBack implements StockCallBack {
+        
+        @Override
+        public void addStock(String ticker) {
+            addNewStock(ticker);
+        }
+        
+        @Override
+        public void changeStock(Stock s) {
+            notifyStockChange(s);
+        }
+        
+        @Override
+        public void removeStock(Stock s) {
+            stocks.remove(s);
+        }
+    }
+	
 	
 	// ==============================================================================================
 	//                 Private ActionListener classes to act on components
 	// ==============================================================================================
-	
-	/**
-	 * Changes tgtStock and triggers notification to observers
-	 */
-	public class ChangeStockAction implements ActionListener {
-	    
-	    @Override
-	    public void actionPerformed(ActionEvent e) {
-	        if(e.getActionCommand().equals("stockDetailButton")) {
-	            StockDetailButton button = (StockDetailButton) e.getSource();
-	            notifyStockChange(button.getStock());
-	        }
-	    }
-	}
-	
-	/** 
-	 * Remove stock and update observers
-	 */
-	public class RemoveStockAction implements ActionListener {
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if(e.getActionCommand().equals("removeItem")) {
-                // leftPanel.removeStock();
-            }
-        }
-	}
 	
 	/**
 	 * Changes the Focus Stock for the RightPanel components (Chart and Table).
@@ -141,6 +161,5 @@ public class BaseGUI extends JFrame {
             chart.changeStock(tgtStock.getdataHistory());
             table.setStock(tgtStock.getTicker());
         }
-	    
 	}
 }

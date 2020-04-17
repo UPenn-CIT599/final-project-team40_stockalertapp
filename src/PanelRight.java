@@ -107,6 +107,14 @@ public class PanelRight extends JPanel {
         }
         return shortData;
     }
+    
+    /**
+     * Add an alert label to the Alert Window panel;
+     * @param msg
+     */
+    public void addAlert(String msg) {
+        alertWindow.addAlert(msg);
+    }
 
     // ============================= Action Listeners =============================
     

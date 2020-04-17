@@ -50,5 +50,6 @@ public class AlertWindow extends JPanel{
         alertButton.setOpaque(true);
         alertButton.setHorizontalTextPosition(JLabel.LEFT);
         add(alertButton);
+        revalidate();
     }
 }

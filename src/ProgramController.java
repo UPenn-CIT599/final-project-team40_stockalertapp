@@ -34,7 +34,7 @@ public class ProgramController {
 		                Stock spy = new Stock("SPY");
 		                ArrayList<Stock> stocks = new ArrayList<>();
 	                    stocks.add(spy);
-	                    BaseGUI app = new BaseGUI(stocks);
+	                    BaseGUI userInterface = new BaseGUI(stocks);
 	                    
 		            } catch(FileNotFoundException | InterruptedException e) { 
 		                e.printStackTrace();

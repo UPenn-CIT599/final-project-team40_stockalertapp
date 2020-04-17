@@ -33,7 +33,7 @@ public class AlertWindow extends JPanel{
         setPreferredSize(dimension);
         setLayout(new GridLayout(0, 1));
         
-        setBackground(Color.ORANGE);
+        setBackground(Color.LIGHT_GRAY);
         setOpaque(true);
     }
     
@@ -51,5 +51,16 @@ public class AlertWindow extends JPanel{
         alertButton.setHorizontalTextPosition(JLabel.LEFT);
         add(alertButton);
         revalidate();
+    }
+    
+    /**
+     * Removes labels from view 
+     * 
+     */
+    public void clearAlerts() {
+        for(JLabel label : labelList) {
+            remove(label);
+        }
+        labelList = new ArrayList<>();
     }
 }

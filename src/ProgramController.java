@@ -27,6 +27,7 @@ public class ProgramController {
 		} else {
 		    System.out.println("fetching data and loading gui ... ");
 		    
+		    // Creates initial thread for gui to run in
 		    SwingUtilities.invokeLater(new Runnable() {
 		        public void run() {
 		            try {

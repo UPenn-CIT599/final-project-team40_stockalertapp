@@ -127,6 +127,7 @@ public class StockListPanel extends JPanel {
     public void addStock(Stock s) {
         StockDetailButton newButton = new StockDetailButton(s);
         newButton.addMouseListener(mouseControl);
+        newButton.addActionListener(new ChangeStockAction());
         buttons.add(newButton);
         add(newButton, gbConst);
     }

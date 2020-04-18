@@ -23,6 +23,7 @@ public class AlertWindow extends JPanel{
     
     private ArrayList<JLabel> labelList;
     private Dimension dimension;
+    private GridBagConstraints content;
     
     /**
      * Constructs basic panel to display labels with alert information;
@@ -33,7 +34,14 @@ public class AlertWindow extends JPanel{
         
         dimension = new Dimension(400, 200);
         setPreferredSize(dimension);
-        setLayout(new GridLayout(0, 1));
+        // setLayout(new GridLayout(0, 1));
+        setLayout(new GridBagLayout());
+        content = new GridBagConstraints();
+        content.weightx = 1;
+        content.weighty = 1;
+        content.gridx = 0;
+        content.fill = GridBagConstraints.HORIZONTAL;
+        content.anchor = GridBagConstraints.FIRST_LINE_START;
         
         setBackground(Color.LIGHT_GRAY);
         setOpaque(true);
@@ -51,8 +59,9 @@ public class AlertWindow extends JPanel{
         alertButton.setBackground(Color.WHITE);
         alertButton.setOpaque(true);
         alertButton.setHorizontalTextPosition(JLabel.LEFT);
+        alertButton.setPreferredSize(new Dimension(400, 50));
         alertButton.addMouseListener(new AlertButtonMouseActions());
-        add(alertButton);
+        add(alertButton, content);
         revalidate();
     }
     

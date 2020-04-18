@@ -95,12 +95,16 @@ public class PanelRight extends JPanel {
         TreeMap<LocalDate, OHLCV> tgtData = targetStock.getdataHistory();
         if (monthsBack > 0) {
             LocalDate startDate = tgtData.lastKey().minusMonths(monthsBack);
-            for (Map.Entry entry : tgtData.entrySet()) {
-                LocalDate k = (LocalDate) entry.getKey();
-                OHLCV v = (OHLCV) entry.getValue();
-                if (k.isAfter(startDate)) {
-                    shortData.put(k, v);
+            if(startDate.isAfter(tgtData.firstKey())) {
+                for (Map.Entry entry : tgtData.entrySet()) {
+                    LocalDate k = (LocalDate) entry.getKey();
+                    OHLCV v = (OHLCV) entry.getValue();
+                    if (k.isAfter(startDate)) {
+                        shortData.put(k, v);
+                    }
                 }
+            } else {
+                return tgtData;
             }
         } else {
             return tgtData;

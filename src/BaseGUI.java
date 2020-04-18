@@ -9,9 +9,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -38,12 +40,12 @@ import javax.swing.JTextField;
  *
  */
 public class BaseGUI extends JFrame {
+    
+    private final String tickerFile = "tickerList2.ser";
 	
     private ArrayList<Stock> stocks;
     private Stock tgtStock;
     private Container content;
-    
-    
     
     // panel right components
 	private ChartGUI chart;
@@ -60,6 +62,7 @@ public class BaseGUI extends JFrame {
 	private JLabel menuLabel;
 	private JPopupMenu menuPopup;
 	private JMenuItem saveItem;
+	private JMenuItem loadItem;
 	
 	/**
 	 * Constructs an entry program to allow a user to add stocks from nothing.
@@ -188,11 +191,17 @@ public class BaseGUI extends JFrame {
 	    menuButton.addMouseListener(new MenuButtonActions());
 	    
 	    menuPopup = new JPopupMenu();
+	    MenuItemAction menuActions = new MenuItemAction();
         saveItem = new JMenuItem("Save Stock List");
         saveItem.setActionCommand("saveItem");
-        saveItem.addActionListener(new MenuItemSaveAction());
+        saveItem.addActionListener(new MenuItemAction());
+        
+        loadItem = new JMenuItem("Load Stock List");
+        loadItem.setActionCommand("loadItem");
+        loadItem.addActionListener(new MenuItemAction());
+        
+        menuPopup.add(loadItem);
         menuPopup.add(saveItem);
-
 	    
 	    menu.add(menuButton, BorderLayout.WEST);
 	    menu.add(menuLabel, BorderLayout.CENTER);
@@ -322,18 +331,38 @@ public class BaseGUI extends JFrame {
     // ==================================================================
     
     /**
-     * Action listener for the save stock list action.
+     * Action listener for the save or load a stock list action.
      * 
      */
-    private class MenuItemSaveAction implements ActionListener {
+    private class MenuItemAction implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
             if(e.getActionCommand() == "saveItem") {
                 saveStockList();
             }
+            
+            if(e.getActionCommand() == "loadItem") {
+                
+                File file = new File(tickerFile);
+                if(file.exists()) {
+                    FileInputStream f;
+                    try {
+                        f = new FileInputStream(file);
+                        ObjectInputStream o = new ObjectInputStream(f);
+                        ArrayList<String> tickers = (ArrayList<String>) o.readObject();
+                        for(String tick : tickers) {
+                            addNewStock(tick);
+                        }
+                        
+                    } catch (IOException | ClassNotFoundException e1) {
+                       rightPanel.addAlert("<html><p>Unable to load securities list : " + tickerFile + "</p> </html>");
+                    }
+                } else {
+                    rightPanel.addAlert("<html><p>Unable to find : " + tickerFile + "</p> </html>");
+                }
+            }
         }
-        
     }
     
     // ==================================================================

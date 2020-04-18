@@ -26,26 +26,8 @@ public class ProgramController {
 	 * 
 	 */
 	public void runProgram() {
-	    
-	    File stockListFile = new File("tickerList.ser");
-	    FileInputStream file;
-	    ArrayList<String> tickerList = new ArrayList<>();
-	    ArrayList<Stock> stocks = new ArrayList<>();
-	    
-	    
-        try {
-            file = new FileInputStream(stockListFile);
-            if(stockListFile.exists()) {
-                ObjectInputStream in = new ObjectInputStream(file);
-                tickerList = (ArrayList<String>) in.readObject();
-                file.close();
-                in.close();
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
         
-        // headless environment for server side useage
+        // headless environment for server side use
 		if(GraphicsEnvironment.isHeadless()) {
 		    ConsoleUI userInterface = new ConsoleUI();
 		    userInterface.init();

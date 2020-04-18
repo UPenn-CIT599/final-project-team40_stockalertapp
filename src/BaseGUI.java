@@ -113,16 +113,26 @@ public class BaseGUI extends JFrame {
 	 */
 	public void addNewStock(String ticker) {
 	    rightPanel.addAlert("<html><bold>" + ticker + "</bold> : fetching data now ... </html>");
-	    try {
-            Stock newStock = new Stock(ticker);
-            stockList.addStock(newStock);
-            stocks.add(newStock);
-            notifyStockChange(newStock);
+	    
+	    // beginning async call to new Stock
+	    new Thread(new Runnable() {
+	        @Override
+            public void run() {
             
-        } catch (FileNotFoundException | InterruptedException e) {
-            rightPanel.addAlert("<html><bold>" + ticker + "</bold> : failed to retrieve ticker</html>");
-            e.printStackTrace();
-        }
+        	    try {
+                    Stock newStock = new Stock(ticker);
+                    stockList.addStock(newStock);
+                    stocks.add(newStock);
+                    notifyStockChange(newStock);
+                    rightPanel.addAlert("<html><bold font-size=large color=blue>" + ticker + "</bold> : data has been loaded!</html>");
+                    
+                } catch (FileNotFoundException | InterruptedException e) {
+                    rightPanel.addAlert("<html><bold font-size=large color=blue>" + ticker + "</bold> : failed to retrieve ticker</html>");
+                    e.printStackTrace();
+                }
+	        }
+            
+	    }).start();
 	}
 	
 	/**

@@ -3,6 +3,8 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
 import javax.swing.Box;
@@ -49,6 +51,7 @@ public class AlertWindow extends JPanel{
         alertButton.setBackground(Color.WHITE);
         alertButton.setOpaque(true);
         alertButton.setHorizontalTextPosition(JLabel.LEFT);
+        alertButton.addMouseListener(new AlertButtonMouseActions());
         add(alertButton);
         revalidate();
     }
@@ -62,5 +65,48 @@ public class AlertWindow extends JPanel{
             remove(label);
         }
         labelList = new ArrayList<>();
+    }
+    
+    // =====================================================================
+    //                         Mouse Listeners
+    // =====================================================================
+    
+    private class AlertButtonMouseActions implements MouseListener {
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+            Object source = e.getSource();
+            if(source instanceof JLabel) {
+                JLabel label = (JLabel) source;
+                label.setBackground(new Color(253, 251, 234));
+            }
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+            Object source = e.getSource();
+            if(source instanceof JLabel) {
+                JLabel label = (JLabel) source;
+                label.setBackground(Color.WHITE);
+            }
+        }
     }
 }

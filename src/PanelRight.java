@@ -53,18 +53,18 @@ public class PanelRight extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.FIRST_LINE_START;
         gbc.fill = GridBagConstraints.BOTH;
-        gbc.weighty = 1;
+        gbc.weighty = 10;
         gbc.weightx = 1;
         gbc.gridy = 0;
         gbc.gridx = 0;
         add(table, gbc);
 
         gbc.anchor = GridBagConstraints.LINE_START;
-        gbc.weighty = 6;
+        gbc.weighty = 60;
         gbc.gridy = 1;
         add(chart, gbc);
 
-        gbc.weighty = 3;
+        gbc.weighty = 30;
         gbc.gridy = 2;
         add(scroller, gbc);
 

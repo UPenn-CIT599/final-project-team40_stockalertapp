@@ -27,19 +27,10 @@ public class ProgramController {
 		} else {
 		    System.out.println("fetching data and loading gui ... ");
 		    
-		    // Creates initial thread for gui to run in
 		    SwingUtilities.invokeLater(new Runnable() {
 		        public void run() {
-		            try {
-		                
-		                Stock spy = new Stock("SPY");
-		                ArrayList<Stock> stocks = new ArrayList<>();
-	                    stocks.add(spy);
-	                    BaseGUI userInterface = new BaseGUI(stocks);
-	                    
-		            } catch(FileNotFoundException | InterruptedException e) { 
-		                e.printStackTrace();
-		            }
+	                ArrayList<Stock> stocks = new ArrayList<>();
+                    BaseGUI userInterface = new BaseGUI();
 		        }
 		    });
 		}

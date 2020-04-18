@@ -23,161 +23,159 @@ import javax.net.ssl.HttpsURLConnection;
  */
 public class DataPull {
 
-    public DataPull() {
-	// TODO Auto-generated constructor stub
-    }
+	public DataPull() {
+		// TODO Auto-generated constructor stub
+	}
 
-    /**
-     * Returns a csv of stock data with data, open, high, low, close, volume
-     * 
-     * @param ticker
-     * @throws InterruptedException
-     */
-    public static void getCsv(String symbol) throws InterruptedException {
-	/// api key =JRVCT84VUG4TM97S
-	try {
+	/**
+	 * Returns a csv of stock data with data, open, high, low, close, volume
+	 * 
+	 * @param ticker
+	 * @throws InterruptedException
+	 */
+	public static void getCsv(String symbol) throws InterruptedException {
+		/// api key =JRVCT84VUG4TM97S
+		try {
 
-	    try {
-		System.gc();
-		Files.deleteIfExists(Paths.get((symbol + ".csv")));
+			try {
+				System.gc();
+				Files.deleteIfExists(Paths.get((symbol + ".csv")));
 
-	    } catch (NoSuchFileException e) {
-		System.out.println("No such file exists");
-	    }
+			} catch (NoSuchFileException e) {
+				System.out.println("No such file exists");
+			}
 
-	    System.out.println("waiting 13 seconds for " + symbol + " data due to api rate limit");
-	    TimeUnit.SECONDS.sleep(13);
-	    String url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=" + (symbol)
-		    + "&outputsize=full&apikey=JRVCT84VUG4TM97S&datatype=csv";
+			System.out.println("waiting 13 seconds for " + symbol + " data due to api rate limit");
+			TimeUnit.SECONDS.sleep(13);
+			String url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=" + (symbol)
+					+ "&outputsize=full&apikey=JRVCT84VUG4TM97S&datatype=csv";
 
-	    InputStream input = new URL(url).openStream();
+			InputStream input = new URL(url).openStream();
 
-	    FileWriter fw = new FileWriter((symbol + ".csv"), true);
-	    PrintWriter pw = new PrintWriter(fw);
+			FileWriter fw = new FileWriter((symbol + ".csv"), true);
+			PrintWriter pw = new PrintWriter(fw);
 
-	    try (InputStreamReader reader = new InputStreamReader(input, "UTF-8");
+			try (InputStreamReader reader = new InputStreamReader(input, "UTF-8");
 
-		    BufferedReader br = new BufferedReader(reader)) {
+					BufferedReader br = new BufferedReader(reader)) {
 
-		String line;
+				String line;
 
-		while ((line = br.readLine()) != null) {
+				while ((line = br.readLine()) != null) {
 
-		    pw.println(line);
-		    pw.flush();
+					pw.println(line);
+					pw.flush();
+				}
+				br.close();
+				reader.close();
+			}
+
+		} catch (IOException e) {
+
+			e.printStackTrace();
 		}
-		br.close();
-		reader.close();
-	    }
-
-	} catch (IOException e) {
-
-	    e.printStackTrace();
-	}
-    }
-
-    /**
-     * Returns the current price of a stock ticker
-     * 
-     * @param symbol
-     * @throws InterruptedException
-     */
-    public static double getCurrentQuote(String symbol) throws InterruptedException {
-
-	System.out.println("waiting 13 seconds for " + symbol + " data due to api rate limit");
-	TimeUnit.SECONDS.sleep(13);
-	String url = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" + symbol
-		+ "&apikey=JRVCT84VUG4TM97S";
-
-	InputStream input = null;
-
-	try {
-	    input = new URL(url).openStream();
-	} catch (MalformedURLException e1) {
-	    e1.printStackTrace();
-	} catch (IOException e1) {
-	    e1.printStackTrace();
-	}
-	try (InputStreamReader reader = new InputStreamReader(input, "UTF-8");
-
-		BufferedReader br = new BufferedReader(reader)) {
-	    String line;
-
-	    String json = " ";
-	    while ((line = br.readLine()) != null) {
-		json = json + line;
-	    }
-	    String[] lineComponents = json.split(":");
-	    String[] priceComponents = lineComponents[6].split(",");
-	    String str = priceComponents[0].replace("\"", "");
-	    double currentPrice = Double.parseDouble(str);
-	    br.close();
-	    reader.close();
-	    return currentPrice;
-
 	}
 
-	catch (IOException e) {
+	/**
+	 * Returns the current price of a stock ticker
+	 * 
+	 * @param symbol
+	 * @throws InterruptedException
+	 */
+	public static double getCurrentQuote(String symbol) throws InterruptedException {
 
-	    e.printStackTrace();
-	    return 0.0;
-	}
-    }
+		System.out.println("waiting 13 seconds for " + symbol + " data due to api rate limit");
+		TimeUnit.SECONDS.sleep(13);
+		String url = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" + symbol
+				+ "&apikey=JRVCT84VUG4TM97S";
 
-    /**
-     * Returns the current financial indicators from stock ticker
-     * 
-     * Added the SMA
-     * 
-     * @param symbol
-     * @throws InterruptedException
-     */
+		InputStream input = null;
 
-    public static void getIndicator(String symbol) throws InterruptedException {
-	/// api key =JRVCT84VUG4TM97S
-	try {
-
-	    try {
-		System.gc();
-		Files.deleteIfExists(Paths.get((symbol + ".csv")));
-
-	    } catch (NoSuchFileException e) {
-		System.out.println("No such file/directory exists");
-	    }
-
-	    System.out.println("waiting 13 seconds for " + symbol + " data due to api rate limit");
-	    TimeUnit.SECONDS.sleep(13);
-
-	    // For SMA
-	    // https://www.alphavantage.co/query?function=SMA&symbol=IBM&interval=weekly&time_period=10&series_type=open&apikey=demo
-
-	    String url = "https://www.alphavantage.co/query?function=SMA&symbol=" + (symbol)
-		    + "&interval=weekly&time_period=10&series_type=open&apikey=JRVCT84VUG4TM97S&datatype=csv";
-
-	    InputStream input = new URL(url).openStream();
-
-	    FileWriter fw = new FileWriter((symbol + ".csv"), true);
-	    PrintWriter pw = new PrintWriter(fw);
-
-	    try (InputStreamReader reader = new InputStreamReader(input, "UTF-8");
-
-		    BufferedReader br = new BufferedReader(reader)) {
-
-		String line;
-
-		while ((line = br.readLine()) != null) {
-		    // System.out.println(line);
-		    pw.println(line);
-		    pw.flush();
+		try {
+			input = new URL(url).openStream();
+		} catch (MalformedURLException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
 		}
-		br.close();
-		reader.close();
-	    }
+		try (InputStreamReader reader = new InputStreamReader(input, "UTF-8");
 
-	} catch (IOException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
+				BufferedReader br = new BufferedReader(reader)) {
+			String line;
+
+			String json = " ";
+			while ((line = br.readLine()) != null) {
+				json = json + line;
+			}
+			String[] lineComponents = json.split(":");
+			String[] priceComponents = lineComponents[6].split(",");
+			String str = priceComponents[0].replace("\"", "");
+			double currentPrice = Double.parseDouble(str);
+			br.close();
+			reader.close();
+			return currentPrice;
+
+		}
+
+		catch (IOException e) {
+
+			e.printStackTrace();
+			return 0.0;
+		}
 	}
-    }
+
+	/**
+	 * Returns the current financial indicators from stock ticker
+	 * 
+	 * Added the SMA
+	 * 
+	 * @param symbol
+	 * @throws InterruptedException
+	 */
+
+	public static double getSMA(String symbol) throws InterruptedException {
+
+		System.out.println("waiting 13 seconds for " + symbol + " data due to api rate limit");
+		TimeUnit.SECONDS.sleep(13);
+		// For SMA
+		// https://www.alphavantage.co/query?function=SMA&symbol=IBM&interval=weekly&time_period=10&series_type=open&apikey=demo
+
+		String url = "https://www.alphavantage.co/query?function=SMA&symbol=" + (symbol)
+				+ "&interval=weekly&time_period=10&series_type=open&apikey=JRVCT84VUG4TM97S&datatype=csv";
+
+		InputStream input = null;
+
+		try {
+			input = new URL(url).openStream();
+		} catch (MalformedURLException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		try (InputStreamReader reader = new InputStreamReader(input, "UTF-8");
+
+				BufferedReader br = new BufferedReader(reader)) {
+			String line;
+
+			String json = " ";
+			while ((line = br.readLine()) != null) {
+				json = json + line;
+			}
+			String[] lineComponents = json.split(":");
+			String[] priceComponents = lineComponents[6].split(",");
+			String str = priceComponents[0].replace("\"", "");
+			double currentPrice = Double.parseDouble(str);
+			br.close();
+			reader.close();
+			return currentPrice;
+
+		}
+
+		catch (IOException e) {
+
+			e.printStackTrace();
+			return 0.0;
+		}
+	}
 
 }

@@ -166,7 +166,7 @@ public class ChartGUI extends JPanel {
 			setXOffset();
 			setYOffset();
 
-			chartData = new ChartData(stockData, netWidth, netHeight, xOffset, buffer); // TODO: switch to Stock
+			chartData = new ChartData(stockData, netWidth, netHeight, xOffset, buffer);
 			repaint();
 		}
 	}
@@ -182,8 +182,10 @@ public class ChartGUI extends JPanel {
 		chartData = new ChartData(stockData, netWidth, netHeight, xOffset, buffer); 
 		repaint();
 	}
-
-	// Begin Draw Methods
+	
+	// ====================================================================================
+	//                                 Begin Draw Methods
+	// ====================================================================================
 
 	/**
 	 * PAINTCOMPONENT METHOD:

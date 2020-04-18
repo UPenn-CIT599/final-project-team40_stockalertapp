@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -43,9 +44,10 @@ public class StockListPanel extends JPanel {
      * @param s
      */
     public StockListPanel(ArrayList<Stock> s) {
-        buttons = new ArrayList<>();
         
+        buttons = new ArrayList<>();
         mouseControl = new MouseEventActions();
+        
         setBackground(Color.DARK_GRAY);
         setOpaque(true);
 

@@ -1,5 +1,9 @@
 import java.awt.GraphicsEnvironment;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
 import javax.swing.SwingUtilities;
@@ -14,22 +18,43 @@ import javax.swing.SwingUtilities;
  */
 
 public class ProgramController {
-
+    
+    
 	/**
 	 * RUNPROGRAM METHOD:
 	 * This method runs the various use cases of the program.
 	 * 
 	 */
 	public void runProgram() {
+	    
+	    File stockListFile = new File("tickerList.ser");
+	    FileInputStream file;
+	    ArrayList<String> tickerList = new ArrayList<>();
+	    ArrayList<Stock> stocks = new ArrayList<>();
+	    
+	    
+        try {
+            file = new FileInputStream(stockListFile);
+            if(stockListFile.exists()) {
+                ObjectInputStream in = new ObjectInputStream(file);
+                tickerList = (ArrayList<String>) in.readObject();
+                file.close();
+                in.close();
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        
+        // headless environment for server side useage
 		if(GraphicsEnvironment.isHeadless()) {
-		    System.out.println("running from server ... ");
+		    ConsoleUI userInterface = new ConsoleUI();
+		    userInterface.init();
 		    
 		} else {
 		    System.out.println("fetching data and loading gui ... ");
 		    
 		    SwingUtilities.invokeLater(new Runnable() {
 		        public void run() {
-	                ArrayList<Stock> stocks = new ArrayList<>();
                     BaseGUI userInterface = new BaseGUI();
 		        }
 		    });

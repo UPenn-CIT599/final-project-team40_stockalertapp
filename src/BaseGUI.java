@@ -234,6 +234,7 @@ public class BaseGUI extends JFrame {
 	public void notifyStockChange(Stock newStock) {
 	    tgtStock = newStock;
 	    rightPanel.changeTargetStock(tgtStock);
+	    
 	}
 	
 	/**
@@ -246,7 +247,6 @@ public class BaseGUI extends JFrame {
 	    } else {
 	        alertWindowTemp.addAlert("<html><bold>" + ticker + "</bold> : fetching data now ... </html>");
 	    }
-	    
 	    
 	    // beginning async call to new Stock
 	    new Thread(new Runnable() {
@@ -271,6 +271,16 @@ public class BaseGUI extends JFrame {
 	        }
             
 	    }).start();
+	}
+	
+	/**
+	 * Bulk adds a list of tickers.
+	 * @param s
+	 */
+	public void bulkAddStocks(ArrayList<String> s) {
+	    for(String ticker : s) {
+	        addNewStock(ticker);
+	    }
 	}
 	
 	/**
@@ -339,7 +349,6 @@ public class BaseGUI extends JFrame {
         @Override
         public void mouseClicked(MouseEvent e) {
             Object source = e.getSource();
-            System.out.println(source);
             if(source instanceof JButton) {
                 menuPopup.show((JButton)source, ((JButton) source).getX(), ((JButton) source).getY());
             }

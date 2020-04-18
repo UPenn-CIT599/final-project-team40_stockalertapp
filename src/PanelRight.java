@@ -80,6 +80,7 @@ public class PanelRight extends JPanel {
         targetStock = s;
         chart.changeStock(adjustDateForChart(60));
         table.setStock(targetStock.getTicker());
+        alertWindow.clearAlerts();
     }
 
     /**

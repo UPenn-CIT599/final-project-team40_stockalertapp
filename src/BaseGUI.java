@@ -3,9 +3,16 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,7 +21,10 @@ import java.util.TreeMap;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
@@ -44,12 +54,19 @@ public class BaseGUI extends JFrame {
 	// panel left components
 	private StockListPanel stockList;
 	
+	// panel menu components
+	private JPanel menu;
+	private JButton menuButton;
+	private JLabel menuLabel;
+	private JPopupMenu menuPopup;
+	private JMenuItem saveItem;
+	
 	/**
 	 * Constructs an entry program to allow a user to add stocks from nothing.
 	 */
 	public BaseGUI() {
         super("StockAlertApp");
-        this.setPreferredSize(new Dimension(800, 600));
+        this.setPreferredSize(new Dimension(800, 800));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         stocks = new ArrayList<>();
         content = this.getContentPane();
@@ -69,10 +86,11 @@ public class BaseGUI extends JFrame {
       // right panel temporary
         alertWindowTemp = new AlertWindow();
         alertWindowTemp.addAlert("<html><bold font-size=large text-align=center>Welcome to Stock Alerts</bold></html>");
-        alertWindowTemp.addAlert("<html><p font-size=medium text-align=center>To start hit the <bold>+</bold> and type in a ticker and hit enter.</p></html>");
+        alertWindowTemp.addAlert("<html><p font-size=medium text-align=left>To start hit the <bold>+</bold> and type in a ticker and hit enter.</p></html>");
         
         content.add(scroller, BorderLayout.WEST);
         content.add(alertWindowTemp, BorderLayout.CENTER);
+        setMenuBar();
         
         this.pack();
         this.setVisible(true);
@@ -93,7 +111,7 @@ public class BaseGUI extends JFrame {
 	 */
 	public BaseGUI(String title, ArrayList<Stock> s) {
 		super(title);
-		this.setPreferredSize(new Dimension(800, 600));
+		this.setPreferredSize(new Dimension(800, 800));
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		
@@ -128,6 +146,7 @@ public class BaseGUI extends JFrame {
 		// add components to content pane
 		content.add(scroller, BorderLayout.WEST);
 		content.add(rightPanel, BorderLayout.CENTER);
+		setMenuBar();
 		
 		// pack components and set visible
 		pack();
@@ -145,6 +164,69 @@ public class BaseGUI extends JFrame {
 	}
 	
 	/**
+	 * Constructs the menu bar at top of application.
+	 * 
+	 */
+	public void setMenuBar() {
+	    menu = new JPanel();
+	    menu.setLayout(new BorderLayout());
+	    
+	    menuLabel = new JLabel("Stock Alert");
+	    menuLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));
+	    menuLabel.setHorizontalAlignment(JLabel.CENTER);
+	    menuLabel.setBackground(Color.DARK_GRAY);
+	    menuLabel.setForeground(Color.WHITE);
+	    menuLabel.setOpaque(true);
+	    
+	    menuButton = new JButton("\u2261");
+	    menuButton.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 85));
+	    menuButton.setVerticalTextPosition(JButton.TOP);
+	    menuButton.setBorderPainted(false);
+	    menuButton.setForeground(Color.WHITE);
+	    menuButton.setBackground(Color.DARK_GRAY);
+	    menuButton.setOpaque(true);
+	    menuButton.addMouseListener(new MenuButtonActions());
+	    
+	    menuPopup = new JPopupMenu();
+        saveItem = new JMenuItem("Save Stock List");
+        saveItem.setActionCommand("saveItem");
+        saveItem.addActionListener(new MenuItemSaveAction());
+        menuPopup.add(saveItem);
+
+	    
+	    menu.add(menuButton, BorderLayout.WEST);
+	    menu.add(menuLabel, BorderLayout.CENTER);
+	    add(menu, BorderLayout.NORTH);
+	}
+	
+	/**
+	 * Saves a list of Stock Tickers to 'tickerList.ser'.
+	 * 
+	 */
+	public void saveStockList() {
+	    ArrayList<String> tickerList = new ArrayList<>();
+	    for(Stock s : stocks) {
+	        tickerList.add(s.getTicker());
+	    }
+	    
+	    File savedTickers = new File("tickerList.ser");
+	    FileOutputStream file;
+        try {
+            file = new FileOutputStream(savedTickers);
+            ObjectOutputStream out = new ObjectOutputStream(file);
+            out.writeObject(tickerList);
+            out.close();
+            rightPanel.addAlert("<html><p><bold color=green>Stock list has saved</bold> : tickerList.ser </p></html> ");
+        } catch (FileNotFoundException e) {
+            rightPanel.addAlert("<html><p><bold color=red> Failed to save file </bold> : FileNotFoundException thrown </p></html> ");
+        } catch (IOException e) {
+            rightPanel.addAlert("<html><p><bold color=red> Failed to save file </bold> : IOException thrown </p></html> ");
+        }
+        revalidate();
+        System.out.println("done saveStockList");
+	}
+	
+	/**
 	 * Alert observing components of a change in the target stock
 	 * 
 	 * @param newStock
@@ -152,6 +234,7 @@ public class BaseGUI extends JFrame {
 	public void notifyStockChange(Stock newStock) {
 	    tgtStock = newStock;
 	    rightPanel.changeTargetStock(tgtStock);
+	    
 	}
 	
 	/**
@@ -164,7 +247,6 @@ public class BaseGUI extends JFrame {
 	    } else {
 	        alertWindowTemp.addAlert("<html><bold>" + ticker + "</bold> : fetching data now ... </html>");
 	    }
-	    
 	    
 	    // beginning async call to new Stock
 	    new Thread(new Runnable() {
@@ -189,6 +271,16 @@ public class BaseGUI extends JFrame {
 	        }
             
 	    }).start();
+	}
+	
+	/**
+	 * Bulk adds a list of tickers.
+	 * @param s
+	 */
+	public void bulkAddStocks(ArrayList<String> s) {
+	    for(String ticker : s) {
+	        addNewStock(ticker);
+	    }
 	}
 	
 	/**
@@ -223,5 +315,73 @@ public class BaseGUI extends JFrame {
         public void removeStock(Stock s) {
             stocks.remove(s);
         }
+    }
+    
+    // ==================================================================
+    //                         Action Listener
+    // ==================================================================
+    
+    /**
+     * Action listener for the save stock list action.
+     * 
+     */
+    private class MenuItemSaveAction implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if(e.getActionCommand() == "saveItem") {
+                saveStockList();
+            }
+        }
+        
+    }
+    
+    // ==================================================================
+    //                          Mouse Listener
+    // ==================================================================
+    
+    /**
+     * Formats the menuButton for actions
+     * 
+     */
+    private class MenuButtonActions implements MouseListener {
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            Object source = e.getSource();
+            if(source instanceof JButton) {
+                menuPopup.show((JButton)source, ((JButton) source).getX(), ((JButton) source).getY());
+            }
+        }
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public void mouseEntered(MouseEvent e) {
+            Object source = e.getSource();
+            if(source instanceof JButton) {
+                ((JButton) source).setBackground(Color.GRAY);
+            }
+        }
+
+        @Override
+        public void mouseExited(MouseEvent e) {
+            Object source = e.getSource();
+            if(source instanceof JButton) {
+                ((JButton) source).setBackground(Color.DARK_GRAY);
+                ((JButton) source).setForeground(Color.WHITE);
+            }
+        }
+        
     }
 }

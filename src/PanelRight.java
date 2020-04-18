@@ -144,6 +144,7 @@ public class PanelRight extends JPanel {
             int monthsBack = dateAdjustMap.get(timeAdjust);
             TreeMap<LocalDate, OHLCV> shortData = adjustDateForChart(monthsBack);
             chart.changeStock(shortData);
+            table.setFocus((JButton) e.getSource());
         }
     }
 }

@@ -29,16 +29,8 @@ public class ProgramController {
 		    
 		    SwingUtilities.invokeLater(new Runnable() {
 		        public void run() {
-		            try {
-		                
-		                Stock spy = new Stock("SPY");
-		                ArrayList<Stock> stocks = new ArrayList<>();
-	                    stocks.add(spy);
-	                    BaseGUI userInterface = new BaseGUI(stocks);
-	                    
-		            } catch(FileNotFoundException | InterruptedException e) { 
-		                e.printStackTrace();
-		            }
+	                ArrayList<Stock> stocks = new ArrayList<>();
+                    BaseGUI userInterface = new BaseGUI();
 		        }
 		    });
 		}

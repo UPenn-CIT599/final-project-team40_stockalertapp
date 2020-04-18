@@ -69,7 +69,6 @@ public class PanelRight extends JPanel {
         add(scroller, gbc);
 
         alertWindow.addAlert("Welcome to alert Catcher");
-        alertWindow.addAlert("Second Alert");
     }
 
     /**

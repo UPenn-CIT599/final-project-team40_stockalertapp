@@ -44,6 +44,7 @@ public class StockListPanel extends JPanel {
      */
     public StockListPanel(ArrayList<Stock> s) {
         buttons = new ArrayList<>();
+        
         mouseControl = new MouseEventActions();
         setBackground(Color.DARK_GRAY);
         setOpaque(true);
@@ -84,16 +85,18 @@ public class StockListPanel extends JPanel {
         add(addStock, gbConst);
 
         add(newStockInput, gbConst);
+        
+        if(s.size() > 0) {
+            for (Stock stock : s) {
+                StockDetailButton button = new StockDetailButton(stock);
+                button.addMouseListener(mouseControl);
+                button.addActionListener(new ChangeStockAction());
+                buttons.add(button);
+                add(button, gbConst);
+            }
 
-        for (Stock stock : s) {
-            StockDetailButton button = new StockDetailButton(stock);
-            button.addMouseListener(mouseControl);
-            button.addActionListener(new ChangeStockAction());
-            buttons.add(button);
-            add(button, gbConst);
+            focusButton = buttons.get(0);
         }
-
-        focusButton = buttons.get(0);
     }
     
     /**
@@ -130,6 +133,11 @@ public class StockListPanel extends JPanel {
         newButton.addActionListener(new ChangeStockAction());
         buttons.add(newButton);
         add(newButton, gbConst);
+        if(focusButton instanceof StockDetailButton) {
+            unsetFocusButtonColor();
+        }
+        focusButton = newButton;
+        setFocusButtonColor();
     }
 
     /**
@@ -145,6 +153,14 @@ public class StockListPanel extends JPanel {
             }
         }
         addStockCallBack.removeStock(s);
+    }
+    
+    /**
+     * Reset text input placeholder to enter ticker.
+     */
+    public void resetTickerInputField() {
+        newStockInput.setForeground(Color.LIGHT_GRAY);
+        newStockInput.setText("enter ticker");
     }
 
     /**
@@ -191,9 +207,7 @@ public class StockListPanel extends JPanel {
                 comp.setForeground(Color.LIGHT_GRAY);
                 comp.setText(" fetching ... ");
                 revalidate();
-                // baffled ...
                 addStockCallBack.addStock(newTicker); // calls back to BaseGUI to create new Stock object
-                comp.setText("enter ticker");
             }
         }
     }

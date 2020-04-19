@@ -138,13 +138,13 @@ public class PanelRight extends JPanel {
             String actionCommand = e.getActionCommand();
             if(actionCommand.equals("50d")) {
                 chart.toggleSMA50();
-                table.setFocusAlert((JButton) e.getSource());
+                ((AlertButton) e.getSource()).toggleOnOff();
             } else if(actionCommand.equals("200d")) {
                 chart.toggleSMA200();
-                table.setFocusAlert((JButton) e.getSource());
+                ((AlertButton) e.getSource()).toggleOnOff();
             } else if(actionCommand.equals("100d")) {
                 chart.toggleSMA100();
-                table.setFocusAlert((JButton) e.getSource());
+                ((AlertButton) e.getSource()).toggleOnOff();
             }
         }
     }

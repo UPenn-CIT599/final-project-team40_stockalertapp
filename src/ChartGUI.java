@@ -212,7 +212,7 @@ public class ChartGUI extends JPanel {
         drawBorder(g2d);
         drawPlotPoints(g2d);
         if(sma50) {
-            g2d.setColor(new Color(163, 238, 165));
+            g2d.setColor(new Color(134, 206, 136));
             drawSMA(g2d, 50);
         }
         
@@ -358,7 +358,7 @@ public class ChartGUI extends JPanel {
 	        
 	        double x = chartData.convertIndexToPlot(endIndex + 1);
 	        double y = chartData.convertPriceToPlot(sumWindow / window);
-	        double[] xy = new double[] { x, y};
+	        double[] xy = new double[] {x, y};
 	        double prevX;
 	        double prevY;
 	        while(endIndex < dataSet.size() - 1) {

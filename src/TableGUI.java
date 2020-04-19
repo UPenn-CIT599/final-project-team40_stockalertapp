@@ -31,7 +31,9 @@ public class TableGUI extends JPanel{
     
     private final Color focusColor = new Color(230, 145, 0);
     private final Color outOfFocusColor = new Color(250, 200, 100);
-    private final Color borderColor = Color.BLACK; // new Color(200, 229, 254);
+    private final Color backGroundColor = new Color(238, 238, 238);
+    private final Color borderColor = Color.BLACK;
+    public Color[] colors;
     
     private ArrayList<JButton> buttons;
     private ArrayList<JButton> alerts;
@@ -57,12 +59,12 @@ public class TableGUI extends JPanel{
         
         setLayout(new GridBagLayout());
         Border border = BorderFactory.createLineBorder(Color.BLACK);
-        this.setBackground(Color.DARK_GRAY);
+        this.setBackground(backGroundColor);
         
         stockLabel = new JLabel(ticker.toUpperCase(), JLabel.CENTER);
         stockLabel.setPreferredSize(new Dimension(160, 30));
         stockLabel.setForeground(focusColor);
-        stockLabel.setBackground(new Color(238, 238, 238)); // color to match default button background
+        stockLabel.setBackground(backGroundColor); // color to match default button background
         stockLabel.setOpaque(true);
         stockLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
         
@@ -79,15 +81,20 @@ public class TableGUI extends JPanel{
             buttons.add(dateAdjust);
         }
         
+     // Set Coloring scheme for Alert Buttons.
+        Color fifty = new Color(134, 206, 136);
+        Color hundred = new Color(255, 153, 132);
+        Color twoHundred = Color.ORANGE;
+        
+        colors = new Color[] {fifty, hundred, twoHundred};
+        int x = 0;
         for(String alertName : new String[] {"50d", "100d", "200d"}) {
-            JButton alertButton = new JButton(alertName);
-            alertButton.setActionCommand(alertName);
-            alertButton.setForeground(outOfFocusColor);
-            alertButton.setOpaque(true);
-            alertButton.setBorder(BorderFactory.createEmptyBorder());
-            alertButton.addMouseListener(new ButtonFormatActions());
+            AlertButton alertButton = new AlertButton(alertName, colors[x]);
             alerts.add(alertButton);
+            x++;
         }
+        
+        
         
         setFocus(buttons.get(3));
         createRow();
@@ -108,11 +115,7 @@ public class TableGUI extends JPanel{
     
     
     public void setFocusAlert(JButton newFocusAlert) {
-        focusAlert.setBorder(BorderFactory.createEmptyBorder());
-        focusAlert.setForeground(outOfFocusColor);
-        focusAlert = newFocusAlert;
-        focusAlert.setBorder(dateAdjustBorder);
-        focusAlert.setForeground(focusColor);
+        
     }
 
     /**
@@ -147,10 +150,13 @@ public class TableGUI extends JPanel{
         gridCont.weighty = 1;
         gridCont.weightx = 1;
         gridCont.gridy = 1;
+        gridCont.gridx = 1;
         gridCont.fill = GridBagConstraints.BOTH;
         
+         
         for(JButton button : alerts) {
             add(button, gridCont);
+            gridCont.gridx = gridCont.gridx + 1;
         }
     }
     

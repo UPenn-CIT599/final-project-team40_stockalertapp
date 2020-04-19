@@ -3,107 +3,115 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-/** 
- * Panel is used for displaying text version of alerts based on settings for various stocks.
+/**
+ * Panel is used for displaying text version of alerts based on settings for
+ * various stocks.
  * 
  * @author robertstanton
  *
  */
-public class AlertWindow extends JPanel{
-    
+public class AlertWindow extends JPanel {
+
     private ArrayList<JLabel> labelList;
     private Dimension dimension;
     private GridBagConstraints content;
-    
+
     /**
      * Constructs basic panel to display labels with alert information;
      */
     public AlertWindow() {
-        
+
         labelList = new ArrayList<>();
-        
+
         dimension = new Dimension(400, 200);
-        setPreferredSize(dimension);
-        // setLayout(new GridLayout(0, 1));
-        setLayout(new GridBagLayout());
-        content = new GridBagConstraints();
-        content.weightx = 1;
-        content.weighty = 1;
-        content.gridx = 0;
-        content.fill = GridBagConstraints.HORIZONTAL;
-        content.anchor = GridBagConstraints.FIRST_LINE_START;
-        
-        setBackground(Color.LIGHT_GRAY);
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        setBackground(Color.WHITE);
         setOpaque(true);
     }
-    
-    /** 
+
+    /**
      * Adds a new Alert message to the panel.
      * 
      * @param msg
      */
     public void addAlert(String msg) {
-        JLabel alertButton = new JLabel(msg);
-        labelList.add(alertButton);
+        JLabel alertLabel = new JLabel(msg) {
+            // This is a joke. There is no reason i should have to override a method to get
+            // a label to fill horizontally
+            // while having a fixed height and aligning top to bottom.....
+
+            @Override
+            public Dimension getMaximumSize() {
+                Dimension d = super.getMaximumSize();
+                d.width = Integer.MAX_VALUE;
+                return d;
+            }
+        };
         
-        alertButton.setBackground(Color.WHITE);
-        alertButton.setOpaque(true);
-        alertButton.setHorizontalTextPosition(JLabel.LEFT);
-        alertButton.setPreferredSize(new Dimension(400, 50));
-        alertButton.addMouseListener(new AlertButtonMouseActions());
-        add(alertButton, content);
+        alertLabel.setBackground(Color.WHITE);
+        alertLabel.setOpaque(true);
+        alertLabel.setBorder(BorderFactory.createEmptyBorder(25, 0, 25, 0));
+        alertLabel.setHorizontalTextPosition(JLabel.LEFT);
+        alertLabel.addMouseListener(new AlertButtonMouseActions());
+
+        labelList.add(alertLabel);
+        int numAlerts = labelList.size();
+        add(alertLabel);
         revalidate();
     }
-    
+
     /**
-     * Removes labels from view 
+     * Removes labels from view
      * 
      */
     public void clearAlerts() {
-        for(JLabel label : labelList) {
+        for (JLabel label : labelList) {
             remove(label);
         }
         labelList = new ArrayList<>();
     }
-    
+
     // =====================================================================
-    //                         Mouse Listeners
+    // Mouse Listeners
     // =====================================================================
-    
+
     private class AlertButtonMouseActions implements MouseListener {
 
         @Override
         public void mouseClicked(MouseEvent e) {
             // TODO Auto-generated method stub
-            
+
         }
 
         @Override
         public void mousePressed(MouseEvent e) {
             // TODO Auto-generated method stub
-            
+
         }
 
         @Override
         public void mouseReleased(MouseEvent e) {
             // TODO Auto-generated method stub
-            
+
         }
 
         @Override
         public void mouseEntered(MouseEvent e) {
             Object source = e.getSource();
-            if(source instanceof JLabel) {
+            if (source instanceof JLabel) {
                 JLabel label = (JLabel) source;
                 label.setBackground(new Color(253, 251, 234));
             }
@@ -112,7 +120,7 @@ public class AlertWindow extends JPanel{
         @Override
         public void mouseExited(MouseEvent e) {
             Object source = e.getSource();
-            if(source instanceof JLabel) {
+            if (source instanceof JLabel) {
                 JLabel label = (JLabel) source;
                 label.setBackground(Color.WHITE);
             }

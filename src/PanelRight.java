@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -71,8 +72,13 @@ public class PanelRight extends JPanel {
         gbc.weighty = 30;
         gbc.gridy = 2;
         add(scroller, gbc);
-
+        
+        // Format alerts HERE for specific stock alerts
         alertWindow.addAlert("Welcome to alert Catcher");
+        alertWindow.addAlert("AAPL : whatever ");
+        alertWindow.addAlert("another whatever");
+        alertWindow.addAlert("totally wasting time");
+        alertWindow.addAlert("should be done");
     }
 
     /**
@@ -85,6 +91,7 @@ public class PanelRight extends JPanel {
         chart.changeStock(adjustDateForChart(60));
         table.setStock(targetStock.getTicker());
         alertWindow.clearAlerts();
+        alertWindow.addAlert(s.getTicker() + " : data loaded");
     }
 
     /**

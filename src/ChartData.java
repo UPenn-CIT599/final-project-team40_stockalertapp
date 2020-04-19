@@ -131,6 +131,10 @@ public class ChartData {
 		return Math.round(slopeY * price + interceptY);
 	}
 	
+	public double convertIndexToPlot(int idx) {
+	    return idx * deltaX + xOffset;
+	}
+	
 	/**
 	 * returns coordinates to plot for a given x y value pairing. x is the number element you are trying to plot and y is the value at that index.
 	 * @param x
@@ -138,7 +142,7 @@ public class ChartData {
 	 * @return
 	 */
 	public double[] convertToPlot(double x, double y) {
-		double xPlot = x * deltaX;
+		double xPlot = x * deltaX + xOffset;
 		double yPlot = convertPriceToPlot(y);
 		return new double[] { x, y };
 	}
@@ -208,73 +212,6 @@ public class ChartData {
                 }
 		    }
 		}
-		/*
-		else if (dataLength < 40) {
-			// semi daily ticks
-			for (Map.Entry dateEntry : plotPoints.entrySet()) {
-				// cast objects to respective types
-				LocalDate key = (LocalDate) dateEntry.getKey();
-				double curTick = Math.round(x * deltaX) + xOffset;
-				if (key.getDayOfMonth() % 2 == 0) {
-					xAxisTicks.put(key, curTick);
-				}
-				x++;
-			}
-		} else if (dataLength < 150) {
-			// weekly ticks
-			for (Map.Entry dateEntry : plotPoints.entrySet()) {
-				// cast objects to respective types
-				LocalDate key = (LocalDate) dateEntry.getKey();
-				double curTick = Math.round(x * deltaX) + xOffset;
-				if (key.getDayOfWeek() == DayOfWeek.MONDAY) {
-					xAxisTicks.put(key, curTick);
-				}
-				x++;
-			}
-		} else if (dataLength < 500) {
-			// monthly ticks
-			Map<Month, List<LocalDate>> monthCollection = plotPoints.entrySet().stream().map((entry) -> entry.getKey())
-					.collect(Collectors.groupingBy(LocalDate::getMonth));
-
-			for (LocalDate key : plotPoints.keySet()) {
-				if (key == monthCollection.get(key.getMonth()).get(0)) {
-					double curTick = Math.round(x * deltaX) + xOffset;
-					xAxisTicks.put(key, curTick);
-				}
-				x++;
-			}
-
-		} else if (dataLength < 2000) {
-			// quarterly ticks
-			Month currentMonth = plotPoints.firstKey().getMonth();
-			for (Map.Entry dateEntry : plotPoints.entrySet()) {
-				// cast objects to respective types
-				LocalDate key = (LocalDate) dateEntry.getKey();
-				double curTick = Math.round(x * deltaX) + xOffset;
-
-				if (key.getMonthValue() % 3 == 1 && !key.getMonth().equals(currentMonth)) {
-					xAxisTicks.put(key, curTick);
-					currentMonth = key.getMonth();
-				}
-				x++;
-			}
-
-		} else {
-			// yearly ticks
-			int currentYear = plotPoints.firstKey().getYear();
-			for (Map.Entry dateEntry : plotPoints.entrySet()) {
-				// cast objects to respective types
-				LocalDate key = (LocalDate) dateEntry.getKey();
-				double curTick = Math.round(x * deltaX) + xOffset;
-
-				if (key.getMonthValue() % 3 == 1 && key.getYear() != currentYear) {
-					xAxisTicks.put(key, curTick);
-					currentYear = key.getYear();
-				}
-				x++;
-			}
-		}
-		*/
 	}
 
 	/**
@@ -334,5 +271,12 @@ public class ChartData {
 	 */
 	public double getMax() {
 	    return maxVal;
+	}
+	
+	/**
+	 * Get closing values as ArrayList<Double>.
+	 */
+	public ArrayList<Double> getClosingPrices() {
+	    return historicalBars.values().stream().map(x -> x.close).collect(Collectors.toCollection(ArrayList::new));
 	}
 }

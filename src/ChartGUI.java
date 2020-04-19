@@ -10,11 +10,13 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -39,6 +41,7 @@ import javax.swing.SwingConstants;
  */ 
 
 public class ChartGUI extends JPanel {
+    
 	private final int buffer = 5; // for edge spacing
 	private int maxLabelSize = 40;
 	private ChartData chartData;
@@ -61,7 +64,14 @@ public class ChartGUI extends JPanel {
 	private float[] dash = { 3f };
 	private BasicStroke dashStroke = new BasicStroke(1, ENDCAPS, LINEJOIN, 3f, dash, 3f);
 	private Color[] colorPallette = new Color[] { Color.RED, Color.ORANGE, Color.MAGENTA, Color.YELLOW, Color.GREEN };
-
+	
+	private boolean sma50;
+	private boolean sma200;
+	private boolean sma100;
+	private boolean obv;
+	
+	
+	 // private Graphics2D gdd;
 
 	/**
 	 * CHARTGUI METHOD: This method constructs a ChartGUI object with a default size
@@ -85,6 +95,7 @@ public class ChartGUI extends JPanel {
 		chartD = d;
 		image = new BufferedImage((int) chartD.getWidth(), (int) chartD.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		g2d = image.createGraphics();
+		
 		if (chartD.getWidth() < 100 || chartD.getHeight() < 100) {
 			chartD = new Dimension(800, 400);
 
@@ -94,6 +105,12 @@ public class ChartGUI extends JPanel {
 		setYOffset();
 
 		chartData = new ChartData(stockData, netWidth, netHeight, xOffset, buffer); 
+		sma50 = false;
+		sma100 = false;
+		sma200 = false;
+		obv = false;
+		
+		createChartImage();
 	}
 
 	/**
@@ -154,24 +171,6 @@ public class ChartGUI extends JPanel {
 	}
 
 	/**
-	 * RESCALE METHOD: This method resizes details and display for a new given
-	 * Dimension.
-	 * 
-	 * @param newDim
-	 */
-	public void reScale(Dimension newDim) {
-		if (newDim.getWidth() > 400 || newDim.getHeight() > 100) {
-			chartD = newDim;
-			setPreferredSize(chartD);
-			setXOffset();
-			setYOffset();
-
-			chartData = new ChartData(stockData, netWidth, netHeight, xOffset, buffer); // TODO: switch to Stock
-			repaint();
-		}
-	}
-
-	/**
 	 * CHANGESTOCK METHOD: This method changes all details to allow for plotting
 	 * different stocks without the need for new ChartData and ChartGUI objects.
 	 * 
@@ -180,10 +179,13 @@ public class ChartGUI extends JPanel {
 	public void changeStock(TreeMap<LocalDate, OHLCV> s) {
 		stockData = s;
 		chartData = new ChartData(stockData, netWidth, netHeight, xOffset, buffer); 
+		createChartImage();
 		repaint();
 	}
-
-	// Begin Draw Methods
+	
+	// ====================================================================================
+	//                                 Begin Draw Methods
+	// ====================================================================================
 
 	/**
 	 * PAINTCOMPONENT METHOD:
@@ -191,16 +193,39 @@ public class ChartGUI extends JPanel {
 	 */
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-
-		reScale(this.getSize());
-
-		g2d = (Graphics2D) g;
-		g2d.setColor(Color.WHITE);
-		g2d.fillRect(0, 0, (int) chartD.getWidth(), (int) chartD.getHeight());
-		drawYAxis(g2d);
-		drawXAxis(g2d);
-		drawBorder(g2d);
-		drawPlotPoints(g2d);
+		
+		Image img = (Image) image;
+		g.drawImage(img, 0, 0, this.getWidth(), this.getHeight(), this);
+	}
+	
+	/**
+	 * Create image of chart to Display standard price chart.
+	 * @return
+	 */
+	public void createChartImage() {
+	    image = new BufferedImage((int) chartD.getWidth(), (int) chartD.getHeight(), BufferedImage.TYPE_INT_ARGB);
+	    g2d = (Graphics2D) image.getGraphics();
+        g2d.setColor(Color.WHITE);
+        g2d.fillRect(0, 0, (int) chartD.getWidth(), (int) chartD.getHeight());
+        drawYAxis(g2d);
+        drawXAxis(g2d);
+        drawBorder(g2d);
+        drawPlotPoints(g2d);
+        if(sma50) {
+            g2d.setColor(new Color(163, 238, 165));
+            drawSMA(g2d, 50);
+        }
+        
+        if(sma100) {
+            g2d.setColor(new Color(255, 153, 132));
+            drawSMA(g2d, 100);
+        }
+        
+        if(sma200) {
+            g2d.setColor(Color.ORANGE);
+            drawSMA(g2d, 200);
+        }
+        
 	}
 
 	/**
@@ -221,7 +246,6 @@ public class ChartGUI extends JPanel {
 						(int) (chartD.getHeight() - yOffset / 2));
 				drawVGridLine(g, val);
 			}
-
 		}
 	}
 
@@ -243,7 +267,6 @@ public class ChartGUI extends JPanel {
 				g.drawString(entry.getKey().toString(), 2, val.intValue());
 				drawHGridLine(g, val);
 			}
-
 		}
 	}
 
@@ -314,4 +337,71 @@ public class ChartGUI extends JPanel {
 			prevY = y;
 		}
 	}
+	
+	/**
+	 * Plot simple moving average based on window.
+	 * @param window
+	 */
+	public void drawSMA(Graphics2D g, Integer window) {
+	    Graphics2D gdd = g;
+	    BasicStroke stroke = new BasicStroke(1);
+	    gdd.setStroke(stroke);
+	    
+	    int startIndex = 0;
+	    int endIndex = window - 1;
+	    ArrayList<Double> dataSet = chartData.getClosingPrices();
+	    if(window < dataSet.size()) {
+	        double sumWindow = 0.0;
+	        for(int i = 0; i < window; i++) {
+	            sumWindow += dataSet.get(i);
+	        }
+	        
+	        double x = chartData.convertIndexToPlot(endIndex + 1);
+	        double y = chartData.convertPriceToPlot(sumWindow / window);
+	        double[] xy = new double[] { x, y};
+	        double prevX;
+	        double prevY;
+	        while(endIndex < dataSet.size() - 1) {
+	            double removeVal = dataSet.get(startIndex);
+	            startIndex++;
+	            endIndex++;
+	            double addVal = dataSet.get(endIndex);
+	            sumWindow = sumWindow - removeVal + addVal;
+	            prevX = xy[0];
+	            prevY = xy[1];
+	            x = chartData.convertIndexToPlot(endIndex + 1);
+	            y = chartData.convertPriceToPlot(sumWindow / window);
+	            xy = new double[] { x, y};
+	            Line2D.Double lineSeg = new Line2D.Double(prevX, prevY, xy[0], xy[1]);
+	            gdd.draw(lineSeg);
+	        } 
+	    }
+	}
+	
+	/**
+	 * toggle sma 50 on or off.
+	 */
+	public void toggleSMA50() {
+	    sma50 = !sma50;
+	    createChartImage();
+	    repaint();
+	}
+	
+	/**
+	 * toggle sma 200 on or off.
+	 */
+	public void toggleSMA200() {
+	    sma200 = !sma200;
+	    createChartImage();
+	    repaint();
+	}
+	
+	/**
+	 * toggle sma 100 on or off.
+	 */
+    public void toggleSMA100() {
+        sma100 = !sma100;
+        createChartImage();
+        repaint();
+    }
 }

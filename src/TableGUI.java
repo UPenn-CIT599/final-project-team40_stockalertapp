@@ -34,10 +34,12 @@ public class TableGUI extends JPanel{
     private final Color borderColor = Color.BLACK; // new Color(200, 229, 254);
     
     private ArrayList<JButton> buttons;
+    private ArrayList<JButton> alerts;
     private JLabel stockLabel;
     private GridBagConstraints gridCont;
     private String ticker;
     private JButton focusButton;
+    private JButton focusAlert;
     private Border dateAdjustBorder;
     
     /**
@@ -47,8 +49,10 @@ public class TableGUI extends JPanel{
     public TableGUI(String ticker) {
         this.ticker = ticker;
         buttons = new ArrayList<>();
+        alerts = new ArrayList<>();
         gridCont = new GridBagConstraints();
         focusButton = new JButton();
+        focusAlert = new JButton();
         dateAdjustBorder = BorderFactory.createLineBorder(borderColor);
         
         setLayout(new GridBagLayout());
@@ -62,20 +66,32 @@ public class TableGUI extends JPanel{
         stockLabel.setOpaque(true);
         stockLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
         
-        for(String alertName : new String[] { "3M", "6M", "1Y", "5Y", "ALL"}) {
+        for(String dateRange : new String[] { "3M", "6M", "1Y", "5Y", "ALL"}) {
             
-            JButton dateAdjust = new JButton(alertName);
+            JButton dateAdjust = new JButton(dateRange);
             dateAdjust.setForeground(outOfFocusColor);
             dateAdjust.setBorder(BorderFactory.createEmptyBorder());
             dateAdjust.setPreferredSize(new Dimension(80, 30));
             dateAdjust.setOpaque(true);
             dateAdjust.setHorizontalTextPosition(JLabel.CENTER);
-            dateAdjust.setActionCommand(alertName);
+            dateAdjust.setActionCommand(dateRange);
             dateAdjust.addMouseListener(new ButtonFormatActions());
             buttons.add(dateAdjust);
         }
+        
+        for(String alertName : new String[] {"50d", "100d", "200d"}) {
+            JButton alertButton = new JButton(alertName);
+            alertButton.setActionCommand(alertName);
+            alertButton.setForeground(outOfFocusColor);
+            alertButton.setOpaque(true);
+            alertButton.setBorder(BorderFactory.createEmptyBorder());
+            alertButton.addMouseListener(new ButtonFormatActions());
+            alerts.add(alertButton);
+        }
+        
         setFocus(buttons.get(3));
-        createRow(1);
+        createRow();
+        createAlertRow();
     }
     
     /**
@@ -89,16 +105,25 @@ public class TableGUI extends JPanel{
         focusButton.setBorder(dateAdjustBorder);
         focusButton.setForeground(focusColor);
     }
+    
+    
+    public void setFocusAlert(JButton newFocusAlert) {
+        focusAlert.setBorder(BorderFactory.createEmptyBorder());
+        focusAlert.setForeground(outOfFocusColor);
+        focusAlert = newFocusAlert;
+        focusAlert.setBorder(dateAdjustBorder);
+        focusAlert.setForeground(focusColor);
+    }
 
     /**
      * Adds buttons to the table view and aligns them next to the label.  Multiple tables could be make and stacked with the num param.
      * 
      * @param num determines which row to create.
      */
-    public void createRow(int num) {
+    public void createRow() {
         gridCont.weighty = 3.0;
         gridCont.anchor = GridBagConstraints.LINE_START;
-        gridCont.gridy = num;
+        gridCont.gridy = 0;
         gridCont.weightx = 4.0;
         gridCont.fill = GridBagConstraints.BOTH;
         add(stockLabel, gridCont);
@@ -112,6 +137,20 @@ public class TableGUI extends JPanel{
             }
             add(item, gridCont);
             x++;
+        }
+    }
+    
+    /**
+     * Add buttons for each alert available to plot.
+     */
+    public void createAlertRow() {
+        gridCont.weighty = 1;
+        gridCont.weightx = 1;
+        gridCont.gridy = 1;
+        gridCont.fill = GridBagConstraints.BOTH;
+        
+        for(JButton button : alerts) {
+            add(button, gridCont);
         }
     }
     
@@ -139,6 +178,14 @@ public class TableGUI extends JPanel{
      */
     public ArrayList<JButton> getButtons() {
         return buttons;
+    }
+    
+    /**
+     * Retusn list of alert buttons.
+     * @return
+     */
+    public ArrayList<JButton> getAlerts() {
+        return alerts;
     }
     
     // ========================================================================

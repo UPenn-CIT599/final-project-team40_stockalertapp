@@ -48,6 +48,10 @@ public class PanelRight extends JPanel {
         for (JButton but : table.getButtons()) {
             but.addActionListener(new DateAdjustAction());
         }
+        
+        for(JButton alrt : table.getAlerts()) {
+            alrt.addActionListener(new ToggleIndicators());
+        }
 
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -121,6 +125,29 @@ public class PanelRight extends JPanel {
     }
 
     // ============================= Action Listeners =============================
+    
+    /**
+     * Toggles on or off a given indicator.
+     * @author robertstanton
+     *
+     */
+    private class ToggleIndicators implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String actionCommand = e.getActionCommand();
+            if(actionCommand.equals("50d")) {
+                chart.toggleSMA50();
+                table.setFocusAlert((JButton) e.getSource());
+            } else if(actionCommand.equals("200d")) {
+                chart.toggleSMA200();
+                table.setFocusAlert((JButton) e.getSource());
+            } else if(actionCommand.equals("100d")) {
+                chart.toggleSMA100();
+                table.setFocusAlert((JButton) e.getSource());
+            }
+        }
+    }
     
     /**
      * Changes the time frame displayed in the Chart to 3 months, 6 months, 1 year,

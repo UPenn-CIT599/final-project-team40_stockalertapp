@@ -156,16 +156,12 @@ public class DataPull {
 
 			String json = " ";
 			while ((line = br.readLine()) != null) {
-				json = json + line;
+				json = json + line + ";";
 			}
-			String[] lineComponents = json.split(",");
-			String indicatorComponents = "";
+			String[] lineComponents = json.split(";");
+			String[] itemComponents = lineComponents[1].split(",");
+			String indicatorComponents = itemComponents[1];
 			
-			if (indicator == "MACD") {
-				indicatorComponents = lineComponents[5];
-			} else {
-				indicatorComponents = lineComponents[3];
-			}
 			double currentIndicator = Double.parseDouble(indicatorComponents);
 			br.close();
 			reader.close();

@@ -18,7 +18,7 @@ import java.nio.file.Paths;
 /**
  * A class to store a stock's ticker, price, and historical data
  * 
- * @author Joseph Kravets
+ * @author Joseph Kravets; Tiffany Choi
  *
  */
 public class Stock {
@@ -26,6 +26,11 @@ public class Stock {
 	private String ticker;
 	private String csv;
 	private double quote;
+	private double sma;
+	private double ema;
+	private double rsi;
+	private double macd;
+	private double obv;
 	private TreeMap dataHistory;
 
 	/**
@@ -45,6 +50,11 @@ public class Stock {
 
 		try {
 			this.quote = data.getCurrentQuote(ticker);
+			this.sma = data.getIndicator("SMA", ticker);
+			this.ema = data.getIndicator("EMA", ticker);
+			this.rsi = data.getIndicator("RSI", ticker);
+			this.macd = data.getIndicator("MACD", ticker);
+			this.obv = data.getIndicator("OBV", ticker);
 			this.dataHistory = getTreeMap(csv, ticker);
 
 		} catch (java.time.format.DateTimeParseException e) {
@@ -52,6 +62,11 @@ public class Stock {
 			TimeUnit.SECONDS.sleep(30);
 			this.dataHistory = getTreeMap(csv, ticker);
 			this.quote = data.getCurrentQuote(ticker);
+			this.sma = data.getIndicator("SMA", ticker);
+			this.ema = data.getIndicator("EMA", ticker);
+			this.rsi = data.getIndicator("RSI", ticker);
+			this.macd = data.getIndicator("MACD", ticker);
+			this.obv = data.getIndicator("OBV", ticker);
 		}
 	}
 
@@ -149,8 +164,48 @@ public class Stock {
 		this.dataHistory = dataHistory;
 	}
 
+	public double getSma() {
+		return sma;
+	}
+
+	public void setSma(double sma) {
+		this.sma = sma;
+	}
+
+	public double getEma() {
+		return ema;
+	}
+
+	public void setEma(double ema) {
+		this.ema = ema;
+	}
+
+	public double getRsi() {
+		return rsi;
+	}
+
+	public void setRsi(double rsi) {
+		this.rsi = rsi;
+	}
+
+	public double getMacd() {
+		return macd;
+	}
+
+	public void setMacd(double macd) {
+		this.macd = macd;
+	}
+
+	public double getObv() {
+		return obv;
+	}
+
+	public void setObv(double obv) {
+		this.obv = obv;
+	}
+	
 	/*
-	 * main for testing
+	 * Main Method for Testing Purposes
 	 * 
 	 */
 	public static void main(String[] args) throws FileNotFoundException, InterruptedException {

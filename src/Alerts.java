@@ -11,12 +11,14 @@ public class Alerts {
 	
 	// test price variable
 	
+	
 	double price = 45.00;
 	double pricealert = 50.00;
 	
 	// store the alerts method
 	
-	
+	Stock s = new Stock("SPY");
+
 	
 	/**
 	 * BELOWPRICEALERT METHOD: 

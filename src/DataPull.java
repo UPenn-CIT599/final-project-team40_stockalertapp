@@ -18,17 +18,13 @@ import javax.net.ssl.HttpsURLConnection;
 /**
  * A class to pull stock historical data
  * 
- * @author Joseph Kravets; tiffchoi
+ * @author Joseph Kravets; Tiffany Choi
  *
  */
 public class DataPull {
 
-	public DataPull() {
-		// TODO Auto-generated constructor stub
-	}
-
 	/**
-	 * Returns a csv of stock data with data, open, high, low, close, volume
+	 * Returns a CSV file of stock data with data, open, high, low, close, volume
 	 * 
 	 * @param ticker
 	 * @throws InterruptedException
@@ -125,22 +121,23 @@ public class DataPull {
 	}
 
 	/**
-	 * Returns the latest SMA (daily interval; 10 time period) from the given stock
-	 * ticker
+	 * Returns the latest financial indicators from the given stock ticker and the
+	 * financial indicator type
 	 * 
-	 * @param symbol
+	 * Default API Values: Daily Interval; 10 Time Period
+	 * Possible Indicator Selection: SMA, EMA, RSI, MACD, OBV
+	 * 
+	 * @param	indicator
+	 * @param 	symbol
 	 * @throws InterruptedException
 	 */
 
-	public static double getSMA(String symbol) throws InterruptedException {
+	public static double getIndicator(String indicator, String symbol) throws InterruptedException {
 
 		System.out.println("waiting 13 seconds for " + symbol + " data due to api rate limit");
 		TimeUnit.SECONDS.sleep(13);
 
-		// For SMA
-		// https://www.alphavantage.co/query?function=SMA&symbol=IBM&interval=weekly&time_period=10&series_type=open&apikey=demo
-
-		String url = "https://www.alphavantage.co/query?function=SMA&symbol=" + (symbol)
+		String url = "https://www.alphavantage.co/query?function=" + (indicator) + "&symbol=" + (symbol)
 				+ "&interval=daily&time_period=10&series_type=open&apikey=JRVCT84VUG4TM97S&datatype=csv";
 
 		InputStream input = null;
@@ -162,11 +159,17 @@ public class DataPull {
 				json = json + line;
 			}
 			String[] lineComponents = json.split(",");
-			String smaComponents = lineComponents[3];
-			double currentSMA = Double.parseDouble(smaComponents);
+			String indicatorComponents = "";
+			
+			if (indicator == "MACD") {
+				indicatorComponents = lineComponents[5];
+			} else {
+				indicatorComponents = lineComponents[3];
+			}
+			double currentIndicator = Double.parseDouble(indicatorComponents);
 			br.close();
 			reader.close();
-			return currentSMA;
+			return currentIndicator;
 
 		}
 
@@ -176,5 +179,6 @@ public class DataPull {
 			return 0.0;
 		}
 	}
+
 
 }

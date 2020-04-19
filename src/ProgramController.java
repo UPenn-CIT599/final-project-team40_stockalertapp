@@ -28,12 +28,12 @@ public class ProgramController {
 	public void runProgram() {
         
         // headless environment for server side use
+	    
 		if(GraphicsEnvironment.isHeadless()) {
 		    ConsoleUI userInterface = new ConsoleUI();
 		    userInterface.init();
 		    
 		} else {
-		    System.out.println("fetching data and loading gui ... ");
 		    
 		    SwingUtilities.invokeLater(new Runnable() {
 		        public void run() {
@@ -42,9 +42,4 @@ public class ProgramController {
 		    });
 		}
 	}
-	
-	public static void main(String[] args) {
-        ProgramController cont = new ProgramController();
-        cont.runProgram();
-    }
 }

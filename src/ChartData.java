@@ -27,15 +27,15 @@ import java.util.stream.Collectors;
  */
 public class ChartData {
 
-	public double slopeY; // change to private post testing
-	public double interceptY; // change to private post testing
+	public double slopeY; 
+	public double interceptY; 
 	public double deltaX;
 	private int width;
 	private int height;
 	private int xOffset;
 	private int yBuffer;
-	public double minVal; // change to private post testing
-	public double maxVal; // change to private post testing
+	public double minVal; 
+	public double maxVal; 
 	private TreeMap<LocalDate, OHLCV> historicalBars;
 	private TreeMap<LocalDate, Double[]> plotPoints; // {x, y}
 	private TreeMap<LocalDate, Double> xAxisTicks;
@@ -61,7 +61,6 @@ public class ChartData {
 	 *                allow for X AXIS labels.
 	 */
 	public ChartData(TreeMap<LocalDate, OHLCV> bars, int width, int height, int xOffset, int yBuffer) {
-		// stock = s; REINSTATE
 
 	    historicalBars = bars;
 		this.width = width;

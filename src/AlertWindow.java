@@ -87,7 +87,12 @@ public class AlertWindow extends JPanel {
     // =====================================================================
     // Mouse Listeners
     // =====================================================================
-
+    
+    /**
+     * Formats button for mouse hovering.
+     * @author robertstanton
+     *
+     */
     private class AlertButtonMouseActions implements MouseListener {
 
         @Override

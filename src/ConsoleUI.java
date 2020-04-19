@@ -62,6 +62,9 @@ public class ConsoleUI {
 	    processResponse();
 	}
 	
+	/**
+	 * Process user Responses and handle bad input.
+	 */
 	public void processResponse() {
 	    boolean invalid = true;
 	    String ticker = "";
@@ -105,6 +108,11 @@ public class ConsoleUI {
 	                
 	                quit();
 	                break;
+	                
+	            default:
+	                System.out.println("Please select a valid option");
+	                System.out.println("");
+	                selectionMenu();
 	            }
 	            invalid = false;
 	        }else {

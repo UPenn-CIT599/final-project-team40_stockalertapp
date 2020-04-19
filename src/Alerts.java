@@ -9,17 +9,6 @@
 
 public class Alerts {
 	
-	// test price variable
-	
-	
-	double price = 45.00;
-	double pricealert = 50.00;
-	
-	// store the alerts method
-	
-	Stock s = new Stock("SPY");
-
-	
 	/**
 	 * BELOWPRICEALERT METHOD: 
 	 * This method alerts the user if the price is below or equal to a certain number.
@@ -27,9 +16,9 @@ public class Alerts {
 	 * @return false: if the price is above the number
 	 */
 	
-	public boolean belowPriceAlert() {
+	public boolean belowPriceAlert(double price, double pricealert) {
 		
-		if (price <= pricealert) {
+		if (price < pricealert) {
 			return true;
 		} 
 
@@ -44,7 +33,7 @@ public class Alerts {
 	 * @return false: if the price is below the number
 	 */
 	
-	public boolean abovePriceAlert() {
+	public boolean abovePriceAlert(double price, double pricealert) {
 		
 		if (price >= pricealert) {
 			return true;
@@ -60,9 +49,11 @@ public class Alerts {
 	 * @return false: if the SMA did not cross over
 	 */
 	
-	public boolean smaCrossoverAlert() {
+	public boolean smaCrossoverAlert(double sma, double smaalert) {
 		
-		
+		if (sma >= smaalert) {
+			return true;
+		}
 		
 		return false;
 	}
@@ -75,7 +66,11 @@ public class Alerts {
 	 * @return false: if the EMA did not cross over
 	 */
 	
-	public boolean emaCrossoverAlert() {
+	public boolean emaCrossoverAlert(double ema, double emaalert) {
+		
+		if (ema >= emaalert) {
+			return true;
+		}
 		
 		return false;
 	}
@@ -88,7 +83,11 @@ public class Alerts {
 	 * @return false: if the RSI is above the number
 	 */
 	
-	public boolean belowRSIAlert() {
+	public boolean belowRSIAlert(double rsi, double rsialert) {
+		
+		if (rsi < rsialert) {
+			return true;
+		} 
 		
 		return false;
 		
@@ -101,7 +100,11 @@ public class Alerts {
 	 * @return false: if the RSI is below the number
 	 */
 	
-	public boolean aboveRSIAlert() {
+	public boolean aboveRSIAlert(double rsi, double rsialert) {
+		
+		if (rsi >= rsialert) {
+			return true;
+		} 
 		
 		return false;
 	}
@@ -114,7 +117,11 @@ public class Alerts {
 	 * @return false: if the MACD is above the number
 	 */
 	
-	public boolean belowMACDAlert() {
+	public boolean belowMACDAlert(double macd, double macdalert) {
+		
+		if (macd < macdalert) {
+			return true;
+		} 
 		
 		return false;
 		
@@ -127,7 +134,11 @@ public class Alerts {
 	 * @return false: if the MACD is below the number
 	 */
 	
-	public boolean aboveMACDAlert() {
+	public boolean aboveMACDAlert(double macd, double macdalert) {
+		
+		if (macd >= macdalert) {
+			return true;
+		} 
 		
 		return false;
 	}
@@ -139,7 +150,11 @@ public class Alerts {
 	 * @return false: if the OBV is above the number
 	 */
 	
-	public boolean belowOBVAlert() {
+	public boolean belowOBVAlert(double obv, double obvalert) {
+		
+		if (obv < obvalert) {
+			return true;
+		} 
 		
 		return false;
 		
@@ -152,7 +167,11 @@ public class Alerts {
 	 * @return false: if the OBV is below the number
 	 */
 	
-	public boolean aboveOBVAlert() {
+	public boolean aboveOBVAlert(double obv, double obvalert) {
+		
+		if (obv >= obvalert) {
+			return true;
+		}
 		
 		return false;
 	}

@@ -125,9 +125,8 @@ public class DataPull {
 	}
 
 	/**
-	 * Returns the current financial indicators from stock ticker
-	 * 
-	 * Added the SMA
+	 * Returns the latest SMA (daily interval; 10 time period) from the given stock
+	 * ticker
 	 * 
 	 * @param symbol
 	 * @throws InterruptedException
@@ -137,11 +136,12 @@ public class DataPull {
 
 		System.out.println("waiting 13 seconds for " + symbol + " data due to api rate limit");
 		TimeUnit.SECONDS.sleep(13);
+
 		// For SMA
 		// https://www.alphavantage.co/query?function=SMA&symbol=IBM&interval=weekly&time_period=10&series_type=open&apikey=demo
 
 		String url = "https://www.alphavantage.co/query?function=SMA&symbol=" + (symbol)
-				+ "&interval=weekly&time_period=10&series_type=open&apikey=JRVCT84VUG4TM97S&datatype=csv";
+				+ "&interval=daily&time_period=10&series_type=open&apikey=JRVCT84VUG4TM97S&datatype=csv";
 
 		InputStream input = null;
 
@@ -161,13 +161,12 @@ public class DataPull {
 			while ((line = br.readLine()) != null) {
 				json = json + line;
 			}
-			String[] lineComponents = json.split(":");
-			String[] priceComponents = lineComponents[6].split(",");
-			String str = priceComponents[0].replace("\"", "");
-			double currentPrice = Double.parseDouble(str);
+			String[] lineComponents = json.split(",");
+			String smaComponents = lineComponents[3];
+			double currentSMA = Double.parseDouble(smaComponents);
 			br.close();
 			reader.close();
-			return currentPrice;
+			return currentSMA;
 
 		}
 

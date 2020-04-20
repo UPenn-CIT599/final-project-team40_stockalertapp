@@ -58,6 +58,7 @@ public class StockListPanel extends JPanel {
         // it and then hides it again.
         addStock = new JButton("+");
         Font buttonFont = addStock.getFont();
+        addStock.setPreferredSize(new Dimension(90, 30));
         addStock.setFont(new Font(buttonFont.getFontName(), buttonFont.getStyle(), (int) (buttonFont.getSize() * 1.5)));
         addStock.setBackground(Color.DARK_GRAY);
         addStock.setForeground(Color.WHITE);

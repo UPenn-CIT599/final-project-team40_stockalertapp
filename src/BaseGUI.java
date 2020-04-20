@@ -252,9 +252,9 @@ public class BaseGUI extends JFrame {
 	 */
 	public void addNewStock(String ticker) {
 	    if(stocks.size() > 0) {
-	        rightPanel.addAlert("<html><bold>" + ticker + "</bold> : fetching data now ... </html>");
+	        rightPanel.addAlert("<html><bold>" + ticker + "</bold><p color=orange> : fetching data now ...</p></html>");
 	    } else {
-	        alertWindowTemp.addAlert("<html><bold>" + ticker + "</bold> : fetching data now ... </html>");
+	        alertWindowTemp.addAlert("<html><bold>" + ticker + "</bold><p color=orange> : fetching data now ...</p></html>");
 	    }
 	    
 	    // beginning async call to new Stock
@@ -270,7 +270,6 @@ public class BaseGUI extends JFrame {
                         setRightPanel();
                     }
                     notifyStockChange(newStock);
-                    rightPanel.addAlert("<html><bold font-size=large color=blue>" + ticker + "</bold> : data has been loaded!</html>");
                     stockList.resetTickerInputField();
                     
                 } catch (FileNotFoundException | InterruptedException e) {

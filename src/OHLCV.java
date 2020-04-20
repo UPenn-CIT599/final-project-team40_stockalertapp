@@ -23,7 +23,5 @@ public class OHLCV implements Serializable {
 		this.low= low; 
 		this.close= close;
 		this.volume=volume;
-		// TODO Auto-generated constructor stub
 	}
-
 }

@@ -407,18 +407,19 @@ public class ChartGUI extends JPanel {
         double y;
         double prevX = 0;
         double prevY = 0;
+        
         for(int i = 0; i < datesInRange.length; i++) {
+            
             if(smaPrices.containsKey(datesInRange[i])) {
                 
                 x = chartData.convertIndexToPlot(i);
                 y = chartData.convertPriceToPlot(smaPrices.get(datesInRange[i]));
                 
-                if(smaPrices.firstKey().equals(datesInRange[i])) {
+                if(prevX == 0 && prevY == 0) {
                     prevX = x;
                     prevY = y;
-                    
                 }
-
+                
                 Line2D.Double lineSeg = new Line2D.Double(prevX, prevY, x, y);
                 gdd.draw(lineSeg); 
                 

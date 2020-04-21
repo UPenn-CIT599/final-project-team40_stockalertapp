@@ -78,7 +78,4 @@ class ChartDataTest {
         numTicks = 7;
         assertEquals(chart.getXAxisTicks().size(), numTicks);
     }
-    
-    
-
 }

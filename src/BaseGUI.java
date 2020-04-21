@@ -252,7 +252,7 @@ public class BaseGUI extends JFrame {
 	 */
 	public void addNewStock(String ticker) {
 	    if(stocks.size() > 0) {
-	        rightPanel.addAlert("<html><bold>" + ticker + "</bold><p color=orange> : fetching data now ...</p></html>");
+	        rightPanel.addAlert("<html><p color=orange><bold>" + ticker + "</bold> : fetching data now ...</p></html>");
 	    } else {
 	        alertWindowTemp.addAlert("<html><bold>" + ticker + "</bold><p color=orange> : fetching data now ...</p></html>");
 	    }
@@ -410,6 +410,5 @@ public class BaseGUI extends JFrame {
                 ((JButton) source).setForeground(Color.WHITE);
             }
         }
-        
     }
 }

@@ -317,6 +317,7 @@ public class Stock {
 	public void setObv(double obv) {
 		this.obv = obv;
 	}
+<<<<<<< HEAD
 
 	/*
 	 * Main Method for Testing Purposes
@@ -356,5 +357,8 @@ public class Stock {
 		System.out.println(t.quote);
 
 	}
+=======
+	
+>>>>>>> e57239c26164d0e716871d343ffa249283184a75
 
 }

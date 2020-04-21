@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -102,14 +103,15 @@ public class ChartGUI extends JPanel {
         setPreferredSize(chartD);
         setXOffset();
         setYOffset();
-
-        chartData = new ChartData(stockData, netWidth, netHeight, xOffset, buffer);
+        
+        // chartData = new ChartData(stockData, netWidth, netHeight, xOffset, buffer);
         sma50 = false;
         sma100 = false;
         sma200 = false;
         obv = false;
 
-        createChartImage();
+        // createChartImage();
+        changeDateRange(60); // set default date range to 5 years
     }
 
     /**
@@ -175,7 +177,26 @@ public class ChartGUI extends JPanel {
      */
     public void changeStock(TreeMap<LocalDate, OHLCV> s) {
         stockData = s;
-        chartData = new ChartData(stockData, netWidth, netHeight, xOffset, buffer);
+        // chartData = new ChartData(stockData, netWidth, netHeight, xOffset, buffer);
+        // createChartImage();
+        changeDateRange(60); // sets default date range to 5 years
+        repaint();
+    }
+    
+    
+    public void changeDateRange(int monthsBack) {
+        TreeMap<LocalDate, OHLCV> shortData = new TreeMap<>();
+        LocalDate refDate = stockData.lastKey().minusMonths(monthsBack);
+        if(monthsBack == 0) {
+            refDate = stockData.firstKey();
+        }
+        for(LocalDate d : stockData.keySet()) {
+            if(d.isAfter(refDate)) {
+                shortData.put(d, stockData.get(d));
+            }
+        }
+        
+        chartData = new ChartData(shortData, netWidth, netHeight, xOffset, buffer);
         createChartImage();
         repaint();
     }
@@ -209,19 +230,22 @@ public class ChartGUI extends JPanel {
         drawXAxis(g2d);
         drawBorder(g2d);
         drawPlotPoints(g2d);
+        
+        LocalDate startDate = chartData.getPlotPoints().firstKey();
+        
         if (sma50) {
             g2d.setColor(new Color(134, 206, 136));
-            drawSMA(g2d, 50);
+            drawSMA(g2d, 50, startDate);
         }
 
         if (sma100) {
             g2d.setColor(new Color(255, 153, 132));
-            drawSMA(g2d, 100);
+            drawSMA(g2d, 100, startDate);
         }
 
         if (sma200) {
             g2d.setColor(Color.ORANGE);
-            drawSMA(g2d, 200);
+            drawSMA(g2d, 200, startDate);
         }
     }
 
@@ -329,44 +353,77 @@ public class ChartGUI extends JPanel {
             prevY = y;
         }
     }
+    
+    /**
+     * Computes the simple moving average based on entire dataset.
+     * @param window
+     * @return
+     */
+    private TreeMap<LocalDate, Double> calculateSMA(Integer window) {
+        TreeMap<LocalDate, Double> smaVals = new TreeMap<>();
+        
+        int startIndex = 0;
+        int endIndex = window - 1;
+        LocalDate[] dateArray = stockData.keySet().toArray(new LocalDate[] {});
+        
+        if(window < dateArray.length) {
+            double sumWindow = 0;
+            for(int i = 0; i < window; i++) {
+                sumWindow += stockData.get(dateArray[i]).close;
+            }
+            smaVals.put(dateArray[window - 1], sumWindow / window);
+            while(endIndex < dateArray.length - 1) {
+                startIndex++;
+                endIndex++;
+                double removeVal = stockData.get(dateArray[startIndex - 1]).close;
+                double addVal = stockData.get(dateArray[endIndex]).close;
+                sumWindow = sumWindow - removeVal + addVal;
+                smaVals.put(dateArray[endIndex], sumWindow / window);
+            }
+        } else {
+            double sumWindow = 0;
+            for(LocalDate d : stockData.keySet()) {
+                sumWindow += stockData.get(d).close;
+            }
+            smaVals.put(stockData.lastKey(), sumWindow / stockData.size());
+        }
+        return smaVals;
+    }
 
     /**
      * Plot simple moving average based on window.
      * 
      * @param window
      */
-    public void drawSMA(Graphics2D g, Integer window) {
+    public void drawSMA(Graphics2D g, Integer window, LocalDate startDate) {
         Graphics2D gdd = g;
         BasicStroke stroke = new BasicStroke(1);
         gdd.setStroke(stroke);
+        
+        TreeMap<LocalDate, Double> smaPrices = calculateSMA(window);
+        LocalDate[] datesInRange = chartData.getPlotPoints().keySet().toArray(new LocalDate[] {});
+        
+        double x;
+        double y;
+        double prevX = 0;
+        double prevY = 0;
+        for(int i = 0; i < datesInRange.length; i++) {
+            if(smaPrices.containsKey(datesInRange[i])) {
+                
+                x = chartData.convertIndexToPlot(i);
+                y = chartData.convertPriceToPlot(smaPrices.get(datesInRange[i]));
+                
+                if(smaPrices.firstKey().equals(datesInRange[i])) {
+                    prevX = x;
+                    prevY = y;
+                    
+                }
 
-        int startIndex = 0;
-        int endIndex = window - 1;
-        ArrayList<Double> dataSet = chartData.getClosingPrices();
-        if (window < dataSet.size()) {
-            double sumWindow = 0.0;
-            for (int i = 0; i < window; i++) {
-                sumWindow += dataSet.get(i);
-            }
-
-            double x = chartData.convertIndexToPlot(endIndex + 1);
-            double y = chartData.convertPriceToPlot(sumWindow / window);
-            double[] xy = new double[] { x, y };
-            double prevX;
-            double prevY;
-            while (endIndex < dataSet.size() - 1) {
-                double removeVal = dataSet.get(startIndex);
-                startIndex++;
-                endIndex++;
-                double addVal = dataSet.get(endIndex);
-                sumWindow = sumWindow - removeVal + addVal;
-                prevX = xy[0];
-                prevY = xy[1];
-                x = chartData.convertIndexToPlot(endIndex + 1);
-                y = chartData.convertPriceToPlot(sumWindow / window);
-                xy = new double[] { x, y };
-                Line2D.Double lineSeg = new Line2D.Double(prevX, prevY, xy[0], xy[1]);
-                gdd.draw(lineSeg);
+                Line2D.Double lineSeg = new Line2D.Double(prevX, prevY, x, y);
+                gdd.draw(lineSeg); 
+                
+                prevX = x;
+                prevY = y;
             }
         }
     }

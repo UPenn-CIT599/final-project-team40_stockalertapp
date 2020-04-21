@@ -130,8 +130,29 @@ public class ChartData {
 		return Math.round(slopeY * price + interceptY);
 	}
 	
+	/**
+	 * Converts an integer value to the corresponding plot point.
+	 * @param idx
+	 * @return
+	 */
 	public double convertIndexToPlot(int idx) {
 	    return idx * deltaX + xOffset;
+	}
+	
+	/**
+	 * Convert LocalDate to corresponding plot point.
+	 * @param d
+	 * @return
+	 */
+	public double convertDateToPlot(LocalDate d) {
+	    int idx = 0;
+	    for(LocalDate date : historicalBars.keySet()) {
+	        if(d.equals(date)) {
+	            return convertIndexToPlot(idx);
+	        }
+	        idx++;
+	    }
+	    return convertIndexToPlot(historicalBars.size());
 	}
 	
 	/**
@@ -140,12 +161,13 @@ public class ChartData {
 	 * @param y
 	 * @return
 	 */
+	/*
 	public double[] convertToPlot(double x, double y) {
 		double xPlot = x * deltaX + xOffset;
 		double yPlot = convertPriceToPlot(y);
 		return new double[] { x, y };
 	}
-
+	*/
 	/**
 	 * SETPLOTPOINTS METHOD:
 	 * Converts Stock price to plot point and stores in plotPoints data structure.

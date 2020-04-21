@@ -36,7 +36,7 @@ public class PanelRight extends JPanel {
      */
     public PanelRight(Stock s) {
         targetStock = s;
-        chart = new ChartGUI(this.adjustDateForChart(60)); // default to 5 years back
+        chart = new ChartGUI(targetStock.getdataHistory()); // default to 5 years back
         table = new TableGUI(targetStock.getTicker());
         alertWindow = new AlertWindow();
 
@@ -88,7 +88,7 @@ public class PanelRight extends JPanel {
      */
     public void changeTargetStock(Stock s) {
         targetStock = s;
-        chart.changeStock(adjustDateForChart(60));
+        chart.changeStock(targetStock.getdataHistory());
         table.setStock(targetStock.getTicker());
         alertWindow.clearAlerts();
         alertWindow.addAlert(s.getTicker() + " : data loaded");
@@ -101,6 +101,7 @@ public class PanelRight extends JPanel {
      * @param monthsBack
      * @return
      */
+    /*
     public TreeMap<LocalDate, OHLCV> adjustDateForChart(int monthsBack) {
         TreeMap<LocalDate, OHLCV> shortData = new TreeMap<>();
         TreeMap<LocalDate, OHLCV> tgtData = targetStock.getdataHistory();
@@ -122,6 +123,7 @@ public class PanelRight extends JPanel {
         }
         return shortData;
     }
+    */
     
     /**
      * Add an alert label to the Alert Window panel;
@@ -129,6 +131,13 @@ public class PanelRight extends JPanel {
      */
     public void addAlert(String msg) {
         alertWindow.addAlert(msg);
+    }
+    
+    /**
+     * Clear the Alert Window.
+     */
+    public void clearAlerts() {
+        alertWindow.clearAlerts();
     }
 
     // ============================= Action Listeners =============================
@@ -181,8 +190,13 @@ public class PanelRight extends JPanel {
         public void actionPerformed(ActionEvent e) {
             String timeAdjust = e.getActionCommand();
             int monthsBack = dateAdjustMap.get(timeAdjust);
+            
+            /*
             TreeMap<LocalDate, OHLCV> shortData = adjustDateForChart(monthsBack);
             chart.changeStock(shortData);
+            */
+            chart.changeDateRange(monthsBack);
+            
             table.setFocus((JButton) e.getSource());
         }
     }

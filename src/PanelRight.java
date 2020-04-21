@@ -74,6 +74,7 @@ public class PanelRight extends JPanel {
         add(scroller, gbc);
         
         // Format alerts HERE for specific stock alerts
+        
         alertWindow.addAlert("Welcome to alert Catcher");
         alertWindow.addAlert("AAPL : whatever ");
         alertWindow.addAlert("another whatever");

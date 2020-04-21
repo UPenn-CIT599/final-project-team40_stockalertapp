@@ -74,11 +74,14 @@ public class PanelRight extends JPanel {
         add(scroller, gbc);
         
         // Format alerts HERE for specific stock alerts
-        alertWindow.addAlert("Welcome to alert Catcher");
-        alertWindow.addAlert("AAPL : whatever ");
-        alertWindow.addAlert("another whatever");
-        alertWindow.addAlert("totally wasting time");
-        alertWindow.addAlert("should be done");
+        for(Map.Entry entry : targetStock.getCalculatedAlerts().entrySet()) {
+            String name = (String) entry.getKey();
+            Boolean didTrigger = (Boolean) entry.getValue();
+            if(didTrigger) {
+                alertWindow.addAlert("<html><div color=orange><bold color=black>" + targetStock.getTicker() + "</bold> : " + name + "</div></html>");
+                
+            }
+        }
     }
 
     /**

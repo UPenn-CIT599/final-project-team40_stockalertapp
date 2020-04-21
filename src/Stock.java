@@ -165,7 +165,8 @@ public class Stock {
 
 	}
 
-	private void calculateAlerts(HashMap storedAlerts) {
+	private void calculateAlerts(HashMap storedAlerts, String ticker) {
+		
 		Alerts alert = new Alerts();
 		DataPull datapull = new DataPull();
 
@@ -181,7 +182,7 @@ public class Stock {
 		}
 		
 		
-
+		
 	}
 
 	/**
@@ -317,48 +318,6 @@ public class Stock {
 	public void setObv(double obv) {
 		this.obv = obv;
 	}
-<<<<<<< HEAD
 
-	/*
-	 * Main Method for Testing Purposes
-	 * 
-	 */
-	public static void main(String[] args) throws FileNotFoundException, InterruptedException {
-		// TODO Auto-generated method stub
-
-		Stock t;
-
-		t = new Stock("SLB");
-
-		// get all entries
-		Set<Map.Entry<LocalDate, OHLCV>> entries = t.dataHistory.entrySet();
-
-		// using for loop
-		for (Map.Entry<LocalDate, OHLCV> entry : entries) {
-			System.out.println(entry.getKey() + " open " + entry.getValue().open + " high " + entry.getValue().high
-					+ " low " + entry.getValue().low + " close " + entry.getValue().close + " volume "
-					+ entry.getValue().volume);
-		}
-
-		System.out.println(t.quote);
-
-		t = new Stock("UPRO");
-
-		// get all entries
-		Set<Map.Entry<LocalDate, OHLCV>> entries1 = t.dataHistory.entrySet();
-
-		// using for loop
-		for (Map.Entry<LocalDate, OHLCV> entry : entries1) {
-			System.out.println(entry.getKey() + " open " + entry.getValue().open + " high " + entry.getValue().high
-					+ " low " + entry.getValue().low + " close " + entry.getValue().close + " volume "
-					+ entry.getValue().volume);
-		}
-
-		System.out.println(t.quote);
-
-	}
-=======
-	
->>>>>>> e57239c26164d0e716871d343ffa249283184a75
 
 }

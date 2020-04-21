@@ -27,15 +27,15 @@ import java.util.stream.Collectors;
  */
 public class ChartData {
 
-	public double slopeY; // change to private post testing
-	public double interceptY; // change to private post testing
+	public double slopeY; 
+	public double interceptY; 
 	public double deltaX;
 	private int width;
 	private int height;
 	private int xOffset;
 	private int yBuffer;
-	public double minVal; // change to private post testing
-	public double maxVal; // change to private post testing
+	public double minVal; 
+	public double maxVal; 
 	private TreeMap<LocalDate, OHLCV> historicalBars;
 	private TreeMap<LocalDate, Double[]> plotPoints; // {x, y}
 	private TreeMap<LocalDate, Double> xAxisTicks;
@@ -61,7 +61,6 @@ public class ChartData {
 	 *                allow for X AXIS labels.
 	 */
 	public ChartData(TreeMap<LocalDate, OHLCV> bars, int width, int height, int xOffset, int yBuffer) {
-		// stock = s; REINSTATE
 
 	    historicalBars = bars;
 		this.width = width;
@@ -131,8 +130,29 @@ public class ChartData {
 		return Math.round(slopeY * price + interceptY);
 	}
 	
+	/**
+	 * Converts an integer value to the corresponding plot point.
+	 * @param idx
+	 * @return
+	 */
 	public double convertIndexToPlot(int idx) {
 	    return idx * deltaX + xOffset;
+	}
+	
+	/**
+	 * Convert LocalDate to corresponding plot point.
+	 * @param d
+	 * @return
+	 */
+	public double convertDateToPlot(LocalDate d) {
+	    int idx = 0;
+	    for(LocalDate date : historicalBars.keySet()) {
+	        if(d.equals(date)) {
+	            return convertIndexToPlot(idx);
+	        }
+	        idx++;
+	    }
+	    return convertIndexToPlot(historicalBars.size());
 	}
 	
 	/**
@@ -141,12 +161,13 @@ public class ChartData {
 	 * @param y
 	 * @return
 	 */
+	/*
 	public double[] convertToPlot(double x, double y) {
 		double xPlot = x * deltaX + xOffset;
 		double yPlot = convertPriceToPlot(y);
 		return new double[] { x, y };
 	}
-
+	*/
 	/**
 	 * SETPLOTPOINTS METHOD:
 	 * Converts Stock price to plot point and stores in plotPoints data structure.

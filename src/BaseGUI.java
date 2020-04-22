@@ -227,11 +227,17 @@ public class BaseGUI extends JFrame {
 	 * @param s
 	 */
 	public void setStocks(ArrayList<Stock> s) {
-	    clearStockList();
-	    stocks = s;
-	    for(Stock stock : stocks) {
-	        stockList.addStock(stock);
+	    if(stocks.size() < 1) {
+	        stocks = s;
+	        setRightPanel();
+	    } else {
+	        clearStockList();
+	        stocks = s;
+	        for(Stock stock : stocks) {
+	            stockList.addStock(stock);
+	        }
 	    }
+	    
 	    revalidate();
 	}
 	

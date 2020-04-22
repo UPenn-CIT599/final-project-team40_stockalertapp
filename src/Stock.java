@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
@@ -22,9 +23,13 @@ import java.nio.file.Paths;
  * @author Joseph Kravets; Tiffany Choi
  *
  */
-public class Stock {
+public class Stock implements Serializable{
 
-	private String ticker;
+	/**
+     * 
+     */
+    private static final long serialVersionUID = -1995220666246658729L;
+    private String ticker;
 	private String csv;
 	private double quote;
 	private double sma;
@@ -33,13 +38,8 @@ public class Stock {
 	private double macd;
 	private double obv;
 	private TreeMap dataHistory;
-
-	private String indicator;
-	private String above_below;
-	private double savedalert;
-	private HashMap<String, HashMap<String, Double>> storedAlerts;
-	private HashMap<String, Boolean> calculatedAlerts;
-
+	private HashMap<String, Boolean> calculatedAlerts = new HashMap<>();
+    
 	/**
 	 * Stock object with stock's ticker, price, and historical data
 	 * 
@@ -75,113 +75,6 @@ public class Stock {
 			this.macd = data.getIndicator("MACD", ticker);
 			this.obv = data.getIndicator("OBV", ticker);
 		}
-	}
-
-	/**
-	 * Overloaded the Stock class to save Alerts
-	 * 
-	 * @param ticker
-	 * @param indicator
-	 * @param above_below
-	 * @param savedalert
-	 * @throws InterruptedException
-	 */
-
-	public Stock(String ticker, String indicator, String above_below, double savedalert)
-			throws FileNotFoundException, InterruptedException {
-
-		DataPull data = new DataPull();
-
-		this.ticker = ticker;
-		this.csv = ticker + ".csv";
-		this.indicator = indicator;
-		this.above_below = above_below;
-		this.savedalert = savedalert;
-
-		try {
-			this.quote = data.getCurrentQuote(ticker);
-			this.sma = data.getIndicator("SMA", ticker);
-			this.ema = data.getIndicator("EMA", ticker);
-			this.rsi = data.getIndicator("RSI", ticker);
-			this.macd = data.getIndicator("MACD", ticker);
-			this.obv = data.getIndicator("OBV", ticker);
-			this.dataHistory = getTreeMap(csv, ticker);
-
-		} catch (java.time.format.DateTimeParseException e) {
-			System.out.print("waiting 30 seconds due to api rate limit");
-			TimeUnit.SECONDS.sleep(30);
-			this.dataHistory = getTreeMap(csv, ticker);
-			this.quote = data.getCurrentQuote(ticker);
-			this.sma = data.getIndicator("SMA", ticker);
-			this.ema = data.getIndicator("EMA", ticker);
-			this.rsi = data.getIndicator("RSI", ticker);
-			this.macd = data.getIndicator("MACD", ticker);
-			this.obv = data.getIndicator("OBV", ticker);
-		}
-
-	}
-
-	/**
-	 * Add Alerts to the stored alerts
-	 * 
-	 * @param ticker
-	 * @param indicator
-	 * @param above_below
-	 * @param savedalert
-	 */
-
-	private void addAlert(String ticker, String indicator, String above_below, double savedalert) {
-
-		HashMap<String, Double> temp = new HashMap<String, Double>();
-		
-		try {
-			temp.put(above_below, savedalert);
-			storedAlerts.put(ticker + indicator, temp);
-		} catch (Exception e) {
-			System.out.println("Alert cannot be found.");
-		}
-
-	}
-
-	/**
-	 * Remove Alerts from the stored alerts
-	 * 
-	 * @param ticker
-	 * @param indicator
-	 * @param above_below
-	 * @param savedalert
-	 */
-
-	private void removeAlert(String ticker, String indicator, String above_below, double savedalert) {
-
-		HashMap<String, Double> temp = new HashMap<String, Double>();
-		
-		try {
-			temp.put(above_below, savedalert);
-			storedAlerts.remove(ticker + indicator, temp);
-		} catch (Exception e) {
-			System.out.println("Alert cannot be found.");
-		}
-
-	}
-
-	private void calculateAlerts(HashMap storedAlerts, String ticker) {
-		
-		Alerts alert = new Alerts();
-		DataPull datapull = new DataPull();
-
-		try {
-			double sma = datapull.getIndicator("SMA", ticker);
-			double ema = datapull.getIndicator("EMA", ticker);
-			double rsi = datapull.getIndicator("RSI", ticker);
-			double macd = datapull.getIndicator("MACD", ticker);
-			double obv = datapull.getIndicator("OBV", ticker);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
 		
 	}
 
@@ -318,6 +211,51 @@ public class Stock {
 	public void setObv(double obv) {
 		this.obv = obv;
 	}
+	
+	public HashMap<String, Boolean> getCalculatedAlerts() {
+	    
+        return calculatedAlerts;
+    }
+	
+	/*
+	 * Main Method for Testing Purposes
+	 * 
+	 */
+	public static void main(String[] args) throws FileNotFoundException, InterruptedException {
+		// TODO Auto-generated method stub
 
+		Stock t;
+
+		t = new Stock("SLB");
+
+		// get all entries
+		Set<Map.Entry<LocalDate, OHLCV>> entries = t.dataHistory.entrySet();
+
+		// using for loop
+		for (Map.Entry<LocalDate, OHLCV> entry : entries) {
+			System.out.println(entry.getKey() + " open " + entry.getValue().open + " high " + entry.getValue().high
+					+ " low " + entry.getValue().low + " close " + entry.getValue().close + " volume "
+					+ entry.getValue().volume);
+		}
+
+		System.out.println(t.quote);
+
+		t = new Stock("UPRO");
+
+		// get all entries
+		Set<Map.Entry<LocalDate, OHLCV>> entries1 = t.dataHistory.entrySet();
+
+		// using for loop
+		for (Map.Entry<LocalDate, OHLCV> entry : entries1) {
+			System.out.println(entry.getKey() + " open " + entry.getValue().open + " high " + entry.getValue().high
+					+ " low " + entry.getValue().low + " close " + entry.getValue().close + " volume "
+					+ entry.getValue().volume);
+		}
+
+		System.out.println(t.quote);
+
+	}
+
+    
 
 }

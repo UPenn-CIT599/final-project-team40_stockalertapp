@@ -230,6 +230,9 @@ public class BaseGUI extends JFrame {
 	    if(stocks.size() < 1) {
 	        stocks = s;
 	        setRightPanel();
+	        for(Stock stock : stocks) {
+	            stockList.addStock(stock);
+	        }
 	    } else {
 	        clearStockList();
 	        stocks = s;
@@ -271,7 +274,6 @@ public class BaseGUI extends JFrame {
 	public void notifyStockChange(Stock newStock) {
 	    tgtStock = newStock;
 	    rightPanel.changeTargetStock(tgtStock);
-	    
 	}
 	
 	/**
@@ -281,9 +283,9 @@ public class BaseGUI extends JFrame {
 	public void addNewStock(String ticker) {
 	    if(stocks.size() > 0) {
 	        rightPanel.clearAlerts();
-	        rightPanel.addAlert("<html><b>" + ticker + "</b><text color=orange> : fetching data now ...</text></html>");
+	        rightPanel.addAlert("<html><line color=orange><b>" + ticker + "</b> : fetching data now ...</line></html>");
 	    } else {
-	        alertWindowTemp.addAlert("<html><bold>" + ticker + "</bold><p color=orange> : fetching data now ...</p></html>");
+	        alertWindowTemp.addAlert("<html><line color=orange><bold color=black>" + ticker + "</bold> : fetching data now ...</line></html>");
 	    }
 	    
 	    // beginning async call to new Stock
@@ -302,7 +304,7 @@ public class BaseGUI extends JFrame {
                     stockList.resetTickerInputField();
                     
                 } catch (FileNotFoundException | InterruptedException e) {
-                    rightPanel.addAlert("<html><bold font-size=large color=blue>" + ticker + "</bold> : failed to retrieve ticker</html>");
+                    rightPanel.addAlert("<html><line color=orange><bold font-size=large color=blue>" + ticker + "</bold> : failed to retrieve ticker</line></html>");
                     e.printStackTrace();
                 }
 	        }

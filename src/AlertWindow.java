@@ -78,10 +78,11 @@ public class AlertWindow extends JPanel {
      * 
      */
     public void clearAlerts() {
-        for (JLabel label : labelList) {
-            remove(label);
+        for (int i = 0; i < labelList.size(); i++) {
+            remove(labelList.get(i));
         }
         labelList = new ArrayList<>();
+        revalidate();
     }
 
     // =====================================================================

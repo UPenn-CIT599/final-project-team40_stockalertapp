@@ -74,14 +74,7 @@ public class PanelRight extends JPanel {
         add(scroller, gbc);
         
         // Format alerts HERE for specific stock alerts
-        for(Map.Entry entry : targetStock.getCalculatedAlerts().entrySet()) {
-            String name = (String) entry.getKey();
-            Boolean didTrigger = (Boolean) entry.getValue();
-            if(didTrigger) {
-                alertWindow.addAlert("<html><div color=orange><bold color=black>" + targetStock.getTicker() + "</bold> : " + name + "</div></html>");
-                
-            }
-        }
+      // addAlertsToWindow();
     }
 
     /**
@@ -95,36 +88,22 @@ public class PanelRight extends JPanel {
         table.setStock(targetStock.getTicker());
         alertWindow.clearAlerts();
         alertWindow.addAlert(s.getTicker() + " : data loaded");
+      // addAlertsToWindow();
     }
 
     /**
-     * Transforms complete data of Stock history to window specified by the
-     * monthsBack parameter
+     * load a stocks alert in the alert window.
      * 
-     * @param monthsBack
-     * @return
      */
     /*
-    public TreeMap<LocalDate, OHLCV> adjustDateForChart(int monthsBack) {
-        TreeMap<LocalDate, OHLCV> shortData = new TreeMap<>();
-        TreeMap<LocalDate, OHLCV> tgtData = targetStock.getdataHistory();
-        if (monthsBack > 0) {
-            LocalDate startDate = tgtData.lastKey().minusMonths(monthsBack);
-            if(startDate.isAfter(tgtData.firstKey())) {
-                for (Map.Entry entry : tgtData.entrySet()) {
-                    LocalDate k = (LocalDate) entry.getKey();
-                    OHLCV v = (OHLCV) entry.getValue();
-                    if (k.isAfter(startDate)) {
-                        shortData.put(k, v);
-                    }
-                }
-            } else {
-                return tgtData;
+    public void addAlertsToWindow() {
+        for(Map.Entry entry : targetStock.getCalculatedAlerts().entrySet()) {
+            String name = (String) entry.getKey();
+            Boolean didTrigger = (Boolean) entry.getValue();
+            if(didTrigger) {
+                alertWindow.addAlert("<html><div color=orange><bold color=black>" + targetStock.getTicker() + "</bold> : " + name + "</div></html>");
             }
-        } else {
-            return tgtData;
         }
-        return shortData;
     }
     */
     
@@ -193,11 +172,7 @@ public class PanelRight extends JPanel {
         public void actionPerformed(ActionEvent e) {
             String timeAdjust = e.getActionCommand();
             int monthsBack = dateAdjustMap.get(timeAdjust);
-            
-            /*
-            TreeMap<LocalDate, OHLCV> shortData = adjustDateForChart(monthsBack);
-            chart.changeStock(shortData);
-            */
+
             chart.changeDateRange(monthsBack);
             
             table.setFocus((JButton) e.getSource());

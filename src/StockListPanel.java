@@ -148,8 +148,9 @@ public class StockListPanel extends JPanel {
      * @param s
      */
     public void removeStock(Stock s) {
-        for (StockDetailButton button : buttons) {
-            if (button.getStock().equals(s)) {
+        for (int i = 0; i< buttons.size(); i++) {
+            StockDetailButton button = buttons.get(i);
+            if (button.getStock().getTicker().equals(s.getTicker())) {
                 buttons.remove(button);
                 this.remove(button);
                 revalidate();

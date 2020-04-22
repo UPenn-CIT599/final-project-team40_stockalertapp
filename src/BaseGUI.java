@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -22,6 +23,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -63,6 +66,8 @@ public class BaseGUI extends JFrame {
 	private JPopupMenu menuPopup;
 	private JMenuItem saveItem;
 	private JMenuItem loadItem;
+	private JFileChooser fileChooser;
+	private JScrollPane scroller;
 	
 	/**
 	 * Constructs an entry program to allow a user to add stocks from nothing.
@@ -73,6 +78,7 @@ public class BaseGUI extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         stocks = new ArrayList<>();
         content = this.getContentPane();
+        fileChooser = new JFileChooser(System.getProperty("user.dir"));
         
         stockList = new StockListPanel(stocks);
         stockList.setNewStockAddAction(new AddStockCallBack());
@@ -82,7 +88,7 @@ public class BaseGUI extends JFrame {
         leftPanel.setLayout(new BorderLayout());
         leftPanel.add(stockList, BorderLayout.NORTH);
         leftPanel.setBackground(Color.DARK_GRAY);
-        JScrollPane scroller = new JScrollPane(leftPanel);
+        scroller = new JScrollPane(leftPanel);
         scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         
@@ -116,7 +122,7 @@ public class BaseGUI extends JFrame {
 		super(title);
 		this.setPreferredSize(new Dimension(800, 800));
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+		fileChooser = new JFileChooser(System.getProperty("user.dir"));
 		
 		stocks = s;
 		tgtStock = stocks.get(0);
@@ -136,7 +142,7 @@ public class BaseGUI extends JFrame {
         leftPanel.setLayout(new BorderLayout());
         leftPanel.add(stockList, BorderLayout.NORTH);
         leftPanel.setBackground(Color.DARK_GRAY);
-        JScrollPane scroller = new JScrollPane(leftPanel);
+        scroller = new JScrollPane(leftPanel);
         scroller.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		
@@ -208,22 +214,38 @@ public class BaseGUI extends JFrame {
 	    add(menu, BorderLayout.NORTH);
 	}
 	
+	public void clearStockList() {
+	    ArrayList<Stock> stockRemove = new ArrayList<>();
+	    stockRemove.addAll(stocks);
+	    for(int i = 0; i < stockRemove.size(); i++) {
+	        stockList.removeStock(stockRemove.get(i));
+	    }
+	}
+	
+	/**
+	 * sets an array list of stocks.
+	 * @param s
+	 */
+	public void setStocks(ArrayList<Stock> s) {
+	    clearStockList();
+	    stocks = s;
+	    for(Stock stock : stocks) {
+	        stockList.addStock(stock);
+	    }
+	    revalidate();
+	}
+	
 	/**
 	 * Saves a list of Stock Tickers to 'tickerList.ser'.
 	 * 
 	 */
-	public void saveStockList() {
-	    ArrayList<String> tickerList = new ArrayList<>();
-	    for(Stock s : stocks) {
-	        tickerList.add(s.getTicker());
-	    }
+	public void saveStockList(File savedTickers) {
 	    
-	    File savedTickers = new File("tickerList.ser");
 	    FileOutputStream file;
         try {
             file = new FileOutputStream(savedTickers);
             ObjectOutputStream out = new ObjectOutputStream(file);
-            out.writeObject(tickerList);
+            out.writeObject(stocks);
             out.close();
             rightPanel.addAlert("<html><p><bold color=green>Stock list has saved</bold> : tickerList.ser </p></html> ");
         } catch (FileNotFoundException e) {
@@ -339,27 +361,40 @@ public class BaseGUI extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             if(e.getActionCommand() == "saveItem") {
-                saveStockList();
+                int returnChoice = fileChooser.showSaveDialog((JComponent) e.getSource());
+                if(returnChoice == JFileChooser.APPROVE_OPTION) {
+                    File f = fileChooser.getSelectedFile();
+                    saveStockList(f);
+                }
             }
             
             if(e.getActionCommand() == "loadItem") {
+                int returnChoice = fileChooser.showOpenDialog((JComponent) e.getSource());
                 
-                File file = new File(tickerFile);
-                if(file.exists()) {
-                    FileInputStream f;
-                    try {
-                        f = new FileInputStream(file);
-                        ObjectInputStream o = new ObjectInputStream(f);
-                        ArrayList<String> tickers = (ArrayList<String>) o.readObject();
-                        for(String tick : tickers) {
-                            addNewStock(tick);
+                if(returnChoice == JFileChooser.APPROVE_OPTION) {
+                    File selectedFile = fileChooser.getSelectedFile();
+                    if(selectedFile.exists()) {
+                        try {
+                            FileInputStream file = new FileInputStream(selectedFile);
+                            ObjectInputStream in = new ObjectInputStream(file);
+                            ArrayList<Stock> newStocks = (ArrayList<Stock>) in.readObject();
+                            setStocks(newStocks);
+                            file.close();
+                            in.close();
+                            
+                        } catch (FileNotFoundException fnf) {
+                            // TODO Auto-generated catch block
+                            fnf.printStackTrace();
+                        } catch(IOException ioe) {
+                            ioe.printStackTrace();
+                        } catch (ClassNotFoundException cnf) {
+                            // TODO Auto-generated catch block
+                            cnf.printStackTrace();
                         }
                         
-                    } catch (IOException | ClassNotFoundException e1) {
-                       rightPanel.addAlert("<html><p>Unable to load securities list : " + tickerFile + "</p> </html>");
+                    } else {
+                        rightPanel.addAlert("<html><p>Unable to find : " + selectedFile + "</p> </html>");
                     }
-                } else {
-                    rightPanel.addAlert("<html><p>Unable to find : " + tickerFile + "</p> </html>");
                 }
             }
         }

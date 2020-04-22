@@ -30,7 +30,7 @@ public class DataPull {
 	 * @throws InterruptedException
 	 */
 	public static void getCsv(String symbol) throws InterruptedException {
-		/// api key =JRVCT84VUG4TM97S
+		
 		try {
 
 			try {

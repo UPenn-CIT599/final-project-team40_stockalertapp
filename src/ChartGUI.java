@@ -417,7 +417,6 @@ public class ChartGUI extends JPanel {
                 
                 if(y < netHeight && y > buffer) {
                     
-                    
                     if(prevX == 0 && prevY == 0) {
                         prevX = x;
                         prevY = y;

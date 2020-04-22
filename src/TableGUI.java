@@ -29,8 +29,8 @@ import javax.swing.border.EtchedBorder;
  */
 public class TableGUI extends JPanel{
     
-    private final Color focusColor = new Color(230, 145, 0);
-    private final Color outOfFocusColor = new Color(250, 200, 100);
+    private final Color focusColor = new Color(255, 187, 0);
+    private final Color outOfFocusColor = new Color(255, 221, 0);
     private final Color backGroundColor = new Color(238, 238, 238);
     private final Color borderColor = Color.BLACK;
     public Color[] colors;
@@ -71,6 +71,7 @@ public class TableGUI extends JPanel{
         for(String dateRange : new String[] { "3M", "6M", "1Y", "5Y", "ALL"}) {
             
             JButton dateAdjust = new JButton(dateRange);
+            dateAdjust.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 15));
             dateAdjust.setForeground(outOfFocusColor);
             dateAdjust.setBorder(BorderFactory.createEmptyBorder());
             dateAdjust.setPreferredSize(new Dimension(80, 30));

@@ -87,6 +87,7 @@ public class PanelRight extends JPanel {
         chart.changeStock(targetStock.getdataHistory());
         table.setStock(targetStock.getTicker());
         alertWindow.clearAlerts();
+        
         alertWindow.addAlert(s.getTicker() + " : data loaded");
         addAlertsToWindow();
     }

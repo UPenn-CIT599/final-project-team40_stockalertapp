@@ -38,7 +38,7 @@ public class Stock implements Serializable{
 	private double macd;
 	private double obv;
 	private TreeMap dataHistory;
-	
+	private HashMap<String, Boolean> calculatedAlerts = new HashMap<>();
     
 	/**
 	 * Stock object with stock's ticker, price, and historical data
@@ -75,6 +75,7 @@ public class Stock implements Serializable{
 			this.macd = data.getIndicator("MACD", ticker);
 			this.obv = data.getIndicator("OBV", ticker);
 		}
+		
 	}
 
 	/**
@@ -210,7 +211,11 @@ public class Stock implements Serializable{
 	public void setObv(double obv) {
 		this.obv = obv;
 	}
-
+	
+	public HashMap<String, Boolean> getCalculatedAlerts() {
+	    
+        return calculatedAlerts;
+    }
 	
 	/*
 	 * Main Method for Testing Purposes
@@ -250,5 +255,7 @@ public class Stock implements Serializable{
 		System.out.println(t.quote);
 
 	}
+
+    
 
 }

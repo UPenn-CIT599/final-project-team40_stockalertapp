@@ -74,7 +74,7 @@ public class PanelRight extends JPanel {
         add(scroller, gbc);
         
         // Format alerts HERE for specific stock alerts
-      // addAlertsToWindow();
+       addAlertsToWindow();
     }
 
     /**
@@ -88,24 +88,26 @@ public class PanelRight extends JPanel {
         table.setStock(targetStock.getTicker());
         alertWindow.clearAlerts();
         alertWindow.addAlert(s.getTicker() + " : data loaded");
-      // addAlertsToWindow();
+        addAlertsToWindow();
     }
 
     /**
      * load a stocks alert in the alert window.
      * 
      */
-    /*
+    
     public void addAlertsToWindow() {
-        for(Map.Entry entry : targetStock.getCalculatedAlerts().entrySet()) {
-            String name = (String) entry.getKey();
-            Boolean didTrigger = (Boolean) entry.getValue();
-            if(didTrigger) {
-                alertWindow.addAlert("<html><div color=orange><bold color=black>" + targetStock.getTicker() + "</bold> : " + name + "</div></html>");
+        if(!targetStock.getCalculatedAlerts().isEmpty()) {
+            for(Map.Entry entry : targetStock.getCalculatedAlerts().entrySet()) {
+                String name = (String) entry.getKey();
+                Boolean didTrigger = (Boolean) entry.getValue();
+                if(didTrigger) {
+                    alertWindow.addAlert("<html><div color=orange><bold color=black>" + targetStock.getTicker() + "</bold> : " + name + "</div></html>");
+                }
             }
         }
     }
-    */
+    
     
     /**
      * Add an alert label to the Alert Window panel;

@@ -32,7 +32,7 @@ public class ConsoleUI {
 	public ConsoleUI() {
 		scan = new Scanner(System.in);
 		stocks = new ArrayList<>();
-		tickerList = new File("tickerList2.ser");
+		tickerList = new File("portfolio3.ser");
 	}
 	
 	/**
@@ -110,6 +110,7 @@ public class ConsoleUI {
 	                break;
 	                
 	            default:
+	                System.out.println("");
 	                System.out.println("Please select a valid option");
 	                System.out.println("");
 	                selectionMenu();
@@ -191,22 +192,17 @@ public class ConsoleUI {
 	    System.out.println("");
 	    if(tickerList.exists()) {
 	        FileInputStream f;
-	        ArrayList<String> listOfTickers;
+	        ArrayList<Stock> listOfTickers;
             try {
                 f = new FileInputStream(tickerList);
                 ObjectInputStream o = new ObjectInputStream(f);
                 Object source = o.readObject();
                 if(source instanceof ArrayList<?>) {
-                    listOfTickers = (ArrayList<String>) source;
-                    for(String tick : listOfTickers) {
-                        Stock s;
-                        try {
-                            s = new Stock(tick);
-                            stocks.add(s);
-                            System.out.println(tick + " added to stock list.");
-                        } catch (InterruptedException e) {
-                           System.out.println("Unable to add stock " + tick);
-                        }
+                    listOfTickers = (ArrayList<Stock>) source;
+                    for(Stock tick : listOfTickers) {
+                        stocks.add(tick);
+                        System.out.println(tick.getTicker() + " added to stock list.");
+                        
                     }
                 }
                 
@@ -250,5 +246,10 @@ public class ConsoleUI {
         } catch (IOException e) {
             System.out.println("Unable to save File");
         }
+	}
+	
+	public static void main(String[] args) {
+	    ConsoleUI app = new ConsoleUI();
+	    app.init();
 	}
 }

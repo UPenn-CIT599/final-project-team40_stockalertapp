@@ -306,6 +306,12 @@ public class BaseGUI extends JFrame {
                 } catch (FileNotFoundException | InterruptedException e) {
                     rightPanel.addAlert("<html><line color=orange><bold font-size=large color=blue>" + ticker + "</bold> : failed to retrieve ticker</line></html>");
                     e.printStackTrace();
+                } catch(Exception end) {
+                    if(stocks.size() > 0) {
+                        rightPanel.addAlert(ticker + " : unable to find requested ticker");
+                    } else {
+                        alertWindowTemp.addAlert(ticker + " : unable to find requested ticker");
+                    }
                 }
 	        }
             

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Scanner;
 
 /***
@@ -111,7 +112,7 @@ public class ConsoleUI {
 	                
 	            default:
 	                System.out.println("");
-	                System.out.println("Please select a valid option");
+	                System.out.println("Please select an option from the menu");
 	                System.out.println("");
 	                selectionMenu();
 	            }
@@ -135,18 +136,18 @@ public class ConsoleUI {
             stocks.add(stock);
             System.out.println(stock.getTicker() + " has been added to your list.");
             System.out.println("");
-            selectionMenu();
             
         } catch (FileNotFoundException | InterruptedException e) {
             if(e instanceof FileNotFoundException) {
                 System.out.println("Unable to find " + ticker);
-                selectionMenu();
             }
             if(e instanceof InterruptedException) {
                 System.out.println("Data collection stopped ... ");
-                selectionMenu();
             }
+        } catch (Exception end) {
+            System.out.println("unable to find " + ticker);
         }
+	    selectionMenu();
 	}
 	
 	/**
@@ -157,9 +158,20 @@ public class ConsoleUI {
 	    if(stocks.size() > 0) {
 	        System.out.println("Checking for alerts ... ");
 	        System.out.println("");
-	        
-	        // TODO: actions for alerts
-	        
+	        for(Stock stock : stocks) {
+	            Map<String, Boolean> alerts = stock.getCalculatedAlerts();
+	            if(alerts.isEmpty()) {
+	                System.out.println(stock.getTicker() + " : " + "no alerts found");
+	            }else {
+	                for(Map.Entry entry : alerts.entrySet()) {
+	                    Boolean val = (Boolean) entry.getValue();
+	                    String key = (String) entry.getKey();
+	                    if(val) {
+	                        System.out.println(stock.getTicker() + " : " + key);
+	                    }
+	                }
+	            }
+	        }
 	    } else {
 	        System.out.println("No stocks are loaded in your stock list");
 	        System.out.println("");
@@ -192,17 +204,19 @@ public class ConsoleUI {
 	    System.out.println("");
 	    if(tickerList.exists()) {
 	        FileInputStream f;
-	        ArrayList<Stock> listOfTickers;
+	        ArrayList<Object> listOfTickers;
             try {
                 f = new FileInputStream(tickerList);
                 ObjectInputStream o = new ObjectInputStream(f);
                 Object source = o.readObject();
                 if(source instanceof ArrayList<?>) {
-                    listOfTickers = (ArrayList<Stock>) source;
-                    for(Stock tick : listOfTickers) {
-                        stocks.add(tick);
-                        System.out.println(tick.getTicker() + " added to stock list.");
-                        
+                    listOfTickers = (ArrayList<Object>) source;
+                    for(Object tick : listOfTickers) {
+                        if(tick instanceof Stock) {
+                            
+                            stocks.add((Stock) tick);
+                            System.out.println(((Stock) tick).getTicker() + " added to stock list.");
+                        }
                     }
                 }
                 
@@ -231,15 +245,11 @@ public class ConsoleUI {
 	 */
 	public void saveList() {
 	    System.out.println("");
-	    ArrayList<String> tickers = new ArrayList<>();
-	    for(Stock s : stocks) {
-	        tickers.add(s.getTicker());
-	    }
 	    FileOutputStream f;
         try {
             f = new FileOutputStream(tickerList);
             ObjectOutputStream o = new ObjectOutputStream(f);
-            o.writeObject(tickers);
+            o.writeObject(stocks);
             o.close();
             f.close();
             System.out.println("file saved as : tickerList.ser");

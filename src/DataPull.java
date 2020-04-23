@@ -41,7 +41,7 @@ public class DataPull {
 				System.out.println("No such file exists");
 			}
 
-			System.out.println("waiting 13 seconds for " + symbol + " data due to api rate limit");
+			System.out.println("waiting 13 seconds for " + symbol + " historical price data due to api rate limit");
 			TimeUnit.SECONDS.sleep(13);
 			String url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=" + (symbol)
 					+ "&outputsize=full&apikey=JRVCT84VUG4TM97S&datatype=csv";
@@ -80,7 +80,7 @@ public class DataPull {
 	 */
 	public static double getCurrentQuote(String symbol) throws InterruptedException {
 
-		System.out.println("waiting 13 seconds for " + symbol + " data due to api rate limit");
+		System.out.println("waiting 13 seconds for current " + symbol + " price due to api rate limit");
 		TimeUnit.SECONDS.sleep(13);
 		String url = "https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=" + symbol
 				+ "&apikey=JRVCT84VUG4TM97S";
@@ -134,7 +134,7 @@ public class DataPull {
 
 	public static double getIndicator(String indicator, String symbol) throws InterruptedException {
 
-		System.out.println("waiting 13 seconds for " + symbol + " data due to api rate limit");
+		System.out.println("waiting 13 seconds for " + symbol + " " +indicator+ " data due to api rate limit");
 		TimeUnit.SECONDS.sleep(13);
 
 		String url = "https://www.alphavantage.co/query?function=" + (indicator) + "&symbol=" + (symbol)

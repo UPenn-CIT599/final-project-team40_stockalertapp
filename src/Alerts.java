@@ -1,3 +1,5 @@
+import java.util.Comparator;
+
 /***
  * ALERTS CLASS:
  * 
@@ -7,7 +9,7 @@
  *
  */
 
-public class Alerts {
+public class Alerts implements Comparator {
 	
 	/**
 	 * BELOWALERT METHOD: 
@@ -17,9 +19,9 @@ public class Alerts {
 	 * @return false: if the indicator is equal or above the number
 	 */
 	
-	public boolean belowPriceAlert(double indicator, double savedalert) {
+	public boolean belowPriceAlert(double indicator, Object object) {
 		
-		if (indicator < savedalert) {
+		if (indicator < object) {
 			return true;
 		} 
 
@@ -43,5 +45,11 @@ public class Alerts {
 		}
 		
 		return false;
+	}
+
+	@Override
+	public int compare(Object o1, Object o2) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

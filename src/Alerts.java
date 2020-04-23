@@ -19,9 +19,9 @@ public class Alerts implements Comparator {
 	 * @return false: if the indicator is equal or above the number
 	 */
 	
-	public boolean belowPriceAlert(double indicator, Object object) {
+	public boolean belowPriceAlert(double indicator, double savedalert) {
 		
-		if (indicator < object) {
+		if (indicator < savedalert) {
 			return true;
 		} 
 

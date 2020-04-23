@@ -190,16 +190,49 @@ public class Stock implements Serializable {
 			double macd = datapull.getIndicator("MACD", ticker);
 			double obv = datapull.getIndicator("OBV", ticker);
 
-			calculatedAlerts.put(ticker + "SMA" + "below", alert.belowPriceAlert(sma, (storedAlerts.get(ticker + "SMA")).get("below")));
-			calculatedAlerts.put(ticker + "SMA" + "above", alert.abovePriceAlert(sma, (storedAlerts.get(ticker + "SMA")).get("above")));
-			calculatedAlerts.put(ticker + "EMA" + "below", alert.belowPriceAlert(ema, (storedAlerts.get(ticker + "EMA")).get("below")));
-			calculatedAlerts.put(ticker + "EMA" + "above", alert.abovePriceAlert(ema, (storedAlerts.get(ticker + "EMA")).get("above")));
-			calculatedAlerts.put(ticker + "RSI" + "below", alert.belowPriceAlert(rsi, (storedAlerts.get(ticker + "RSI")).get("below")));
-			calculatedAlerts.put(ticker + "RSI" + "above", alert.abovePriceAlert(rsi, (storedAlerts.get(ticker + "RSI")).get("above")));
-			calculatedAlerts.put(ticker + "MACD" + "below", alert.belowPriceAlert(macd, (storedAlerts.get(ticker + "MACD")).get("below")));
-			calculatedAlerts.put(ticker + "MACD" + "above", alert.abovePriceAlert(macd, (storedAlerts.get(ticker + "MACD")).get("above")));
-			calculatedAlerts.put(ticker + "OBV" + "below", alert.belowPriceAlert(obv, (storedAlerts.get(ticker + "OBV")).get("below")));
-			calculatedAlerts.put(ticker + "OBV" + "above", alert.abovePriceAlert(obv, (storedAlerts.get(ticker + "OBV")).get("above")));
+			if (storedAlerts.containsKey(ticker + "SMA")) {
+				
+				calculatedAlerts.put(ticker + "_SMA" + "_below",
+						alert.belowPriceAlert(sma, (double) ((Map) storedAlerts.get(ticker + "SMA")).get("below")));
+				calculatedAlerts.put(ticker + "_SMA" + "_above",
+						alert.abovePriceAlert(sma, (double) ((Map) storedAlerts.get(ticker + "SMA")).get("above")));
+			}
+
+			if (storedAlerts.containsKey(ticker + "EMA")) {
+
+				calculatedAlerts.put(ticker + "_EMA" + "_below",
+						alert.belowPriceAlert(ema, (double) ((Map) storedAlerts.get(ticker + "EMA")).get("below")));
+				calculatedAlerts.put(ticker + "_EMA" + "_above",
+						alert.abovePriceAlert(ema, (double) ((Map) storedAlerts.get(ticker + "EMA")).get("above")));
+
+			}
+
+			if (storedAlerts.containsKey(ticker + "RSI")) {
+
+				calculatedAlerts.put(ticker + "_RSI" + "_below",
+						alert.belowPriceAlert(rsi, (double) ((Map) storedAlerts.get(ticker + "RSI")).get("below")));
+				calculatedAlerts.put(ticker + "_RSI" + "_above",
+						alert.abovePriceAlert(rsi, (double) ((Map) storedAlerts.get(ticker + "RSI")).get("above")));
+
+			}
+
+			if (storedAlerts.containsKey(ticker + "MACD")) {
+
+				calculatedAlerts.put(ticker + "_MACD" + "_below",
+						alert.belowPriceAlert(macd, (double) ((Map) storedAlerts.get(ticker + "MACD")).get("below")));
+				calculatedAlerts.put(ticker + "_MACD" + "_above",
+						alert.abovePriceAlert(macd, (double) ((Map) storedAlerts.get(ticker + "MACD")).get("above")));
+
+			}
+
+			if (storedAlerts.containsKey(ticker + "OBV")) {
+
+				calculatedAlerts.put(ticker + "_OBV" + "_below",
+						alert.belowPriceAlert(obv, (double) ((Map) storedAlerts.get(ticker + "OBV")).get("below")));
+				calculatedAlerts.put(ticker + "_OBV" + "_above",
+						alert.abovePriceAlert(obv, (double) ((Map) storedAlerts.get(ticker + "OBV")).get("above")));
+
+			}
 
 		} catch (InterruptedException e) {
 			System.out.println("Cannot calculate the alert.");
@@ -347,43 +380,5 @@ public class Stock implements Serializable {
 		return calculatedAlerts;
 	}
 
-	/*
-	 * Main Method for Testing Purposes
-	 * 
-	 */
-	public static void main(String[] args) throws FileNotFoundException, InterruptedException {
-		// TODO Auto-generated method stub
-
-		Stock t;
-
-		t = new Stock("SLB");
-
-		// get all entries
-		Set<Map.Entry<LocalDate, OHLCV>> entries = t.dataHistory.entrySet();
-
-		// using for loop
-		for (Map.Entry<LocalDate, OHLCV> entry : entries) {
-			System.out.println(entry.getKey() + " open " + entry.getValue().open + " high " + entry.getValue().high
-					+ " low " + entry.getValue().low + " close " + entry.getValue().close + " volume "
-					+ entry.getValue().volume);
-		}
-
-		System.out.println(t.quote);
-
-		t = new Stock("UPRO");
-
-		// get all entries
-		Set<Map.Entry<LocalDate, OHLCV>> entries1 = t.dataHistory.entrySet();
-
-		// using for loop
-		for (Map.Entry<LocalDate, OHLCV> entry : entries1) {
-			System.out.println(entry.getKey() + " open " + entry.getValue().open + " high " + entry.getValue().high
-					+ " low " + entry.getValue().low + " close " + entry.getValue().close + " volume "
-					+ entry.getValue().volume);
-		}
-
-		System.out.println(t.quote);
-
-	}
 
 }

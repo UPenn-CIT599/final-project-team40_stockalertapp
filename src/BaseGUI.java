@@ -283,9 +283,9 @@ public class BaseGUI extends JFrame {
 	public void addNewStock(String ticker) {
 	    if(stocks.size() > 0) {
 	        rightPanel.clearAlerts();
-	        rightPanel.addAlert("<html><line color=orange><b>" + ticker + "</b> : fetching data now ...</line></html>");
+	        rightPanel.addAlert("<html><line color=orange><b>" + ticker + "</b> : api call will take a minute</line></html>");
 	    } else {
-	        alertWindowTemp.addAlert("<html><line color=orange><bold color=black>" + ticker + "</bold> : fetching data now ...</line></html>");
+	        alertWindowTemp.addAlert("<html><line color=orange><bold color=black>" + ticker + "</bold> : api call will take a minute</line></html>");
 	    }
 	    
 	    // beginning async call to new Stock

@@ -415,16 +415,20 @@ public class ChartGUI extends JPanel {
                 x = chartData.convertIndexToPlot(i);
                 y = chartData.convertPriceToPlot(smaPrices.get(datesInRange[i]));
                 
-                if(prevX == 0 && prevY == 0) {
+                if(y < netHeight && y > buffer) {
+                    
+                    
+                    if(prevX == 0 && prevY == 0) {
+                        prevX = x;
+                        prevY = y;
+                    }
+                    
+                    Line2D.Double lineSeg = new Line2D.Double(prevX, prevY, x, y);
+                    gdd.draw(lineSeg); 
+                    
                     prevX = x;
                     prevY = y;
                 }
-                
-                Line2D.Double lineSeg = new Line2D.Double(prevX, prevY, x, y);
-                gdd.draw(lineSeg); 
-                
-                prevX = x;
-                prevY = y;
             }
         }
     }

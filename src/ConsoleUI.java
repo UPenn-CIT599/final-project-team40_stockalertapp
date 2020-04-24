@@ -277,7 +277,7 @@ public class ConsoleUI {
 	
 	public static void main(String[] args) {
 	    String testTicker = "";
-	    System.out.println(testTicker.length() + " " + testTicker.isBlank() + " "+ testTicker.isEmpty());
+	    System.out.println(testTicker.length() + " " + testTicker.isEmpty() + " "+ testTicker.isEmpty());
 	    
 	    ConsoleUI app = new ConsoleUI();
 	    app.init();

@@ -66,6 +66,7 @@ public class BaseGUI extends JFrame {
 	private JMenuItem loadItem;
 	private JFileChooser fileChooser;
 	private JScrollPane scroller;
+	private AlertPanel alertSetter;
 	
 	/**
 	 * Constructs an entry program to allow a user to add stocks from nothing.
@@ -74,6 +75,7 @@ public class BaseGUI extends JFrame {
         super("StockAlertApp");
         this.setPreferredSize(new Dimension(800, 800));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        alertSetter = new AlertPanel(this);
         stocks = new ArrayList<>();
         content = this.getContentPane();
         fileChooser = new JFileChooser(System.getProperty("user.dir"));
@@ -119,6 +121,7 @@ public class BaseGUI extends JFrame {
 		super(title);
 		//this.setPreferredSize(new Dimension(1000, 800));
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		alertSetter = new AlertPanel(this);
 		fileChooser = new JFileChooser(System.getProperty("user.dir"));
 		
 		stocks = s;
@@ -371,6 +374,11 @@ public class BaseGUI extends JFrame {
                 content.revalidate();
                 content.repaint();
             }
+        }
+        
+        @Override
+        public void setNewAlert(Stock s) {
+            alertSetter.createGUI(s);
         }
     }
     

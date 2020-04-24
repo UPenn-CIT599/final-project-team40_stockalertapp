@@ -35,8 +35,10 @@ public class StockListPanel extends JPanel {
     private JTextField newStockInput;
     private JPopupMenu popupMenu;
     private JMenuItem removeItem;
+    private JMenuItem addAlertItem;
     private StockDetailButton focusButton;
     private StockCallBack addStockCallBack;
+    
     
     /**
      * Constructs the left side panel of the application by creating a button for each stock.
@@ -79,7 +81,11 @@ public class StockListPanel extends JPanel {
         removeItem = new JMenuItem("Remove Stock");
         removeItem.setActionCommand("removeItem");
         removeItem.addActionListener(new RemoveStockAction());
+        addAlertItem = new JMenuItem("Add Alert");
+        addAlertItem.setActionCommand("addAlert");
+        addAlertItem.addActionListener(new RemoveStockAction());
         popupMenu.add(removeItem);
+        popupMenu.add(addAlertItem);
 
         gbConst = new GridBagConstraints();
         gbConst.gridy = GridBagConstraints.RELATIVE;
@@ -240,11 +246,17 @@ public class StockListPanel extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             Stock s = focusButton.getStock();
-            removeStock(s);
-            if (buttons.size() > 0) {
-                focusButton = buttons.get(0);
-                addStockCallBack.changeStock(focusButton.getStock());
-                setFocusButtonColor();
+            if(e.getActionCommand().equals("removeItem")) {
+                removeStock(s);
+                if (buttons.size() > 0) {
+                    focusButton = buttons.get(0);
+                    addStockCallBack.changeStock(focusButton.getStock());
+                    setFocusButtonColor();
+                }
+            }
+            
+            if(e.getActionCommand().equals("addAlert")) {
+                addStockCallBack.setNewAlert(s);
             }
 
             revalidate();

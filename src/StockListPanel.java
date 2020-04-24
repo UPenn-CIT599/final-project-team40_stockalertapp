@@ -36,6 +36,7 @@ public class StockListPanel extends JPanel {
     private JPopupMenu popupMenu;
     private JMenuItem removeItem;
     private JMenuItem addAlertItem;
+    private JMenuItem removeAlertItem;
     private StockDetailButton focusButton;
     private StockCallBack addStockCallBack;
     
@@ -77,15 +78,21 @@ public class StockListPanel extends JPanel {
         newStockInput.setVisible(false);
 
         // menu to remove a given stock
+        RemoveStockAction popUpAction = new RemoveStockAction();
+        
         popupMenu = new JPopupMenu();
         removeItem = new JMenuItem("Remove Stock");
         removeItem.setActionCommand("removeItem");
-        removeItem.addActionListener(new RemoveStockAction());
+        removeItem.addActionListener(popUpAction);
         addAlertItem = new JMenuItem("Add Alert");
         addAlertItem.setActionCommand("addAlert");
-        addAlertItem.addActionListener(new RemoveStockAction());
+        addAlertItem.addActionListener(popUpAction);
+        removeAlertItem = new JMenuItem("Remove Alert");
+        removeAlertItem.setActionCommand("removeAlert");
+        removeAlertItem.addActionListener(popUpAction);
         popupMenu.add(removeItem);
         popupMenu.add(addAlertItem);
+        popupMenu.add(removeAlertItem);
 
         gbConst = new GridBagConstraints();
         gbConst.gridy = GridBagConstraints.RELATIVE;
@@ -258,7 +265,10 @@ public class StockListPanel extends JPanel {
             if(e.getActionCommand().equals("addAlert")) {
                 addStockCallBack.setNewAlert(s);
             }
-
+            
+            if(e.getActionCommand().equals("removeAlert")) {
+                addStockCallBack.removeAlert(s);
+            }
             revalidate();
         }
     }

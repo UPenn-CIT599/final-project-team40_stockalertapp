@@ -33,27 +33,28 @@ public class AlertPanel extends JDialog {
     private JComboBox levelOptionsBox;
     private JButton saveButton;
     private JFormattedTextField triggerValueBox;
-    private JLabel panelHeader;
+    // private JLabel panelHeader;
     private JLabel indicatorLabel;
     private JLabel levelOptionLabel;
     private JLabel triggerValLabel;
     private Container contentPane;
-    private BaseGUI parentFrame;
+    // private BaseGUI parentFrame;
     
     private NumberFormat triggerFormat;
     
     public AlertPanel(BaseGUI parentFrame) {
         super(parentFrame, "Add Alert Options");
+        
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setMinimumSize(new Dimension(400, 200));
-        this.parentFrame = parentFrame;
+        // this.parentFrame = parentFrame;
         indicatorOptions = new String[] {"SMA", "EMA", "RSI", "MACD", "OBV"};
         levelOptions = new String[] {"above", "below"};
         indicator = "";
         level = "";
         triggerValue = 0;
         
-        panelHeader = new JLabel("Add Alert Options");
+        // panelHeader = new JLabel("Add Alert Options");
         indicatorLabel = new JLabel("choose indicator");
         levelOptionLabel = new JLabel("select direction");
         triggerValLabel = new JLabel("enter value for indicator");

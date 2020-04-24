@@ -30,7 +30,11 @@ public class RandomPriceGenerator {
          
         endDate = LocalDate.now();
         startDate = endDate.minusDays(255);
-        dateRange = startDate.datesUntil(endDate).collect(Collectors.toList());
+        LocalDate currentDate = startDate;
+        while(currentDate.isBefore(endDate)) {
+            dateRange.add(currentDate);
+        }
+        // dateRange = startDate.datesUntil(endDate).collect(Collectors.toList());
         historicalPrices = new TreeMap<>();
         createHistoricalPrices();
         

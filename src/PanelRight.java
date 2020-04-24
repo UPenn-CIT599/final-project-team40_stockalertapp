@@ -73,8 +73,39 @@ public class PanelRight extends JPanel {
         gbc.gridy = 2;
         add(scroller, gbc);
         
-        // Format alerts HERE for specific stock alerts
-       addAlertsToWindow();
+        // set alerts
+        setAlerts();
+        
+    }
+    
+    public void setAlerts() {
+        // sma 209.04 (100d) ema 207.7732 rsi 62.5398 macd 4.7365 obv 4.96e9
+        double emaSmaDiv = targetStock.getEma() / targetStock.getSma() - 1;
+        
+        // check EMA vs SMA divergence
+        if(emaSmaDiv < -.02) {
+            alertWindow.addAlert("<html><line><bold><font color=blue>EMA SMA DIV ALERT : </font></bold><font color=red>" + emaSmaDiv +"</font></line><html>");
+        }
+        if(emaSmaDiv > .02) {
+            alertWindow.addAlert("<html><line><font color=blue>EMA SMA DIV ALERT : </font><font color=green>" + emaSmaDiv +"</font></line><html>");
+        }
+        
+        // check RSI
+        double rsiVal = targetStock.getRsi();
+        if(rsiVal >= 70) {
+            alertWindow.addAlert("<html><line><font color=blue>RSI BREACHED</font><font color=green> : " + rsiVal + "</font></line></html>");
+        }
+        if(rsiVal <= 30) {
+            alertWindow.addAlert("<html><line><font color=blue>RSI BREACHED</font><font color=red> : " + rsiVal + "</font></line></html>");
+        }
+        
+        // check MACD
+        double macd = targetStock.getMacd();
+        if(macd < .5 && macd > .5) {
+            String alertMsg = "<html><line><bold color=blue>MACD RECENT COLLAPSE</bold>";
+            alertMsg += macd > 0 ? "<text color=green> : " + macd + "</text></line></html>" : "<font color=red> : " + macd + "</font></line></html>";
+            alertWindow.addAlert(alertMsg);
+        }
     }
 
     /**
@@ -89,7 +120,7 @@ public class PanelRight extends JPanel {
         alertWindow.clearAlerts();
         
         alertWindow.addAlert(s.getTicker() + " : data loaded");
-        addAlertsToWindow();
+        setAlerts();
     }
 
     /**

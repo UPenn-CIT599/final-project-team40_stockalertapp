@@ -23,4 +23,10 @@ public interface StockCallBack {
      * @param s
      */
     public void removeStock(Stock s);
+    
+    /**
+     * sets a new alert on the given stock.
+     * @param s
+     */
+    public void setNewAlert(Stock s);
 }

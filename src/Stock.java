@@ -135,7 +135,7 @@ public class Stock implements Serializable {
 	 * @param savedalert
 	 */
 
-	private void addAlert(String ticker, String indicator, String above_below, double savedalert) {
+	public void addAlert(String ticker, String indicator, String above_below, double savedalert) {
 
 		HashMap<String, Double> temp = new HashMap<String, Double>();
 

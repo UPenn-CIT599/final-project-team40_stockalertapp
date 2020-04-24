@@ -80,7 +80,7 @@ public class ChartGUI extends JPanel {
      * @param s
      */
     public ChartGUI(TreeMap<LocalDate, OHLCV> s) {
-        this(s, new Dimension(800, 400));
+        this(s, new Dimension(1000, 800));
     }
 
     /**
@@ -416,7 +416,6 @@ public class ChartGUI extends JPanel {
                 y = chartData.convertPriceToPlot(smaPrices.get(datesInRange[i]));
                 
                 if(y < netHeight && y > buffer) {
-                    
                     
                     if(prevX == 0 && prevY == 0) {
                         prevX = x;

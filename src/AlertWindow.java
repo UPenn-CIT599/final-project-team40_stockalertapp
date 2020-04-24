@@ -70,6 +70,7 @@ public class AlertWindow extends JPanel {
         labelList.add(alertLabel);
         int numAlerts = labelList.size();
         add(alertLabel);
+        repaint();
         revalidate();
     }
 
@@ -79,10 +80,18 @@ public class AlertWindow extends JPanel {
      */
     public void clearAlerts() {
         for (int i = 0; i < labelList.size(); i++) {
+            labelList.get(i).setText("");
             remove(labelList.get(i));
         }
         labelList = new ArrayList<>();
+        repaint();
         revalidate();
+    }
+    
+    
+    public void setDefaultAlert() {
+        addAlert("<html><bold font-size=large text-align=center>Welcome to Stock Alerts</bold></html>");
+        addAlert("<html><p font-size=medium text-align=left>To start hit the <bold>+</bold> to type in a ticker and hit enter.</p></html>");
     }
 
     // =====================================================================

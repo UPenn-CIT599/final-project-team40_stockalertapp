@@ -44,8 +44,6 @@ import javax.swing.JTextField;
  */
 public class BaseGUI extends JFrame {
     
-    private final String tickerFile = "tickerList2.ser";
-	
     private ArrayList<Stock> stocks;
     private Stock tgtStock;
     private Container content;
@@ -94,8 +92,7 @@ public class BaseGUI extends JFrame {
         
       // right panel temporary
         alertWindowTemp = new AlertWindow();
-        alertWindowTemp.addAlert("<html><bold font-size=large text-align=center>Welcome to Stock Alerts</bold></html>");
-        alertWindowTemp.addAlert("<html><p font-size=medium text-align=left>To start hit the <bold>+</bold> and type in a ticker and hit enter.</p></html>");
+        alertWindowTemp.setDefaultAlert();
         
         content.add(scroller, BorderLayout.WEST);
         content.add(alertWindowTemp, BorderLayout.CENTER);
@@ -120,7 +117,7 @@ public class BaseGUI extends JFrame {
 	 */
 	public BaseGUI(String title, ArrayList<Stock> s) {
 		super(title);
-		this.setPreferredSize(new Dimension(800, 800));
+		//this.setPreferredSize(new Dimension(1000, 800));
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		fileChooser = new JFileChooser(System.getProperty("user.dir"));
 		
@@ -236,6 +233,7 @@ public class BaseGUI extends JFrame {
 	    } else {
 	        clearStockList();
 	        stocks = s;
+	        setRightPanel();
 	        for(Stock stock : stocks) {
 	            stockList.addStock(stock);
 	        }
@@ -245,7 +243,7 @@ public class BaseGUI extends JFrame {
 	}
 	
 	/**
-	 * Saves a list of Stock Tickers to 'tickerList.ser'.
+	 * Saves a list of Stock Tickers.
 	 * 
 	 */
 	public void saveStockList(File savedTickers) {
@@ -256,7 +254,7 @@ public class BaseGUI extends JFrame {
             ObjectOutputStream out = new ObjectOutputStream(file);
             out.writeObject(stocks);
             out.close();
-            rightPanel.addAlert("<html><p><bold color=green>Stock list has saved</bold> : tickerList.ser </p></html> ");
+            rightPanel.addAlert("<html><p><bold color=green>Stock list has saved</bold> : "+ savedTickers.getName() +"</p></html> ");
         } catch (FileNotFoundException e) {
             rightPanel.addAlert("<html><p><bold color=red> Failed to save file </bold> : FileNotFoundException thrown </p></html> ");
         } catch (IOException e) {
@@ -274,6 +272,7 @@ public class BaseGUI extends JFrame {
 	public void notifyStockChange(Stock newStock) {
 	    tgtStock = newStock;
 	    rightPanel.changeTargetStock(tgtStock);
+	    content.repaint();
 	}
 	
 	/**
@@ -284,8 +283,11 @@ public class BaseGUI extends JFrame {
 	    if(stocks.size() > 0) {
 	        rightPanel.clearAlerts();
 	        rightPanel.addAlert("<html><line color=orange><b>" + ticker + "</b> : api call will take a minute</line></html>");
+	        content.repaint();
 	    } else {
+	        alertWindowTemp.clearAlerts();
 	        alertWindowTemp.addAlert("<html><line color=orange><bold color=black>" + ticker + "</bold> : api call will take a minute</line></html>");
+	        content.repaint();
 	    }
 	    
 	    // beginning async call to new Stock
@@ -307,6 +309,7 @@ public class BaseGUI extends JFrame {
                     rightPanel.addAlert("<html><line color=orange><bold font-size=large color=blue>" + ticker + "</bold> : failed to retrieve ticker</line></html>");
                     e.printStackTrace();
                 } catch(Exception end) {
+                    end.printStackTrace();
                     if(stocks.size() > 0) {
                         rightPanel.addAlert(ticker + " : unable to find requested ticker");
                     } else {
@@ -359,6 +362,15 @@ public class BaseGUI extends JFrame {
         @Override
         public void removeStock(Stock s) {
             stocks.remove(s);
+            if(stocks.size() < 1) {
+                remove(rightPanel);
+                content.revalidate();
+                add(alertWindowTemp);
+                alertWindowTemp.clearAlerts();
+                alertWindowTemp.setDefaultAlert();
+                content.revalidate();
+                content.repaint();
+            }
         }
     }
     
@@ -392,7 +404,16 @@ public class BaseGUI extends JFrame {
                             FileInputStream file = new FileInputStream(selectedFile);
                             ObjectInputStream in = new ObjectInputStream(file);
                             ArrayList<Stock> newStocks = (ArrayList<Stock>) in.readObject();
-                            setStocks(newStocks);
+                            if(newStocks.size() > 0) {
+                                setStocks(newStocks);
+                            } else {
+                                if(stocks.size() > 0) {
+                                    rightPanel.addAlert("<html><p>No data found : " + selectedFile + "</p> </html>");
+                                } else {
+                                    alertWindowTemp.addAlert("<html><p>No data found : " + selectedFile + "</p> </html>");
+                                }
+                            }
+                            
                             file.close();
                             in.close();
                             
@@ -407,7 +428,11 @@ public class BaseGUI extends JFrame {
                         }
                         
                     } else {
-                        rightPanel.addAlert("<html><p>Unable to find : " + selectedFile + "</p> </html>");
+                        if(stocks.size() > 0) {
+                            rightPanel.addAlert("<html><p>Unable to find : " + selectedFile + "</p> </html>");
+                        } else {
+                            alertWindowTemp.addAlert("<html><p>Unable to find : " + selectedFile + "</p> </html>");
+                        }
                     }
                 }
             }

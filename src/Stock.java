@@ -55,6 +55,8 @@ public class Stock implements Serializable {
 	public Stock(String ticker) throws FileNotFoundException, InterruptedException {
 
 		DataPull data = new DataPull();
+		storedAlerts = new HashMap<>();
+		calculatedAlerts = new HashMap<>();
 
 		this.ticker = ticker;
 		this.csv = ticker + ".csv";
@@ -79,7 +81,6 @@ public class Stock implements Serializable {
 			this.macd = data.getIndicator("MACD", ticker);
 			this.obv = data.getIndicator("OBV", ticker);
 		}
-
 	}
 
 	/**
@@ -96,6 +97,8 @@ public class Stock implements Serializable {
 			throws FileNotFoundException, InterruptedException {
 
 		DataPull data = new DataPull();
+		storedAlerts = new HashMap<>();
+        calculatedAlerts = new HashMap<>();
 
 		this.ticker = ticker;
 		this.csv = ticker + ".csv";
@@ -123,7 +126,6 @@ public class Stock implements Serializable {
 			this.macd = data.getIndicator("MACD", ticker);
 			this.obv = data.getIndicator("OBV", ticker);
 		}
-
 	}
 
 	/**
@@ -134,7 +136,6 @@ public class Stock implements Serializable {
 	 * @param above_below
 	 * @param savedalert
 	 */
-
 	public void addAlert(String ticker, String indicator, String above_below, double savedalert) {
 
 		HashMap<String, Double> temp = new HashMap<String, Double>();
@@ -145,7 +146,6 @@ public class Stock implements Serializable {
 		} catch (Exception e) {
 			System.out.println("Alert cannot be found.");
 		}
-
 	}
 
 	/**
@@ -378,6 +378,10 @@ public class Stock implements Serializable {
 	public HashMap<String, Boolean> getCalculatedAlerts() {
 
 		return calculatedAlerts;
+	}
+	
+	public HashMap<String, HashMap<String, Double>> getStoredAlerts() {
+	    return storedAlerts;
 	}
 
 

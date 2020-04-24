@@ -101,7 +101,7 @@ public class PanelRight extends JPanel {
         
         // check MACD
         double macd = targetStock.getMacd();
-        if(macd < .5 && macd > .5) {
+        if(macd < .5 && macd > -.5) {
             String alertMsg = "<html><line><bold color=blue>MACD RECENT COLLAPSE</bold>";
             alertMsg += macd > 0 ? "<text color=green> : " + macd + "</text></line></html>" : "<font color=red> : " + macd + "</font></line></html>";
             alertWindow.addAlert(alertMsg);

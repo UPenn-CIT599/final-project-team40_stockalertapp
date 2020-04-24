@@ -159,19 +159,36 @@ public class ConsoleUI {
 	        System.out.println("Checking for alerts ... ");
 	        System.out.println("");
 	        for(Stock stock : stocks) {
-	            Map<String, Boolean> alerts = stock.getCalculatedAlerts();
-	            if(alerts.isEmpty()) {
-	                System.out.println(stock.getTicker() + " : " + "no alerts found");
-	            }else {
-	                for(Map.Entry entry : alerts.entrySet()) {
-	                    Boolean val = (Boolean) entry.getValue();
-	                    String key = (String) entry.getKey();
-	                    if(val) {
-	                        System.out.println(stock.getTicker() + " : " + key);
-	                    }
-	                }
+	            String ticker = stock.getTicker();
+	            System.out.println("");
+	            System.out.println(" + start " + ticker + " alerts");
+	            //check ema sma divergence
+	            double emaSmaDiv = stock.getEma() / stock.getSma() - 1;
+	            if(emaSmaDiv > .02) {
+	                System.out.println("\t\t" + ticker + " : EMA leading SMA | " + emaSmaDiv );
 	            }
+	            if(emaSmaDiv < -.02) {
+                    System.out.println("\t\t" + ticker + " : EMA trailing SMA | " + emaSmaDiv );
+                }
+	            
+	            //check RSI
+	            double rsiVal = stock.getRsi();
+	            if(rsiVal >= 70) {
+	                System.out.println("\t\t" + ticker + " : RSI overbought | " + rsiVal);
+	            }
+	            if(rsiVal <= 30) {
+	                System.out.println("\t\t" + ticker + " : RSI oversold | " + rsiVal);
+	            }
+	            
+	            //check MACD
+	            double macd = stock.getMacd();
+	            if(macd < .5 && macd > -.5) {
+	                System.out.println("\t\t" + ticker + " : MACD recent cross | " + macd);
+	            }
+	            System.out.println(" - end " + ticker + "alerts");
+	            System.out.println("");
 	        }
+	            
 	    } else {
 	        System.out.println("No stocks are loaded in your stock list");
 	        System.out.println("");
@@ -252,7 +269,7 @@ public class ConsoleUI {
             o.writeObject(stocks);
             o.close();
             f.close();
-            System.out.println("file saved as : tickerList.ser");
+            System.out.println("file saved as : " + tickerList.getName());
         } catch (IOException e) {
             System.out.println("Unable to save File");
         }

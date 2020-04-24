@@ -109,11 +109,12 @@ public class AlertPanel extends JDialog {
             } catch(NumberFormatException nfe) {
                 triggerValueBox.setText("");
             }
-            System.out.println(indicator + " " + level + " " + triggerValue);
+            
             if(!indicator.isEmpty() && !level.isEmpty() && !(triggerValue == 0)) {
+                tgtStock.addAlert(tgtStock.getTicker(), indicator, level, triggerValue);
                 dispose();
             } else {
-                tgtStock.addAlert(tgtStock.getTicker(), indicator, level, triggerValue);
+                triggerValueBox.setText("");
             }
         }
         

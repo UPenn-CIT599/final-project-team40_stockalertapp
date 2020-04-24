@@ -78,33 +78,21 @@ public class PanelRight extends JPanel {
         
     }
     
+    /**
+     * display existing alerts in panel.
+     */
     public void setAlerts() {
-        // sma 209.04 (100d) ema 207.7732 rsi 62.5398 macd 4.7365 obv 4.96e9
-        double emaSmaDiv = targetStock.getEma() / targetStock.getSma() - 1;
-        
-        // check EMA vs SMA divergence
-        if(emaSmaDiv < -.02) {
-            alertWindow.addAlert("<html><line><bold><font color=blue>EMA SMA DIV ALERT : </font></bold><font color=red>" + emaSmaDiv +"</font></line><html>");
-        }
-        if(emaSmaDiv > .02) {
-            alertWindow.addAlert("<html><line><font color=blue>EMA SMA DIV ALERT : </font><font color=green>" + emaSmaDiv +"</font></line><html>");
-        }
-        
-        // check RSI
-        double rsiVal = targetStock.getRsi();
-        if(rsiVal >= 70) {
-            alertWindow.addAlert("<html><line><font color=blue>RSI BREACHED</font><font color=green> : " + rsiVal + "</font></line></html>");
-        }
-        if(rsiVal <= 30) {
-            alertWindow.addAlert("<html><line><font color=blue>RSI BREACHED</font><font color=red> : " + rsiVal + "</font></line></html>");
-        }
-        
-        // check MACD
-        double macd = targetStock.getMacd();
-        if(macd < .5 && macd > -.5) {
-            String alertMsg = "<html><line><bold color=blue>MACD RECENT COLLAPSE</bold>";
-            alertMsg += macd > 0 ? "<text color=green> : " + macd + "</text></line></html>" : "<font color=red> : " + macd + "</font></line></html>";
-            alertWindow.addAlert(alertMsg);
+        String alertMessageContainer = "<div text-align=center><font color=black font-size=Large>  Active Alerts  </font></div>";
+        if(!targetStock.getStoredAlerts().isEmpty()) {
+            
+            for(Map.Entry entry : targetStock.getStoredAlerts().entrySet()) {
+                String alertName = entry.getKey().toString();
+                String alertCriteria = entry.getValue().toString();
+                alertMessageContainer += "<div><font color=blue>" + alertName + "</font><font color=black> : " + alertCriteria + "</font></div>";
+            }
+            alertWindow.addAlert("<html>" + alertMessageContainer + "</html>");
+        } else {
+            alertWindow.addAlert("<html><line><font color=orange font-size=large>" + targetStock.getTicker() + "</font><font color=black> : right click ticker to add alerts</font></line> </html>");
         }
     }
 
@@ -118,8 +106,6 @@ public class PanelRight extends JPanel {
         chart.changeStock(targetStock.getdataHistory());
         table.setStock(targetStock.getTicker());
         alertWindow.clearAlerts();
-        
-        alertWindow.addAlert(s.getTicker() + " : data loaded");
         setAlerts();
     }
 

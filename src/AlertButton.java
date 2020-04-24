@@ -6,6 +6,11 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.border.Border;
 
+/**
+ * Button class for storing data on an alert for use in plotting in the ChartGUI.
+ * @author robertstanton
+ *
+ */
 public class AlertButton extends JButton {
     
     private final Color backGroundColor = new Color(238, 238, 238);

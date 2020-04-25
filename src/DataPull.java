@@ -30,7 +30,7 @@ public class DataPull {
 	 * @throws InterruptedException
 	 */
 	public static void getCsv(String symbol) throws InterruptedException {
-		
+
 		try {
 
 			try {
@@ -124,17 +124,17 @@ public class DataPull {
 	 * Returns the latest financial indicators from the given stock ticker and the
 	 * financial indicator type
 	 * 
-	 * Default API Values: Daily Interval; 10 Time Period
-	 * Possible Indicator Selection: SMA, EMA, RSI, MACD, OBV
+	 * Default API Values: Daily Interval; 10 Time Period Possible Indicator
+	 * Selection: SMA, EMA, RSI, MACD, OBV
 	 * 
-	 * @param	indicator
-	 * @param 	symbol
+	 * @param indicator
+	 * @param symbol
 	 * @throws InterruptedException
 	 */
 
 	public static double getIndicator(String indicator, String symbol) throws InterruptedException {
 
-		System.out.println("waiting 13 seconds for " + symbol + " " +indicator+ " data due to api rate limit");
+		System.out.println("waiting 13 seconds for " + symbol + " " + indicator + " data due to api rate limit");
 		TimeUnit.SECONDS.sleep(13);
 
 		String url = "https://www.alphavantage.co/query?function=" + (indicator) + "&symbol=" + (symbol)
@@ -161,7 +161,7 @@ public class DataPull {
 			String[] lineComponents = json.split(";");
 			String[] itemComponents = lineComponents[1].split(",");
 			String indicatorComponents = itemComponents[1];
-			
+
 			double currentIndicator = Double.parseDouble(indicatorComponents);
 			br.close();
 			reader.close();
@@ -170,11 +170,12 @@ public class DataPull {
 		}
 
 		catch (IOException e) {
+			return 0.0;
+		}
 
-			e.printStackTrace();
+		catch (ArrayIndexOutOfBoundsException e) {
 			return 0.0;
 		}
 	}
-
 
 }

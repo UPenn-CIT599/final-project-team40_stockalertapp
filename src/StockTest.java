@@ -10,27 +10,35 @@ import org.junit.jupiter.api.Test;
 /**
  * Junit test for Stock Class
  * 
- * @author Joseph Kravets
+ * @author Joseph Kravets, Tiffany Choi
  *
  */
 class StockTest {
 
-    @Test
-    void testStock() throws FileNotFoundException, InterruptedException {
-	System.gc();
-	Stock tlt = new Stock("TLT");
-	assertEquals(tlt.getTicker() + ".csv", tlt.getCsv());
+	@Test
+	void testStock() throws FileNotFoundException, InterruptedException {
+		System.gc();
+		Stock tlt = new Stock("TLT");
+		assertEquals(tlt.getTicker() + ".csv", tlt.getCsv());
 
-    }
+	}
 
-    @Test
-    void testGetDatahistory() throws FileNotFoundException, InterruptedException {
-	System.gc();
-	Stock xlk = new Stock("XLK");
-	System.gc();
-	TreeMap data = xlk.getdataHistory();
+	@Test
+	void testStockOverride() throws FileNotFoundException, InterruptedException {
+		System.gc();
+		Stock aapl = new Stock("AAPL", "SMA", "above", 100);
+		assertEquals(aapl.getTicker() + ".csv", aapl.getCsv());
 
-	assert (data) != null;
-    }
+	}
+
+	@Test
+	void testGetDatahistory() throws FileNotFoundException, InterruptedException {
+		System.gc();
+		Stock xlk = new Stock("XLK");
+		System.gc();
+		TreeMap data = xlk.getdataHistory();
+
+		assert (data) != null;
+	}
 
 }

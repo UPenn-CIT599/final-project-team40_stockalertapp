@@ -1,5 +1,4 @@
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -28,14 +27,10 @@ public class RandomPriceGenerator {
     public RandomPriceGenerator(String ticker) {
         this.ticker = ticker;
         generator = new Random();
-        dateRange = new ArrayList<>();
+         
         endDate = LocalDate.now();
         startDate = endDate.minusDays(255);
-        LocalDate currentDate = startDate;
-        while(currentDate.isBefore(endDate)) {
-            dateRange.add(currentDate);
-        }
-        // dateRange = startDate.datesUntil(endDate).collect(Collectors.toList());
+        dateRange = startDate.datesUntil(endDate).collect(Collectors.toList());
         historicalPrices = new TreeMap<>();
         createHistoricalPrices();
         
@@ -108,12 +103,7 @@ public class RandomPriceGenerator {
      */
     public void setTimeLength(int x) {
         startDate = endDate.minusDays(x);
-        dateRange = new ArrayList<>();
-        LocalDate currentDate = startDate;
-        while(currentDate.isBefore(endDate)) {
-            dateRange.add(currentDate);
-        }
-        // dateRange = startDate.datesUntil(endDate).collect(Collectors.toList());
+        dateRange = startDate.datesUntil(endDate).collect(Collectors.toList());
         historicalPrices = new TreeMap<>();
         createHistoricalPrices();
     }

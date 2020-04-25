@@ -104,7 +104,7 @@ public class PanelRight extends JPanel {
             }
             
         } else {
-            alertWindow.addAlert("<html><line><font color=orange font-size=large>" + targetStock.getTicker() + "</font><font color=black> : right click ticker to add alerts</font></line> </html>");
+            alertWindow.addAlert("<html><line><font color=orange font-size=large>" + targetStock.getTicker() + "</font><font color=black> : right click ticker button on the left to add alerts</font></line> </html>");
         }
     }
 

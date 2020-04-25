@@ -17,6 +17,11 @@ import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+/**
+ * Dialog box for entering a new alert for a stock.
+ * @author robertstanton
+ *
+ */
 public class AlertPanel extends JDialog {
     
     private String indicator;
@@ -42,6 +47,11 @@ public class AlertPanel extends JDialog {
     
     private NumberFormat triggerFormat;
     
+    
+    /**
+     * Constructs a dialog window for users to enter alerts to a stock object.
+     * @param parentFrame
+     */
     public AlertPanel(BaseGUI parentFrame) {
         super(parentFrame, "Add Alert Options");
         
@@ -70,6 +80,10 @@ public class AlertPanel extends JDialog {
         
     }
     
+    /**
+     * adds components of Dialog window and displays.
+     * @param s
+     */
     public void createGUI(Stock s) {
         tgtStock = s;
         
@@ -87,6 +101,9 @@ public class AlertPanel extends JDialog {
         showDialog();
     }
     
+    /**
+     * method to display 
+     */
     public void showDialog() {
         this.setVisible(true);
     }

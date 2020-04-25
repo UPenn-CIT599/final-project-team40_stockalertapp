@@ -17,6 +17,11 @@ import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+/**
+ * Dialog box for entering a new alert for a stock.
+ * @author robertstanton
+ *
+ */
 public class AlertPanel extends JDialog {
     
     private String indicator;
@@ -33,27 +38,33 @@ public class AlertPanel extends JDialog {
     private JComboBox levelOptionsBox;
     private JButton saveButton;
     private JFormattedTextField triggerValueBox;
-    private JLabel panelHeader;
+    // private JLabel panelHeader;
     private JLabel indicatorLabel;
     private JLabel levelOptionLabel;
     private JLabel triggerValLabel;
     private Container contentPane;
-    private BaseGUI parentFrame;
+    // private BaseGUI parentFrame;
     
     private NumberFormat triggerFormat;
     
+    
+    /**
+     * Constructs a dialog window for users to enter alerts to a stock object.
+     * @param parentFrame
+     */
     public AlertPanel(BaseGUI parentFrame) {
         super(parentFrame, "Add Alert Options");
+        
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setMinimumSize(new Dimension(400, 200));
-        this.parentFrame = parentFrame;
+        // this.parentFrame = parentFrame;
         indicatorOptions = new String[] {"SMA", "EMA", "RSI", "MACD", "OBV"};
         levelOptions = new String[] {"above", "below"};
         indicator = "";
         level = "";
         triggerValue = 0;
         
-        panelHeader = new JLabel("Add Alert Options");
+        // panelHeader = new JLabel("Add Alert Options");
         indicatorLabel = new JLabel("choose indicator");
         levelOptionLabel = new JLabel("select direction");
         triggerValLabel = new JLabel("enter value for indicator");
@@ -69,6 +80,10 @@ public class AlertPanel extends JDialog {
         
     }
     
+    /**
+     * adds components of Dialog window and displays.
+     * @param s
+     */
     public void createGUI(Stock s) {
         tgtStock = s;
         
@@ -86,6 +101,9 @@ public class AlertPanel extends JDialog {
         showDialog();
     }
     
+    /**
+     * method to display 
+     */
     public void showDialog() {
         this.setVisible(true);
     }

@@ -5,6 +5,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -75,7 +76,6 @@ public class PanelRight extends JPanel {
         
         // set alerts
         setAlerts();
-        
     }
     
     /**
@@ -83,16 +83,28 @@ public class PanelRight extends JPanel {
      */
     public void setAlerts() {
         String alertMessageContainer = "<div text-align=center><font color=black font-size=Large>  Active Alerts  </font></div>";
+        
         if(!targetStock.getStoredAlerts().isEmpty()) {
+            Map<String, HashMap<String, Double>> storedAlerts = targetStock.getStoredAlerts();
             
-            for(Map.Entry entry : targetStock.getStoredAlerts().entrySet()) {
+            for(Map.Entry entry : storedAlerts.entrySet()) {
                 String alertName = entry.getKey().toString();
                 String alertCriteria = entry.getValue().toString();
                 alertMessageContainer += "<div><font color=blue>" + alertName + "</font><font color=black> : " + alertCriteria + "</font></div>";
             }
             alertWindow.addAlert("<html>" + alertMessageContainer + "</html>");
+            
+            targetStock.calculateAlerts();
+            for(Map.Entry entry : targetStock.getCalculatedAlerts().entrySet()) {
+                String indicatorName = (String) entry.getKey();
+                Boolean isTrue = (Boolean) entry.getValue();
+                if(isTrue) {
+                    alertWindow.addAlert("<html><line><font color=red font-size=large>" + indicatorName + "</font><font color=black> has been triggered</font></line></html>");
+                }
+            }
+            
         } else {
-            alertWindow.addAlert("<html><line><font color=orange font-size=large>" + targetStock.getTicker() + "</font><font color=black> : right click ticker to add alerts</font></line> </html>");
+            alertWindow.addAlert("<html><line><font color=orange font-size=large>" + targetStock.getTicker() + "</font><font color=black> : right click ticker button on the left to add alerts</font></line> </html>");
         }
     }
 

@@ -24,7 +24,7 @@ import javax.net.ssl.HttpsURLConnection;
 public class DataPull {
 
 	/**
-	 * Returns a CSV file of stock data with open, high, low, close,  and volume data
+	 * Returns a CSV file of stock data with open, high, low, close, and volume data
 	 * 
 	 * @param ticker
 	 * @throws InterruptedException

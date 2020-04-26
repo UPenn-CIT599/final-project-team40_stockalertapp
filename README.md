@@ -12,7 +12,7 @@ Personal Computers will launch the graphical user interface at which point there
 
 <img src=StockAlertAppShot2.png>
 
-Each stock request will make an API call that has a 13 second window between calls built-in to ensure compliance with the third party's requirements.  Alternatively, the user can load a file named portfolioAutos.ser by clicking the menu button, denoted by the triple bar, and selecting Load Stock List.  From the file chooser select the 'portfolioAutos.ser' file.  
+Each stock request will make an call from the free stock data api https://www.alphavantage.co/, which allows 5 calls per minute so it can be slow.  Alternatively, the user can load a file named portfolioAutos.ser by clicking the menu button, denoted by the triple bar, and selecting Load Stock List.  From the file chooser select the 'portfolioAutos.ser' file.  
 
 
 <img src=StockAlertAppShot3.png>

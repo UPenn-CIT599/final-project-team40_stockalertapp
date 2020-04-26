@@ -15,7 +15,7 @@ This program allows the user to enter a stock ticker, get the useful technical a
 
 Work Breakdown:
 
-1. Joseph Kravets tried Yahoo-Finance API and the AlphaVantage API and determined that the AlphaVantage API was better suited for the program. Joseph worked on the Stock, DataPull, OHCLV, StockTest, and DataPullTest classes. He focused on pulling the historical open high low close volume and current quote data. 
+1. Joseph Kravets found the AlphaVantage API to pull the stock data. Joseph worked on the Stock, DataPull, OHCLV, StockTest, and DataPullTest classes. He focused on pulling the historical open high low close volume and current quote data. 
 2. Tiffany Choi worked on the Alerts, Stock, Financial Indicators, and DataPull classes. She focused on pulling techncial indicator data from the third-party API, wrote the methods to add and remove the alerts, and wrote the method to calculate alerts to notify the user of any triggered alerts. 
 3. Robert Stanton worked on the GUI, data display, and user input and functionality of the application. He worked on the AlertButton, Alert Panel, AlertRemovePanel, AlertWindow, BaseGui, Chartdata, Chartdatatest, ChartGui, ConsoleUI, PanelRight, ProgramController, RandomPriceGenerator, Runner, StockCallback, StockDetailButton, StockListPanel, and TableGUI classes.
 

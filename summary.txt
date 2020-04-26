@@ -1,7 +1,15 @@
-This project is titled "Stock Alert App". 
+Project Name: Stock Alert App
+
+Team Members: Tiffany Choi, Joseph Kravetz, Robert Stanton
+
+Project Description:
+
 This program allows the user to enter a stock ticker, get the useful technical and statistical analysis of its trading history, and get stock alerts displayed on the graphical user interface (GUI). 
-It pulls the historical data, current price, and technical indicator data from a website called https://www.alphavantage.co/. 
-We then calcuate if we should send any alerts and plot the data on the user gui.  
+
+The program pulls the historical data, current price, and financial indicator data from via a third-party API from https://www.alphavantage.co/. 
+
+The program plots the data on the User GUI and allows the user to add/remove alerts based on the financial indicators. The program will then calculate the alerts to see if any have triggered. 
+
 Joseph Kravets tried yahoo-finance api and the alphavantage api and decided that the alphavantage api was better. 
 He worked on the Stock, Datapull, OHCLV, Stocktest, and Datapull test classes.
 He focused on getting the historical open high low close volume and current quote data. 

@@ -89,7 +89,7 @@ public class TableGUI extends JPanel{
         
         colors = new Color[] {fifty, hundred, twoHundred};
         int x = 0;
-        for(String alertName : new String[] {"50d", "100d", "200d"}) {
+        for(String alertName : new String[] {"50d sma", "100d sma", "200d sma"}) {
             AlertButton alertButton = new AlertButton(alertName, colors[x]);
             alerts.add(alertButton);
             x++;

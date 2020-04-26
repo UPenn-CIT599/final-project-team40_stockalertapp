@@ -188,61 +188,107 @@ public class Stock implements Serializable {
 
 		Alerts alert = new Alerts();
 		DataPull datapull = new DataPull();
-
+		
 		try {
-
+		    /*
 			double sma = datapull.getIndicator("SMA", ticker);
 			double ema = datapull.getIndicator("EMA", ticker);
 			double rsi = datapull.getIndicator("RSI", ticker);
 			double macd = datapull.getIndicator("MACD", ticker);
 			double obv = datapull.getIndicator("OBV", ticker);
-
-			if (storedAlerts.containsKey(ticker + "SMA")) {
-				
+            */
+		    
+			if (storedAlerts.containsKey(ticker + "_SMA")) {
+			    
+			    String saKey = ticker + "_SMA";
+			    Map<String, Double> smaMap = (Map) storedAlerts.get(saKey);
+			    for(String key : smaMap.keySet()) { 
+			        double val = smaMap.get(key);
+			        calculatedAlerts.put(saKey + "_" + key, key.equals("below") ? alert.belowPriceAlert(sma, val) : alert.abovePriceAlert(sma, val));
+			    }
+			    
+			    
+			    /*
 				calculatedAlerts.put(ticker + "_SMA" + "_below",
 						alert.belowPriceAlert(sma, (double) ((Map) storedAlerts.get(ticker + "SMA")).get("below")));
 				calculatedAlerts.put(ticker + "_SMA" + "_above",
 						alert.abovePriceAlert(sma, (double) ((Map) storedAlerts.get(ticker + "SMA")).get("above")));
+				*/
 			}
 
-			if (storedAlerts.containsKey(ticker + "EMA")) {
-
+			if (storedAlerts.containsKey(ticker + "_EMA")) {
+			    
+			    String saKey = ticker + "_EMA";
+                Map<String, Double> emaMap = (Map) storedAlerts.get(saKey);
+                for(String key : emaMap.keySet()) { 
+                    double val = emaMap.get(key);
+                    calculatedAlerts.put(saKey + "_" + key, key.equals("below") ? alert.belowPriceAlert(ema, val) : alert.abovePriceAlert(ema, val));
+                }
+                
+                /*
 				calculatedAlerts.put(ticker + "_EMA" + "_below",
 						alert.belowPriceAlert(ema, (double) ((Map) storedAlerts.get(ticker + "EMA")).get("below")));
 				calculatedAlerts.put(ticker + "_EMA" + "_above",
 						alert.abovePriceAlert(ema, (double) ((Map) storedAlerts.get(ticker + "EMA")).get("above")));
+				*/
 
 			}
 
-			if (storedAlerts.containsKey(ticker + "RSI")) {
-
+			if (storedAlerts.containsKey(ticker + "_RSI")) {
+			    
+			    String saKey = ticker + "_RSI";
+                Map<String, Double> rsiMap = (Map) storedAlerts.get(saKey);
+                for(String key : rsiMap.keySet()) { 
+                    double val = rsiMap.get(key);
+                    calculatedAlerts.put(saKey + "_" + key, key.equals("below") ? alert.belowPriceAlert(rsi, val) : alert.abovePriceAlert(rsi, val));
+                }
+                
+                /*
 				calculatedAlerts.put(ticker + "_RSI" + "_below",
 						alert.belowPriceAlert(rsi, (double) ((Map) storedAlerts.get(ticker + "RSI")).get("below")));
 				calculatedAlerts.put(ticker + "_RSI" + "_above",
 						alert.abovePriceAlert(rsi, (double) ((Map) storedAlerts.get(ticker + "RSI")).get("above")));
+				*/
 
 			}
 
-			if (storedAlerts.containsKey(ticker + "MACD")) {
-
+			if (storedAlerts.containsKey(ticker + "_MACD")) {
+			    
+			    String saKey = ticker + "_MACD";
+                Map<String, Double> macdMap = (Map) storedAlerts.get(saKey);
+                for(String key : macdMap.keySet()) { 
+                    double val = macdMap.get(key);
+                    calculatedAlerts.put(saKey + "_" + key, key.equals("below") ? alert.belowPriceAlert(macd, val) : alert.abovePriceAlert(macd, val));
+                }
+                
+                /*
 				calculatedAlerts.put(ticker + "_MACD" + "_below",
 						alert.belowPriceAlert(macd, (double) ((Map) storedAlerts.get(ticker + "MACD")).get("below")));
 				calculatedAlerts.put(ticker + "_MACD" + "_above",
 						alert.abovePriceAlert(macd, (double) ((Map) storedAlerts.get(ticker + "MACD")).get("above")));
+				*/
 
 			}
 
-			if (storedAlerts.containsKey(ticker + "OBV")) {
+			if (storedAlerts.containsKey(ticker + "_OBV")) {
+			    
+			    String saKey = ticker + "_OBV";
+                Map<String, Double> obvMap = (Map) storedAlerts.get(saKey);
+                for(String key : obvMap.keySet()) { 
+                    double val = obvMap.get(key);
+                    calculatedAlerts.put(saKey + "_" + key, key.equals("below") ? alert.belowPriceAlert(obv, val) : alert.abovePriceAlert(obv, val));
+                }
 
+                /*
 				calculatedAlerts.put(ticker + "_OBV" + "_below",
 						alert.belowPriceAlert(obv, (double) ((Map) storedAlerts.get(ticker + "OBV")).get("below")));
 				calculatedAlerts.put(ticker + "_OBV" + "_above",
 						alert.abovePriceAlert(obv, (double) ((Map) storedAlerts.get(ticker + "OBV")).get("above")));
+				*/
 
 			}
 
-		} catch (InterruptedException e) {
-			System.out.println("Cannot calculate the alert.");
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 

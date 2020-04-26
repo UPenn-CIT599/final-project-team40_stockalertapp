@@ -95,6 +95,8 @@ public class PanelRight extends JPanel {
             alertWindow.addAlert("<html>" + alertMessageContainer + "</html>");
             
             targetStock.calculateAlerts();
+            System.out.println("size of calculated alerts map : " + targetStock.getCalculatedAlerts().size());
+            System.out.println("stored alerts : " + targetStock.getStoredAlerts().toString());
             for(Map.Entry entry : targetStock.getCalculatedAlerts().entrySet()) {
                 String indicatorName = (String) entry.getKey();
                 Boolean isTrue = (Boolean) entry.getValue();
@@ -166,13 +168,13 @@ public class PanelRight extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             String actionCommand = e.getActionCommand();
-            if(actionCommand.equals("50d")) {
+            if(actionCommand.equals("50d sma")) {
                 chart.toggleSMA50();
                 ((AlertButton) e.getSource()).toggleOnOff();
-            } else if(actionCommand.equals("200d")) {
+            } else if(actionCommand.equals("200d sma")) {
                 chart.toggleSMA200();
                 ((AlertButton) e.getSource()).toggleOnOff();
-            } else if(actionCommand.equals("100d")) {
+            } else if(actionCommand.equals("100d sma")) {
                 chart.toggleSMA100();
                 ((AlertButton) e.getSource()).toggleOnOff();
             }

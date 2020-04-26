@@ -1,0 +1,12 @@
+ This project is titled "Stockalertapp". 
+This program allows the user to enter a stock ticker, get the useful technical and statistical analysis of its trading history, and get stock alerts displayed on the graphical user interface (GUI). 
+It pulls the historical data, current price, and technical indicator data from a website called https://www.alphavantage.co/. 
+We then calcuate if we should send any alerts and plot the data on the user gui.  
+Joseph Kravets tried yahoo-finance api and the alphavantage api and decided that the alphavantage api was better. 
+He worked on the Stock, Datapull, OHCLV, Stocktest, and Datapull test classes.
+ He focused on getting the historical open high low close volume and current quote data. 
+Tiffany worked on the Alerts, Stock, Financial Indicators, and Datapull classes. 
+She focused on pulling techncial indicator data from the api and calulating alerts to notify the user of strong signals. 
+Robert Stanton worked on the GUI, data display, and  user presentation and functionality of the app.
+ He worked on the AlertButton, Alert Panel, AlertRemovePanel, AlertWindow, BaseGui, Chartdata, Chartdatatest, ChartGui, ConsoleUI, PanelRight, 
+ProgramController, RandomPriceGenerator, Runner, StockCallback, StockDetailButton, StockListPanel, and TableGUI classes.

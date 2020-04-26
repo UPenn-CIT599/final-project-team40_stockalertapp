@@ -1,22 +1,21 @@
 Project Name: Stock Alert App
 
-Team Members: Tiffany Choi, Joseph Kravetz, Robert Stanton
+Team Members: Tiffany Choi, Joseph Kravets, Robert Stanton
 
 Project Description:
 
-This program allows the user to enter a stock ticker, get the useful technical and statistical analysis of its trading history, and get stock alerts displayed on the graphical user interface (GUI). 
+- This program allows the user to enter a stock ticker, get the useful technical and statistical analysis of its trading history, and get stock alerts displayed on the graphical user interface (GUI). 
+- The program pulls the historical data, current price, and financial indicator data from via a third-party API from https://www.alphavantage.co/. 
+- The program plots the data on the User GUI and allows the user to add/remove alerts based on the financial indicators. The program will then calculate the alerts to see if any have triggered. 
 
-The program pulls the historical data, current price, and financial indicator data from via a third-party API from https://www.alphavantage.co/. 
+Work Breakdown:
 
-The program plots the data on the User GUI and allows the user to add/remove alerts based on the financial indicators. The program will then calculate the alerts to see if any have triggered. 
+1. Joseph Kravets tried Yahoo-Finance API and the AlphaVantage API and determined that the AlphaVantage API was better suited for the program. Joseph worked on the Stock, DataPull, OHCLV, StockTest, and DataPullTest classes. He focused on pulling the historical open high low close volume and current quote data. 
 
-Joseph Kravets tried yahoo-finance api and the alphavantage api and decided that the alphavantage api was better. 
-He worked on the Stock, Datapull, OHCLV, Stocktest, and Datapull test classes.
-He focused on getting the historical open high low close volume and current quote data. 
-Tiffany Choi worked on the Alerts, Stock, Financial Indicators, and Datapull classes. 
-She focused on pulling techncial indicator data from the api and calulating alerts to notify the user of strong signals. 
-Robert Stanton worked on the GUI, data display, and  user presentation and functionality of the app.
-He worked on the AlertButton, Alert Panel, AlertRemovePanel, AlertWindow, BaseGui, Chartdata, Chartdatatest, ChartGui, ConsoleUI, PanelRight, ProgramController, RandomPriceGenerator, Runner, StockCallback, StockDetailButton, StockListPanel, and TableGUI classes.
+2. Tiffany Choi worked on the Alerts, Stock, Financial Indicators, and DataPull classes. She focused on pulling techncial indicator data from the third-party API, wrote the methods to add and remove the alerts, and wrote the method to calculate alerts to notify the user of any triggered alerts. 
+
+3. Robert Stanton worked on the GUI, data display, and user input and functionality of the application. He worked on the AlertButton, Alert Panel, AlertRemovePanel, AlertWindow, BaseGui, Chartdata, Chartdatatest, ChartGui, ConsoleUI, PanelRight, ProgramController, RandomPriceGenerator, Runner, StockCallback, StockDetailButton, StockListPanel, and TableGUI classes.
 
 Github Link:
+
 https://github.com/UPenn-CIT599/final-project-team40_stockalertapp

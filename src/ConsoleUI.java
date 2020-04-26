@@ -76,7 +76,7 @@ public class ConsoleUI {
 	            case 1: 
 	                
 	                System.out.print("Please enter a stock ticker to add : ");
-	                while(ticker.isBlank()) {
+	                while(ticker.isEmpty()) {
 	                    ticker = scan.nextLine();
 	                }
 	                System.out.println("");
@@ -87,7 +87,7 @@ public class ConsoleUI {
 	            case 2:
 	                
 	                System.out.print("Please enter stock to remove : ");
-	                while(ticker.isBlank()) {
+	                while(ticker.isEmpty()) {
 	                    ticker = scan.nextLine();
 	                }
 	                System.out.println("");

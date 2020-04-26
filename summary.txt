@@ -9,3 +9,6 @@ Tiffany worked on the Alerts, Stock, Financial Indicators, and Datapull classes.
 She focused on pulling techncial indicator data from the api and calulating alerts to notify the user of strong signals. 
 Robert Stanton worked on the GUI, data display, and  user presentation and functionality of the app.
 He worked on the AlertButton, Alert Panel, AlertRemovePanel, AlertWindow, BaseGui, Chartdata, Chartdatatest, ChartGui, ConsoleUI, PanelRight, ProgramController, RandomPriceGenerator, Runner, StockCallback, StockDetailButton, StockListPanel, and TableGUI classes.
+
+Github Link:
+https://github.com/UPenn-CIT599/final-project-team40_stockalertapp

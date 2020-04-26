@@ -1,4 +1,4 @@
-This project is titled "Stockalertapp". 
+This project is titled "Stock Alert App". 
 This program allows the user to enter a stock ticker, get the useful technical and statistical analysis of its trading history, and get stock alerts displayed on the graphical user interface (GUI). 
 It pulls the historical data, current price, and technical indicator data from a website called https://www.alphavantage.co/. 
 We then calcuate if we should send any alerts and plot the data on the user gui.  

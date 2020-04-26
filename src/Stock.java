@@ -169,6 +169,13 @@ public class Stock implements Serializable {
 		}
 
 	}
+	
+	/**
+	 * Overloaded calculateAlerts method for this stock;
+	 */
+	private void calculateAlerts() {
+	    calculateAlerts(this.storedAlerts, this.ticker);
+	}
 
 	/***
 	 * This method calculates the alerts and stores the booleans in a HashMap

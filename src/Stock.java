@@ -208,12 +208,7 @@ public class Stock implements Serializable {
 			    }
 			    
 			    
-			    /*
-				calculatedAlerts.put(ticker + "_SMA" + "_below",
-						alert.belowPriceAlert(sma, (double) ((Map) storedAlerts.get(ticker + "SMA")).get("below")));
-				calculatedAlerts.put(ticker + "_SMA" + "_above",
-						alert.abovePriceAlert(sma, (double) ((Map) storedAlerts.get(ticker + "SMA")).get("above")));
-				*/
+
 			}
 
 			if (storedAlerts.containsKey(ticker + "_EMA")) {
@@ -225,12 +220,7 @@ public class Stock implements Serializable {
                     calculatedAlerts.put(saKey + "_" + key, key.equals("below") ? alert.belowPriceAlert(ema, val) : alert.abovePriceAlert(ema, val));
                 }
                 
-                /*
-				calculatedAlerts.put(ticker + "_EMA" + "_below",
-						alert.belowPriceAlert(ema, (double) ((Map) storedAlerts.get(ticker + "EMA")).get("below")));
-				calculatedAlerts.put(ticker + "_EMA" + "_above",
-						alert.abovePriceAlert(ema, (double) ((Map) storedAlerts.get(ticker + "EMA")).get("above")));
-				*/
+
 
 			}
 
@@ -243,12 +233,7 @@ public class Stock implements Serializable {
                     calculatedAlerts.put(saKey + "_" + key, key.equals("below") ? alert.belowPriceAlert(rsi, val) : alert.abovePriceAlert(rsi, val));
                 }
                 
-                /*
-				calculatedAlerts.put(ticker + "_RSI" + "_below",
-						alert.belowPriceAlert(rsi, (double) ((Map) storedAlerts.get(ticker + "RSI")).get("below")));
-				calculatedAlerts.put(ticker + "_RSI" + "_above",
-						alert.abovePriceAlert(rsi, (double) ((Map) storedAlerts.get(ticker + "RSI")).get("above")));
-				*/
+
 
 			}
 
@@ -261,12 +246,6 @@ public class Stock implements Serializable {
                     calculatedAlerts.put(saKey + "_" + key, key.equals("below") ? alert.belowPriceAlert(macd, val) : alert.abovePriceAlert(macd, val));
                 }
                 
-                /*
-				calculatedAlerts.put(ticker + "_MACD" + "_below",
-						alert.belowPriceAlert(macd, (double) ((Map) storedAlerts.get(ticker + "MACD")).get("below")));
-				calculatedAlerts.put(ticker + "_MACD" + "_above",
-						alert.abovePriceAlert(macd, (double) ((Map) storedAlerts.get(ticker + "MACD")).get("above")));
-				*/
 
 			}
 
@@ -278,13 +257,6 @@ public class Stock implements Serializable {
                     double val = obvMap.get(key);
                     calculatedAlerts.put(saKey + "_" + key, key.equals("below") ? alert.belowPriceAlert(obv, val) : alert.abovePriceAlert(obv, val));
                 }
-
-                /*
-				calculatedAlerts.put(ticker + "_OBV" + "_below",
-						alert.belowPriceAlert(obv, (double) ((Map) storedAlerts.get(ticker + "OBV")).get("below")));
-				calculatedAlerts.put(ticker + "_OBV" + "_above",
-						alert.abovePriceAlert(obv, (double) ((Map) storedAlerts.get(ticker + "OBV")).get("above")));
-				*/
 
 			}
 

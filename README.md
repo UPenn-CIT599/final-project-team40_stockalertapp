@@ -32,6 +32,10 @@ From there a Dialog box will provide available options for a user to make change
 
 <img src=StockAlertAppShot4.png>
 
+When the user is done.  They may save the List of Securities, using the menu button's Save Stock List option, as a java serialized object (yourList.ser).
+
+<img src=StockAlertAppShot7.png>
+
 Group Members: 
 
 Tiffany Choi (tiffchoi@seas.upenn.edu)
